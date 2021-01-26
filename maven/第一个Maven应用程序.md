@@ -8,19 +8,19 @@
 
 选择 `File` -> `New` -> `Project...`
 
-![img](https://www.funtl.com/assets/Lusifer1528025821.png)
+![img](../assets/img/Lusifer1528025821.png)
 
 选择 `Maven` 项目
 
-![img](https://www.funtl.com/assets/Lusifer1528025904.png)
+![img](../assets/img/Lusifer1528025904.png)
 
 填写项目信息
 
-![img](https://www.funtl.com/assets/Lusifer1528025957.png)
+![img](../assets/img/Lusifer1528025957.png)
 
 选择工作空间
 
-![img](https://www.funtl.com/assets/Lusifer1528026009.png)
+![img](../assets/img/Lusifer1528026009.png)
 
 ## 目录结构
 
@@ -54,7 +54,7 @@ Java Web 的 Maven 基本结构如下：
 
 在 IDEA 界面的右侧 `Maven Projects` 选项，可以管理 Maven 项目的整个生命周期、插件、依赖等
 
-![img](https://www.funtl.com/assets/Lusifer1528027638.png)
+![img](../assets/img/Lusifer1528027638.png)
 
 ## 完善 Java Web 程序
 

@@ -36,6 +36,8 @@ module.exports = {
           "/idea/": genIdeaSidebar(),
           "/maven/": genMavenSidebar(),
           "/devops/": genDevOpsSidebar(),
+          "/gitflow/": genGitFlowSidebar(),
+          "/mvc/": genMVCSidebar(),
         }
       }
     }
@@ -47,6 +49,7 @@ module.exports = {
   ]
 };
 
+// 指南
 function genGuideSidebar() {
   return [
     {
@@ -60,7 +63,8 @@ function genGuideSidebar() {
       title: "开始",
       collapsable: false,
       children: [
-        "走进单体应用"
+        "走进单体应用",
+        "GitFlow工作流"
       ]
     }, 
     {
@@ -73,6 +77,7 @@ function genGuideSidebar() {
   ];
 }
 
+// IDEA
 function genIdeaSidebar() {
   return [
     {
@@ -86,6 +91,7 @@ function genIdeaSidebar() {
   ];
 }
 
+// Maven
 function genMavenSidebar() {
   return [
     {
@@ -106,6 +112,8 @@ function genMavenSidebar() {
     }
   ];
 }
+
+// 运维
 function genDevOpsSidebar() {
   return [
     {
@@ -113,6 +121,36 @@ function genDevOpsSidebar() {
       collapsable: false,
       children: [
         ""
+      ]
+    }
+  ];
+}
+
+// GITFLOW工作流
+function genGitFlowSidebar() {
+  return [
+    {
+      title: "GitFlow工作流指南",
+      collapsable: false,
+      children: [
+        "",
+        "什么是Git",
+        "安装Git",
+        "Git工作流简介"
+      ]
+    }
+  ];
+}
+
+// mvc
+function genMVCSidebar() {
+  return [
+    {
+      title: "三层架构 + MVC",
+      collapsable: false,
+      children: [
+        "",
+        "mvc模式"
       ]
     }
   ];
