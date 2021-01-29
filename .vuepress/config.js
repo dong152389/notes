@@ -1,5 +1,5 @@
 module.exports = {
-  dest: "note",
+  dest: "notes",
   base: "/mynote/",
   markdown: {
     externalLinks: {
