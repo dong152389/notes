@@ -1,6 +1,6 @@
 module.exports = {
-  dest: "docs",
-  base: "/",
+  dest: "note",
+  base: "/mynote/",
   markdown: {
     externalLinks: {
       target: "_blank",
@@ -38,6 +38,7 @@ module.exports = {
           "/devops/": genDevOpsSidebar(),
           "/gitflow/": genGitFlowSidebar(),
           "/mvc/": genMVCSidebar(),
+          "/bootstrap/": genBootStrapSidebar(),
         }
       }
     }
@@ -151,6 +152,21 @@ function genMVCSidebar() {
       children: [
         "",
         "mvc模式"
+      ]
+    }
+  ];
+}
+// bootstrap
+function genBootStrapSidebar() {
+  return [
+    {
+      title: "Bootstrap",
+      collapsable: false,
+      children: [
+        "",
+        "bootstrap简介",
+        "bootstrap环境安装",
+        "bootstrap网格系统"
       ]
     }
   ];
