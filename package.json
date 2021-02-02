@@ -1,7 +1,7 @@
 {
   "name": "notes",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "scripts": {
     "dev": "vuepress dev",
     "build": "vuepress build"

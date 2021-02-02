@@ -1,6 +1,6 @@
 module.exports = {
-  dest: "notes",
-  base: "/mynote/",
+  dest: "notebook",
+  base: "/notebook/",
   markdown: {
     externalLinks: {
       target: "_blank",
@@ -39,6 +39,7 @@ module.exports = {
           "/gitflow/": genGitFlowSidebar(),
           "/mvc/": genMVCSidebar(),
           "/bootstrap/": genBootStrapSidebar(),
+          "/spring/": genSpringSidebar(),
         }
       }
     }
@@ -163,10 +164,28 @@ function genBootStrapSidebar() {
       title: "Bootstrap",
       collapsable: false,
       children: [
-        "",
         "bootstrap简介",
         "bootstrap环境安装",
-        "bootstrap网格系统"
+        "bootstrap网格系统",
+        "媒体查询的用法",
+        "bootstrap表格",
+        "bootstrap字体图标"
+      ]
+    }
+  ];
+}
+// spring
+function genSpringSidebar() {
+  return [
+    {
+      title: "Spring",
+      collapsable: false,
+      children: [
+        "",
+        "spring体系结构",
+        "spring的特点",
+        "spring与ioc",
+        "第一个spring应用程序"
       ]
     }
   ];
