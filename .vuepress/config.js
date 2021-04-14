@@ -40,6 +40,16 @@ module.exports = {
           "/mvc/": genMVCSidebar(),
           "/bootstrap/": genBootStrapSidebar(),
           "/spring/": genSpringSidebar(),
+          "/junit/": genJunitSidebar(),
+          "/log4j/": genLog4jSidebar(),
+          "/servlet/": genServletSidebar(),
+          "/spring-web/": genSpringwebSidebar(),
+          "/spring-mvc/": genSpringmvcSidebar(),
+          "/mybatis/": genMybatisSidebar(),
+          "/myshop1/": genMyshop1Sidebar(),
+          "/spring-transaction/": genSpringTransactionSidebar(),
+          "/apache-http-client/": genApachehttpclientnSidebar(),
+          "/myshop2/": genMyshop2Sidebar(),
         }
       }
     }
@@ -60,7 +70,7 @@ function genGuideSidebar() {
       children: [
         "",
       ]
-    }, 
+    },
     {
       title: "开始",
       collapsable: false,
@@ -68,7 +78,7 @@ function genGuideSidebar() {
         "走进单体应用",
         "GitFlow工作流"
       ]
-    }, 
+    },
     {
       title: "运维",
       collapsable: false,
@@ -186,6 +196,158 @@ function genSpringSidebar() {
         "spring的特点",
         "spring与ioc",
         "第一个spring应用程序"
+      ]
+    }
+  ];
+}
+// junit
+function genJunitSidebar() {
+  return [
+    {
+      title: "JUnit",
+      collapsable: false,
+      children: [
+        "",
+        "第一个JUnit单元测试",
+        "JUnit注解",
+        "JUnit断言",
+      ]
+    }
+  ];
+}
+// Log4j
+function genLog4jSidebar() {
+  return [
+    {
+      title: "Log4j",
+      collapsable: false,
+      children: [
+        "",
+        "第一个Log4j日志文件",
+        "Log4j日志级别",
+        "Log4j日志输出控制文件",
+      ]
+    }
+  ];
+}
+// 综合复习
+function genServletSidebar() {
+  return [
+    {
+      title: "综合复习",
+      collapsable: false,
+      children: [
+        ""
+      ]
+    }
+  ];
+}
+// SpringWeb
+function genSpringwebSidebar() {
+  return [
+    {
+      title: "Spring Web",
+      collapsable: false,
+      children: [
+        "",
+        "ApplicationContextAware",
+        "Bean的装配方式",
+        "浏览器端存储技术简介"
+      ]
+    }
+  ];
+}
+// SpringMVC
+function genSpringmvcSidebar() {
+  return [
+    {
+      title: "Spring Mvc",
+      collapsable: false,
+      children: [
+        "",
+        "Spring整合Spring MVC",
+        "第一个Controller控制器",
+        "Spring MVC拦截器的使用",
+        "Maven 模块化开发",
+        "课后练习-重新完善功能代码",
+        "Spring MVC 表单标签库",
+        "Spring MVC @ModelAttribute",
+        "Spring MVC @ResponseBody",
+      ]
+    }
+  ];
+}
+// Mybatis
+function genMybatisSidebar() {
+  return [
+    {
+      title: "MyBatis",
+      collapsable: false,
+      children: [
+        "",
+        "Druid 简介",
+        "Spring 整合 Druid",
+        "Spring 整合 MyBatis",
+        "小知识-utf8 与 utf8mb4 字符集",
+        "第一个 MyBatis 对象关系映射",
+        "MyBatis 单表 CRUD 操作",
+        "MyBatis 动态 SQL"
+      ]
+    }
+  ];
+}
+// Myshop1
+function genMyshop1Sidebar() {
+  return [
+    {
+      title: "项目实战 MyShop（上）",
+      collapsable: false,
+      children: [
+        ""
+      ]
+    }
+  ];
+}
+// SpringTransaction
+function genSpringTransactionSidebar() {
+  return [
+    {
+      title: "Spring Transaction",
+      collapsable: false,
+      children: [
+        "",
+        "使用 AspectJ 的 AOP 配置管理事务",
+        "使用 Spring 注解管理事务",
+      ]
+    }
+  ];
+}
+// Apachehttpclientn
+function genApachehttpclientnSidebar() {
+  return [
+    {
+      title: "解决模块间通信问题",
+      collapsable: false,
+      children: [
+        "",
+        "Apache HttpClient",
+        "Jackson",
+        "创建 API 接口模块",
+        "你怎么理解 RESTful",
+        "什么是幂等性",
+        "实现 RESTful 风格的 API"
+      ]
+    }
+  ];
+}
+// Myshop2
+function genMyshop2Sidebar() {
+  return [
+    {
+      title: "项目实战 MyShop（下）",
+      collapsable: false,
+      children: [
+        ""
       ]
     }
   ];
