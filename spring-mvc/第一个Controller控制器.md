@@ -2,7 +2,7 @@
 
 ## 概述
 
-```text
+```java
 package com.funtl.my.shop.web.controller;
 
 import com.funtl.my.shop.service.UserService;

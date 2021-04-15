@@ -4,7 +4,7 @@
 
 在 `pom.xml` 配置文件中增加 `org.springframework:spring-webmvc` 依赖
 
-```text
+```xml
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-webmvc</artifactId>
@@ -18,7 +18,7 @@
 
 配置字符集过滤器，用于解决中文编码问题
 
-```text
+```xml
 <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -41,7 +41,7 @@
 
 配置 Spring 的 Servlet 分发器处理所有 HTTP 的请求和响应
 
-```text
+```xml
 <servlet>
     <servlet-name>springServlet</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -61,7 +61,7 @@
 
 创建一个名为 `spring-mvc.xml` 文件来配置 MVC
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -109,7 +109,7 @@
 
 创建一个名为 `myshop.properties` 的配置文件，内容如下：
 
-```text
+```properties
 #============================#
 #==== Framework settings ====#
 #============================#
@@ -125,7 +125,7 @@ web.view.suffix=.jsp
 
 修改 `spring-context.xml` 配置：
 
-```text
+```xml
 <!-- 使用 Annotation 自动注册 Bean，在主容器中不扫描 @Controller 注解，在 SpringMVC 中只扫描 @Controller 注解。-->
 <context:component-scan base-package="com.funtl.my.shop">
     <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>

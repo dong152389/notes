@@ -50,6 +50,10 @@ module.exports = {
           "/spring-transaction/": genSpringTransactionSidebar(),
           "/apache-http-client/": genApachehttpclientnSidebar(),
           "/myshop2/": genMyshop2Sidebar(),
+          "/supplement1/": genSupplement1Sidebar(),
+          "/micro-service-intro/": genmicroserviceintroSidebar(),
+          "/linux/": genLinuxSidebar(),
+          "/docker/": genDockerSidebar(),
         }
       }
     }
@@ -76,7 +80,8 @@ function genGuideSidebar() {
       collapsable: false,
       children: [
         "走进单体应用",
-        "GitFlow工作流"
+        "GitFlow工作流",
+        "微服务解决复杂问题",
       ]
     },
     {
@@ -148,7 +153,12 @@ function genGitFlowSidebar() {
         "",
         "什么是Git",
         "安装Git",
-        "Git工作流简介"
+        "Git工作流简介",
+        "集中式工作流",
+        "功能分支工作流",
+        "GitFlow 工作流",
+        "Forking 工作流",
+        "Pull Requests",
       ]
     }
   ];
@@ -351,4 +361,182 @@ function genMyshop2Sidebar() {
       ]
     }
   ];
+}
+// 补充知识点
+function genSupplement1Sidebar() {
+  return [
+    {
+      title: "Spring",
+      collapsable: false,
+      children: [
+        ""
+      ]
+    },
+    {
+      title: "Java 工具类",
+      collapsable: false,
+      children: [
+        "CookieUtils",
+        "RegexpUtils",
+        "MapperUtils",
+      ]
+    },
+    {
+      title: "JavaScript 工具类",
+      collapsable: false,
+      children: [
+        "DateTime",
+      ]
+    },
+    {
+      title: "JavaScript 插件",
+      collapsable: false,
+      children: [
+        "jQuery Validation",
+        "jQuery iCheck",
+        "jQuery Datatables",
+        "jQuery TreeTable",
+        "jQuery zTree",
+        "Dropzone",
+        "wangEditor"
+      ]
+    },
+    {
+      title: "IDEA 插件",
+      collapsable: false,
+      children: [
+        "Lombok",
+        "JRebel",
+      ]
+    },
+    {
+      title: "其它",
+      collapsable: false,
+      children: [
+        "Kaptcha",
+        "解决 Maven 无法自动下载依赖的问题"
+      ]
+    }
+  ];
+}
+// Myshop2
+function genMyshop2Sidebar() {
+  return [
+    {
+      title: "项目实战 MyShop（下）",
+      collapsable: false,
+      children: [
+        ""
+      ]
+    }
+  ];
+}
+// 微服务
+function genmicroserviceintroSidebar() {
+  return [
+    {
+      title: "微服务简介",
+      collapsable: false,
+      children: [
+        "",
+        "走向单体地狱",
+        "微服务-解决复杂问题",
+        "微服务的优点",
+        "微服务的缺点",
+      ]
+    }
+  ]
+}
+// linux
+function genLinuxSidebar() {
+  return [
+    {
+      title: "Linux",
+      collapsable: false,
+      children: [
+        "",
+        "Linux 与 Windows 比较",
+        "关于操作系统的选型",
+        "安装 Ubuntu Server",
+        "Linux 远程控制管理",
+        "Linux 的目录结构",
+        "Linux 操作文件目录",
+        "Linux 系统管理命令",
+        "Linux 开关机命令",
+        "Linux 压缩命令",
+        "Linux 编辑器",
+        "Linux 软件包管理",
+        "Linux 用户和组管理",
+        "Linux 文件权限管理",
+        "Linux 安装 Java",
+        "Linux 安装 Tomcat",
+        "Linux 安装 MySQL",
+        "部署应用到生产环境",
+        "附：Linux LVM 磁盘扩容",
+      ]
+    }
+  ]
+}
+// Docker
+function genDockerSidebar() {
+  return [
+    {
+      title: "Docker",
+      collapsable: false,
+      children: [
+        "",
+        "为什么要使用 Docker",
+        "Docker 引擎",
+        "Docker 系统架构",
+        "Docker 镜像",
+        "Docker 容器",
+        "Docker 仓库",
+        "Ubuntu 安装 Docker",
+        "Docker 镜像加速器",
+      ]
+    },
+    {
+      title: "Docker 镜像",
+      collapsable: false,
+      children: [
+        "使用 Docker 镜像",
+        "获取镜像",
+        "列出镜像",
+        "删除本地镜像",
+        "使用 Dockerfile 定制镜像",
+        "Dockerfile 指令",
+      ]
+    },
+    {
+      title: "Docker 容器",
+      collapsable: false,
+      children: [
+        "操作 Docker 容器",
+        "启动容器",
+        "守护态运行",
+        "终止容器",
+        "进入容器",
+      ]
+    },
+    {
+      title: "Docker 仓库",
+      collapsable: false,
+      children: [
+        "访问 Docker 仓库",
+        "Docker Hub",
+        "Docker 私有仓库",
+      ]
+    },
+    {
+      title: "Docker 实战",
+      collapsable: false,
+      children: [
+        "数据卷",
+        "Docker 构建 Tomcat",
+        "Docker 构建 MySQL",
+        "部署项目到容器",
+        "Docker 常用命令",
+      ]
+    }
+  ]
 }

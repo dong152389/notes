@@ -10,7 +10,7 @@ AspectJ 主要是使用 XML 配置顾问方式自动为每个符合切入点表�
 
 创建一个名为 `aspectj-aop` 项目，`pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -149,8 +149,8 @@ import java.util.Date;
  * <p>Title: TbContentCategory</p>
  * <p>Description: </p>
  *
- * @author Lusifer
- * @version 1.0.0
+ * 
+ * 
  * @date 2018/6/25 9:14
  */
 @Data
@@ -168,7 +168,7 @@ public class TbContentCategory {
 
 ### TbContent
 
-```text
+```java
 package com.hello.spring.transaction.aspectsj.aop.domain;
 
 import lombok.Data;
@@ -180,8 +180,8 @@ import java.util.Date;
  * <p>Title: TbContent</p>
  * <p>Description: </p>
  *
- * @author Lusifer
- * @version 1.0.0
+ * 
+ * 
  * @date 2018/6/25 14:02
  */
 @Data
@@ -204,7 +204,7 @@ public class TbContent {
 
 ### TbContentCategoryDao
 
-```text
+```java
 package com.hello.spring.transaction.aspectsj.aop.dao;
 
 import com.hello.spring.transaction.aspectsj.aop.domain.TbContentCategory;
@@ -218,7 +218,7 @@ public interface TbContentCategoryDao {
 
 ### TbContentDao
 
-```text
+```java
 package com.hello.spring.transaction.aspectsj.aop.dao;
 
 import com.hello.spring.transaction.aspectsj.aop.domain.TbContent;
@@ -236,7 +236,7 @@ public interface TbContentDao {
 
 接口
 
-```text
+```java
 package com.hello.spring.transaction.aspectsj.aop.service;
 
 import com.hello.spring.transaction.aspectsj.aop.domain.TbContent;
@@ -249,7 +249,7 @@ public interface TbContentCategoryService {
 
 实现
 
-```text
+```java
 package com.hello.spring.transaction.aspectsj.aop.service.impl;
 
 import com.hello.spring.transaction.aspectsj.aop.dao.TbContentCategoryDao;
@@ -280,7 +280,7 @@ public class TbContentCategoryServiceImpl implements TbContentCategoryService {
 
 接口
 
-```text
+```java
 package com.hello.spring.transaction.aspectsj.aop.service;
 
 import com.hello.spring.transaction.aspectsj.aop.domain.TbContent;
@@ -292,7 +292,7 @@ public interface TbContentService {
 
 实现
 
-```text
+```java
 package com.hello.spring.transaction.aspectsj.aop.service.impl;
 
 import com.hello.spring.transaction.aspectsj.aop.dao.TbContentDao;
@@ -317,7 +317,7 @@ public class TbContentServiceImpl implements TbContentService {
 
 ### `spring-context.xml`
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -352,7 +352,7 @@ public class TbContentServiceImpl implements TbContentService {
 
 ### `spring-context-druid.xml`
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -398,7 +398,7 @@ public class TbContentServiceImpl implements TbContentService {
 
 ### `spring-context-mybatis.xml`
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
@@ -424,7 +424,7 @@ public class TbContentServiceImpl implements TbContentService {
 
 ### `mybatis-config.xml`
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
@@ -471,7 +471,7 @@ public class TbContentServiceImpl implements TbContentService {
 
 ### `TbContentCategoryMapper.xml`
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hello.spring.transaction.aspectsj.aop.dao.TbContentCategoryDao">

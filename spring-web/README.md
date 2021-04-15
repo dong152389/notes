@@ -8,7 +8,7 @@
 
 需要在 `pom.xml` 增加 `org.springframework:spring-web` 依赖
 
-```text
+```xml
 <dependency>
     <groupId>javax.servlet</groupId>
     <artifactId>javax.servlet-api</artifactId>
@@ -27,7 +27,7 @@
 
 `web.xml` 配置如下
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

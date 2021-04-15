@@ -12,7 +12,7 @@
 
 暴露表单引用对象为模型数据的例子
 
-```text
+```java
 @ModelAttribute
 public User get(@RequestParam(required = false) String id) {
     User entity = null;

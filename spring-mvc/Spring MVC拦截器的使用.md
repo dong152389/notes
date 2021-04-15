@@ -25,7 +25,7 @@ Spring MVC 拦截器需要实现 `HandlerInterceptor` 接口，该接口定义�
 
 定义一个名为 `LoginInterceptor` 的拦截器，代码如下：
 
-```text
+```java
 package com.funtl.my.shop.web.interceptor;
 
 import com.funtl.my.shop.entity.User;
@@ -40,8 +40,8 @@ import javax.servlet.http.HttpServletResponse;
  * <p>Title: LoginInterceptor</p>
  * <p>Description: </p>
  *
- * @author Lusifer
- * @version 1.0.0
+ * 
+ * 
  * @date 2018/6/12 5:44
  */
 public class LoginInterceptor implements HandlerInterceptor {
@@ -77,7 +77,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 拦截器定义后还需要在 `spring-mvc.xml` 中配置拦截器，代码如下：
 
-```text
+```xml
 <!-- 拦截器配置，拦截顺序：先执行后定义的，排在第一位的最后执行。-->
 <mvc:interceptors>
     <mvc:interceptor>

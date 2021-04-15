@@ -30,7 +30,7 @@
 
 使用起来很简单，只需要在需要增加事务的业务类上增加 `@Transaction` 注解即可，案例代码如下：
 
-```text
+```java
 package com.hello.spring.transaction.aspectsj.aop.service.impl;
 
 import com.hello.spring.transaction.aspectsj.aop.dao.TbContentCategoryDao;

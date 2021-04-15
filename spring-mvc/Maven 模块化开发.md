@@ -19,7 +19,7 @@
 
 创建一个名为 `my-shop` 的工程，`pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -43,7 +43,7 @@
 
 创建一个名为 `my-shop-dependencies` 的项目，`pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -182,7 +182,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-depen
 
 创建一个名为 `my-shop-commons` 的项目，`pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -210,7 +210,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-commo
 
 创建一个名为 `my-shop-domain` 的项目，`pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -238,7 +238,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-domai
 
 创建一个名为 `my-shop-web-admin` 的项目，`pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -279,7 +279,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-a
 
 创建一个名为 `my-shop-web-ui` 的项目，`pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -315,7 +315,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-u
 
 创建一个名为 `my-shop-web-api` 的项目，`pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -351,7 +351,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-a
 
 至此一个完整的模块化工程创建完毕，此时的 Root 工程 `pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -376,7 +376,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-a
 
 我们可以在 Root 工程中使用 Maven 提供的 `mvn clean` 命令测试一下效果，控制台输出如下：
 
-```text
+```log
 [INFO] Scanning for projects...
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Build Order:

@@ -16,7 +16,7 @@
 
 如果需要返回自定义对象为 JSON 数据类型，需要增加 `jackson` 依赖，`pom.xml` 配置文件如下：
 
-```text
+```xml
 <!-- Json Begin -->
 <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
