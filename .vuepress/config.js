@@ -10,7 +10,7 @@ module.exports = {
   locales: {
     "/": {
       lang: "zh-CN",
-      title: "我的日记",
+      title: "我的笔记",
       description: "方便阅读和寻找"
     }
   },
@@ -54,6 +54,10 @@ module.exports = {
           "/micro-service-intro/": genmicroserviceintroSidebar(),
           "/linux/": genLinuxSidebar(),
           "/docker/": genDockerSidebar(),
+          "/docker-compose/": genDockerComposeSidebar(),
+          "/gitlab/": genGitlabSidebar(),
+          "/nexus/": genNexusSidebar(),
+          "/registry/": genRegistrySidebar(),
         }
       }
     }
@@ -536,6 +540,80 @@ function genDockerSidebar() {
         "Docker 构建 MySQL",
         "部署项目到容器",
         "Docker 常用命令",
+      ]
+    }
+  ]
+}
+// Dockercompose
+function genDockerComposeSidebar() {
+  return [
+    {
+      title: "Docker Compose",
+      collapsable: false,
+      children: [
+        "",
+        "Docker Compose 安装与卸载",
+        "Docker Compose 使用",
+        "Docker Compose 命令说明",
+        "Docker Compose 模板文件",
+        "Docker Compose 实战 Tomcat",
+        "Docker Compose 实战 MySQL",
+        "Docker Compose 部署项目到容器",
+        "Docker Compose 常用命令",
+        "YAML 配置文件语言",
+        "附：为什么说 JSON 不适合做配置文件？",
+      ]
+    }
+  ]
+}
+// Gitlab
+function genGitlabSidebar() {
+  return [
+    {
+      title: "GitLab",
+      collapsable: false,
+      children: [
+        "",
+        "安装 Git",
+        "Git 的一般工作流程",
+        "Git 的基本操作",
+        "TortoiseGit 简化 Git 操作",
+        "什么是 GitLab",
+        "基于 Docker 安装 GitLab",
+        "GitLab 的基本设置",
+        "GitLab 的账户管理",
+        "GitLab 创建第一个项目",
+        "GitLab 使用 SSH 免密登录",
+      ]
+    }
+  ]
+}
+// nexus
+function genNexusSidebar() {
+  return [
+    {
+      title: "Nexus",
+      collapsable: false,
+      children: [
+        "",
+        "基于 Docker 安装 Nexus",
+        "Maven 仓库介绍",
+        "在项目中使用 Maven 私服",
+      ]
+    }
+  ]
+}
+// registry
+function genRegistrySidebar() {
+  return [
+    {
+      title: "Registry",
+      collapsable: false,
+      children: [
+        "",
+        "配置 Docker Registry 客户端",
+        "部署 Docker Registry WebUI",
+        "真正实现：一次构建，到处运行",
       ]
     }
   ]
