@@ -1,9 +1,5 @@
 # Docker 引擎
 
-## 本节视频
-
-- [【视频】基础设施即服务-Docker-引擎](https://www.bilibili.com/video/av27243509/)
-
 ## 概述
 
 Docker 引擎是一个包含以下主要组件的客户端服务器应用程序。

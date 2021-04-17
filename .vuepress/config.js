@@ -188,7 +188,7 @@ function genBootStrapSidebar() {
       title: "Bootstrap",
       collapsable: false,
       children: [
-        "bootstrap简介",
+        "",
         "bootstrap环境安装",
         "bootstrap网格系统",
         "媒体查询的用法",

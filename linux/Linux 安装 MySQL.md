@@ -1,9 +1,5 @@
 # Linux 安装 MySQL
 
-## 本节视频
-
-- [【视频】基础设施即服务-Linux-安装 MySQL](https://www.bilibili.com/video/av27165678/)
-
 ## 安装
 
 ### 更新数据源

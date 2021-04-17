@@ -1,9 +1,5 @@
 # Linux 系统管理命令
 
-## 本节视频
-
-- [【视频】基础设施即服务-Linux-系统管理命令](https://www.bilibili.com/video/av27165280/)
-
 ## 概述
 
 | 命令     | 说明                                         |

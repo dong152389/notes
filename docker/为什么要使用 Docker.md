@@ -1,8 +1,5 @@
 # 为什么要使用 Docker
 
-## 本节视频
-
-- [【视频】基础设施即服务-Docker-为什么要用 Docker](https://www.bilibili.com/video/av27243494/)
 
 ## 概述
 

@@ -1,9 +1,5 @@
 # Docker 镜像
 
-## 本节视频
-
-- [【视频】基础设施即服务-Docker-镜像与容器](https://www.bilibili.com/video/av27243550/)
-
 ## 概述
 
 我们都知道，操作系统分为内核和用户空间。对于 Linux 而言，内核启动后，会挂载 `root` 文件系统为其提供用户空间支持。而 Docker 镜像（Image），就相当于是一个 `root` 文件系统。比如官方镜像 `ubuntu:16.04` 就包含了完整的一套 Ubuntu 16.04 最小系统的 `root` 文件系统。

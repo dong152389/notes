@@ -1,9 +1,5 @@
 # Linux 的目录结构
 
-## 本节视频
-
-- [【视频】基础设施即服务-Linux-目录结构说明](https://www.bilibili.com/video/av27165234/)
-
 ## 概述
 
 ![img](../assets/img/20171102134832.png)

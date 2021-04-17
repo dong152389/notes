@@ -1,9 +1,5 @@
 # Docker 构建 MySQL
 
-## 本节视频
-
-- [【视频】基础设施即服务-Docker-部署数据库](https://www.bilibili.com/video/av27374362)
-
 ## 查找 Docker Hub 上的 MySQL 镜像
 
 ```text

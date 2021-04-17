@@ -1,9 +1,5 @@
 # Linux 编辑器
 
-## 本节视频
-
-- [【视频】基础设施即服务-Linux-编辑器的使用](https://www.bilibili.com/video/av27165307/)
-
 ## vim
 
 ### 运行模式

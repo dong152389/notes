@@ -1,9 +1,5 @@
 # Linux 软件包管理
 
-## 本节视频
-
-- [【视频】基础设施即服务-Linux-软件的安装与卸载](https://www.bilibili.com/video/av27165621/)
-
 ## 概述
 
 APT(Advanced Packaging Tool) 是 Debian/Ubuntu 类 Linux 系统中的软件包管理程序, 使用它可以找到想要的软件包, 而且安装、卸载、更新都很简便；也可以用来对 Ubuntu 进行升级; APT 的源文件为 `/etc/apt/` 目录下的 `sources.list` 文件。

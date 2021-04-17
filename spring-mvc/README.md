@@ -1,7 +1,5 @@
 # Spring MVC 简介
 
-## 本节视频
-
 ## 概述
 
 Spring MVC 也叫 Spring Web MVC ，属于展示层框架。SpringMVC 是 Spring 框架的一部分。

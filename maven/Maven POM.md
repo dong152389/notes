@@ -1,9 +1,5 @@
 # Maven POM
 
-## 本节视频
-
-- [【视频】使用 Maven 构建应用-Maven POM](https://www.bilibili.com/video/av24455333/)
-
 ## 概述
 
 POM 代表项目对象模型。它是 Maven 中工作的基本单位，这是一个 XML 文件。它始终保存在该项目基本目录中的 pom.xml 文件。

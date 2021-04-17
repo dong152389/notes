@@ -1,9 +1,5 @@
 # GitFlow 工作流
 
-## 本节视频
-
-- [【视频】Git工作流指南-GitFlow工作流](https://www.bilibili.com/video/av32573821/)
-
 ## 概述
 
 ![img](../assets/img/git-workflows-gitflow.png)

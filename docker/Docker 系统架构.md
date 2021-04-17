@@ -1,9 +1,5 @@
 # Docker 系统架构
 
-## 本节视频
-
-- [【视频】基础设施即服务-Docker-架构](https://www.bilibili.com/video/av27243524/)
-
 ## 概述
 
 Docker 使用客户端-服务器 (C/S) 架构模式，使用远程 API 来管理和创建 Docker 容器。

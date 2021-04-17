@@ -1,9 +1,5 @@
 # Docker 镜像加速器
 
-## 本节视频
-
-- [【视频】基础设施即服务-Docker-加速器](https://www.bilibili.com/video/av27243570/)
-
 ## 概述
 
 国内从 Docker Hub 拉取镜像有时会遇到困难，此时可以配置镜像加速器。Docker 官方和国内很多云服务商都提供了国内加速器服务，例如：

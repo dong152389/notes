@@ -1,9 +1,5 @@
 # 你怎么理解 RESTful
 
-## 本节视频
-
-- [【视频】解决模块间的通信问题-RESTful 风格的 API 设计](https://www.bilibili.com/video/av26109248/)
-
 ## 概述
 
 2000 年，Roy Thomas Fielding 博士在他那篇著名的博士论文《Architectural Styles and the Design of Network-based Software Architectures》中提出了几种软件应用的架构风格，REST 作为其中的一种架构风格在这篇论文的第5章中进行了概括性的介绍。

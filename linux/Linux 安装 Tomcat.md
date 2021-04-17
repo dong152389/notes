@@ -1,9 +1,5 @@
 # Linux 安装 Tomcat
 
-## 本节视频
-
-- [【视频】基础设施即服务-Linux-安装 Tomcat](https://www.bilibili.com/video/av27165652/)
-
 ## 概述
 
 此处以 Tomcat 8.5.23 为例

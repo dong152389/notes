@@ -1,9 +1,5 @@
 # Linux 安装 Java
 
-## 本节视频
-
-- [【视频】基础设施即服务-Linux-安装 Java](https://www.bilibili.com/video/av27165645/)
-
 ## 概述
 
 此处以 JDK 1.8.0_152 为例

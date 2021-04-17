@@ -1,9 +1,5 @@
 # Linux 压缩命令
 
-## 本节视频
-
-- [【视频】基础设施即服务-Linux-重启与压缩命令](https://www.bilibili.com/video/av27165291/)
-
 ## tar
 
 | 命令 | 语法                                        | 参数 | 参数说明                        |

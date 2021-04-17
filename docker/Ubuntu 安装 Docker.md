@@ -1,9 +1,5 @@
 # Ubuntu 安装 Docker
 
-## 本节视频
-
-- [【视频】基础设施即服务-Docker-安装](https://www.bilibili.com/video/av27243588/)
-
 ## 准备工作
 
 > 警告：切勿在没有配置 Docker APT 源的情况下直接使用 apt 命令安装 Docker.
