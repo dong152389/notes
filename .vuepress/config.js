@@ -60,6 +60,9 @@ module.exports = {
           "/registry/": genRegistrySidebar(),
           "/again-micro/": genAgainMicro(),
           "/springboot/": genSpringboot(),
+          "/spring-boot-thymeleaf/": genSpringbootThymeleaf(),
+          "/spring-boot-mybatis/": genSpringbootMybatis(),
+          "/spring-cloud-netflix/": genSpringcloudNetflix(),
         }
       }
     }
@@ -90,6 +93,7 @@ function genGuideSidebar() {
         "微服务解决复杂问题",
         "再谈微服务",
         "SpringBoot",
+        "SpringCloudNetflix",
       ]
     },
     {
@@ -652,6 +656,58 @@ function genSpringboot() {
         "第一个 Spring Boot 应用程序",
         "Spring Boot 单元测试",
         "Spring Boot 常用配置",
+      ]
+    }
+  ]
+}
+// SpringbootThymeleaf
+function genSpringbootThymeleaf() {
+  return [
+    {
+      title: "Spring Boot Thymeleaf",
+      collapsable: false,
+      children: [
+        "",
+        "为什么使用 Thymeleaf",
+        "第一个 Thymeleaf 模板页",
+        "Thymeleaf 常用语法",
+        "Thymeleaf 参考手册",
+        "Thymeleaf 表达式语法",
+        "Thymeleaf 内置对象",
+        "Thymeleaf 模板布局",
+      ]
+    }
+  ]
+}
+// SpringbootMybatis
+function genSpringbootMybatis() {
+  return [
+    {
+      title: "Spring Boot MyBatis",
+      collapsable: false,
+      children: [
+        "",
+        "Spring Boot 整合 tk.mybatis",
+        "Spring Boot 整合 PageHelper",
+        "使用 MyBatis 的 Maven 插件生成代码",
+        "测试 MyBatis 操作数据库",
+      ]
+    }
+  ]
+}
+
+function genSpringcloudNetflix() {
+  return [
+    {
+      title: "Spring Cloud Netflix",
+      collapsable: false,
+      children: [
+        "",
+        "创建统一的依赖管理",
+        "服务注册与发现",
+        "创建服务提供者",
+        "创建服务消费者（Ribbon）",
+        "创建服务消费者（Feign）",
       ]
     }
   ]
