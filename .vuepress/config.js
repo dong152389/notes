@@ -58,6 +58,8 @@ module.exports = {
           "/gitlab/": genGitlabSidebar(),
           "/nexus/": genNexusSidebar(),
           "/registry/": genRegistrySidebar(),
+          "/again-micro/": genAgainMicro(),
+          "/springboot/": genSpringboot(),
         }
       }
     }
@@ -86,6 +88,8 @@ function genGuideSidebar() {
         "走进单体应用",
         "GitFlow工作流",
         "微服务解决复杂问题",
+        "再谈微服务",
+        "SpringBoot",
       ]
     },
     {
@@ -614,6 +618,40 @@ function genRegistrySidebar() {
         "配置 Docker Registry 客户端",
         "部署 Docker Registry WebUI",
         "真正实现：一次构建，到处运行",
+      ]
+    }
+  ]
+}// 再谈微服务
+function genAgainMicro() {
+  return [
+    {
+      title: "再谈微服务",
+      collapsable: false,
+      children: [
+        "",
+        "传统架构与微服务架构的区别",
+        "微服务的特征",
+        "SOA 架构与微服务架构的区别",
+        "微服务的实践",
+        "小知识-单点故障与分布式锁",
+        "微服务架构设计模式",
+        "新架构新起点",
+      ]
+    }
+  ]
+}// SpringBoot
+function genSpringboot() {
+  return [
+    {
+      title: "SpringBoot",
+      collapsable: false,
+      children: [
+        "",
+        "Spring Boot 简介",
+        "Spring Boot 优缺点",
+        "第一个 Spring Boot 应用程序",
+        "Spring Boot 单元测试",
+        "Spring Boot 常用配置",
       ]
     }
   ]
