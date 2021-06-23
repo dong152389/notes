@@ -63,6 +63,7 @@ module.exports = {
           "/spring-boot-thymeleaf/": genSpringbootThymeleaf(),
           "/spring-boot-mybatis/": genSpringbootMybatis(),
           "/spring-cloud-netflix/": genSpringcloudNetflix(),
+          "/apache-dubbo-zookeeper/": genZookeeper(),
         }
       }
     }
@@ -94,6 +95,7 @@ function genGuideSidebar() {
         "再谈微服务",
         "SpringBoot",
         "SpringCloudNetflix",
+        "Apache-Dubbo",
       ]
     },
     {
@@ -708,6 +710,47 @@ function genSpringcloudNetflix() {
         "创建服务提供者",
         "创建服务消费者（Ribbon）",
         "创建服务消费者（Feign）",
+        "使用熔断器防止服务雪崩",
+        "使用熔断器仪表盘监控",
+        "使用路由网关统一访问接口",
+        "使用路由网关的服务过滤功能"
+      ]
+    },
+    {
+      title: "Spring Cloud 服务配置",
+      collapsable: false,
+      children: [
+        "分布式配置中心",
+        "分布式配置中心服务端",
+        "分布式配置中心客户端"
+      ]
+    },
+    {
+      title: "Spring Cloud 服务追踪",
+      collapsable: false,
+      children: [
+        "服务链路追踪",
+        "Spring Boot Admin",
+        "Spring Boot Admin 服务端",
+        "Spring Boot Admin 客户端"
+      ]
+    }
+  ]
+}
+function genZookeeper() {
+  return [
+    {
+      title: "Apache Zookeeper",
+      collapsable: false,
+      children: [
+        "",
+        "什么是分布式协调技术",
+        "什么是分布式锁",
+        "什么是 Zookeeper",
+        "Zookeeper 如何实现分布式锁",
+        "基于 Docker 安装 Zookeeper",
+        "附：Linux 下手动安装 Zookeeper",
+        "Zookeeper 配置说明",
       ]
     }
   ]
