@@ -64,6 +64,7 @@ module.exports = {
           "/spring-boot-mybatis/": genSpringbootMybatis(),
           "/spring-cloud-netflix/": genSpringcloudNetflix(),
           "/apache-dubbo-zookeeper/": genZookeeper(),
+          "/apache-dubbo-rpc/": genRPC(),
         }
       }
     }
@@ -751,6 +752,26 @@ function genZookeeper() {
         "基于 Docker 安装 Zookeeper",
         "附：Linux 下手动安装 Zookeeper",
         "Zookeeper 配置说明",
+      ]
+    }
+  ]
+}
+function genRPC() {
+  return [
+    {
+      title: "Apache Dubbo",
+      collapsable: false,
+      children: [
+        "",
+        "Dubbo 的服务治理",
+        "Dubbo 的核心功能",
+        "Dubbo 的组件角色",
+        "Dubbo Admin 管理控制台",
+        "第一个 Dubbo 应用程序",
+        "Dubbo 的负载均衡",
+        "Dubbo + Kryo 实现高速序列化",
+        "Dubbo + Hystrix 实现服务熔断",
+        "Dubbo + Hystrix 熔断器仪表盘",
       ]
     }
   ]
