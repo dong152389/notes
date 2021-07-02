@@ -28,8 +28,8 @@ Feign 是一个声明式的伪 Http 客户端，它使得写 Http 客户端变�
     <packaging>jar</packaging>
 
     <name>hello-spring-cloud-web-admin-feign</name>
-    <url>http://www.funtl.com</url>
-    <inceptionYear>2018-Now</inceptionYear>
+    
+    
 
     <dependencies>
         <!-- Spring Boot Begin -->

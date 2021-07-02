@@ -36,8 +36,8 @@ Ribbon 是一个负载均衡客户端，可以很好的控制 `http` 和 `tcp` �
     <packaging>jar</packaging>
 
     <name>hello-spring-cloud-web-admin-ribbon</name>
-    <url>http://www.funtl.com</url>
-    <inceptionYear>2018-Now</inceptionYear>
+    
+    
 
     <dependencies>
         <!-- Spring Boot Begin -->

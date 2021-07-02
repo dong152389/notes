@@ -65,6 +65,7 @@ module.exports = {
           "/spring-cloud-netflix/": genSpringcloudNetflix(),
           "/apache-dubbo-zookeeper/": genZookeeper(),
           "/apache-dubbo-rpc/": genRPC(),
+          "/apache-dubbo-prepare/": genPrepare(),
         }
       }
     }
@@ -772,6 +773,27 @@ function genRPC() {
         "Dubbo + Kryo 实现高速序列化",
         "Dubbo + Hystrix 实现服务熔断",
         "Dubbo + Hystrix 熔断器仪表盘",
+      ]
+    }
+  ]
+}
+function genPrepare() {
+  return [
+    {
+      title: "MyShop 开发前的准备",
+      collapsable: false,
+      children: [
+        "",
+        "了解 XP 极限编程",
+        "系统架构的演进",
+        "搭建通用模块项目"
+      ]
+    },
+    {
+      title: "MyShop 创建第一个服务",
+      collapsable: false,
+      children: [
+        "搭建用户管理服务"
       ]
     }
   ]

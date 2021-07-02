@@ -21,8 +21,8 @@
     <packaging>jar</packaging>
 
     <name>hello-spring-cloud-admin-client</name>
-    <url>http://www.funtl.com</url>
-    <inceptionYear>2018-Now</inceptionYear>
+    
+    
 
     <dependencies>
         <!-- Spring Boot Begin -->
