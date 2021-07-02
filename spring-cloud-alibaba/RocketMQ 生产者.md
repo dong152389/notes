@@ -25,7 +25,7 @@ Binding 在消息中间件与应用程序提供的 Provider 和 Consumer 之间�
 
 ## 解决连接超时问题
 
-在之前的 [基于 Docker 安装 RocketMQ](https://www.dfd.com/zh/spring-cloud-alibaba/基于-Docker-安装-RocketMQ.html#基于-docker-安装-rocketmq) 章节中，我们采用 Docker 部署了 RocketMQ 服务，此时 RocketMQ Broker 暴露的地址和端口(10909，10911)是基于容器的，会导致我们开发机无法连接，从而引发 `org.apache.rocketmq.remoting.exception.RemotingTooMuchRequestException: sendDefaultImpl call timeout` 异常
+在之前的 [基于 Docker 安装 RocketMQ](/spring-cloud-alibaba/基于-Docker-安装-RocketMQ.html#基于-docker-安装-rocketmq) 章节中，我们采用 Docker 部署了 RocketMQ 服务，此时 RocketMQ Broker 暴露的地址和端口(10909，10911)是基于容器的，会导致我们开发机无法连接，从而引发 `org.apache.rocketmq.remoting.exception.RemotingTooMuchRequestException: sendDefaultImpl call timeout` 异常
 
 注意下图中的 IP 地址，这个是容器的 IP，开发机与容器不在一个局域网所以无法连接。
 
@@ -54,8 +54,6 @@ Binding 在消息中间件与应用程序提供的 Provider 和 Consumer 之间�
     <packaging>jar</packaging>
 
     <name>hello-spring-cloud-alibaba-rocketmq-provider</name>
-    <url>http://www.dfd.com</url>
-    <inceptionYear>2018-Now</inceptionYear>
 
     <dependencies>
         <!-- Spring Boot Begin -->
