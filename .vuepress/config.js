@@ -68,6 +68,7 @@ module.exports = {
           "/apache-dubbo-prepare/": genPrepare(),
           "/apache-dubbo-ci/": genCi(),
           "/apache-dubbo-codeing/": genCoding(),
+          "/spring-cloud-alibaba/": genAlibaba(),
         }
       }
     }
@@ -100,6 +101,7 @@ function genGuideSidebar() {
         "SpringBoot",
         "SpringCloudNetflix",
         "Apache-Dubbo",
+        "SpringCloudAlibaba",
       ]
     },
     {
@@ -884,6 +886,57 @@ function genCoding() {
       children: [
         "Apollo 简介",
         "基于 Docker 安装 Apollo",
+      ]
+    }
+  ]
+}
+function genAlibaba() {
+  return [
+    {
+      title: "Spring Cloud Alibaba",
+      collapsable: false,
+      children: [
+        "",
+        "创建统一的依赖管理",
+        "服务注册与发现",
+        "创建服务提供者",
+        "创建服务消费者",
+        "创建服务消费者（Feign）",
+        "使用熔断器防止服务雪崩",
+        "使用熔断器仪表盘监控",
+        "使用路由网关统一访问接口",
+        "使用路由网关的全局过滤功能",
+      ]
+    },
+    {
+      title: "Spring Cloud Alibaba 服务配置",
+      collapsable: false,
+      children: [
+        "Nacos Config 服务端初始化",
+        "Nacos Config 客户端的使用",
+        "Nacos Config 多环境的配置",
+      ]
+    },
+    {
+      title: "Spring Cloud Alibaba 链路追踪",
+      collapsable: false,
+      children: [
+        "为什么需要链路追踪",
+        "SkyWalking 服务端配置",
+        "SkyWalking 客户端配置",
+        "附：Maven Assembly 插件",
+      ]
+    },
+    {
+      title: "Spring Cloud Alibaba 异步通信",
+      collapsable: false,
+      children: [
+        "消息队列的流派",
+        "RocketMQ 简介",
+        "基于 Docker 安装 RocketMQ",
+        "RocketMQ 生产者",
+        "RocketMQ 消费者",
+        "RocketMQ 自定义 Binding",
       ]
     }
   ]
