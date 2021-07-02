@@ -28,8 +28,6 @@ Feign 是一个声明式的伪 Http 客户端，它使得写 Http 客户端变�
     <packaging>jar</packaging>
 
     <name>hello-spring-cloud-alibaba-nacos-consumer-feign</name>
-    <url>http://www.dfd.com</url>
-    <inceptionYear>2018-Now</inceptionYear>
 
     <dependencies>
         <!-- Spring Boot Begin -->
@@ -81,7 +79,7 @@ Feign 是一个声明式的伪 Http 客户端，它使得写 Http 客户端变�
 通过 `@EnableFeignClients` 注解开启 Feign 功能
 
 ```java
-package com.funtl.hello.spring.cloud.alibaba.nacos.consumer.feign;
+package com.dfd.hello.spring.cloud.alibaba.nacos.consumer.feign;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -103,7 +101,7 @@ public class NacosConsumerFeignApplication {
 通过 `@FeignClient("服务名")` 注解来指定调用哪个服务。代码如下：
 
 ```java
-package com.funtl.hello.spring.cloud.alibaba.nacos.consumer.feign.service;
+package com.dfd.hello.spring.cloud.alibaba.nacos.consumer.feign.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -120,9 +118,9 @@ public interface EchoService {
 ## Controller
 
 ```java
-package com.funtl.hello.spring.cloud.alibaba.nacos.consumer.feign.controller;
+package com.dfd.hello.spring.cloud.alibaba.nacos.consumer.feign.controller;
 
-import com.funtl.hello.spring.cloud.alibaba.nacos.consumer.feign.service.EchoService;
+import com.dfd.hello.spring.cloud.alibaba.nacos.consumer.feign.service.EchoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -184,7 +182,7 @@ Hello Nacos Discovery Hi Feign
 - 修改 `consumer-provider` 项目中的 `Controller` 代码，用于确定负载均衡生效
 
 ```java
-package com.funtl.hello.spring.cloud.alibaba.nacos.provider;
+package com.dfd.hello.spring.cloud.alibaba.nacos.provider;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;

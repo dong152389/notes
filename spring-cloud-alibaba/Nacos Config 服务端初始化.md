@@ -18,7 +18,7 @@ Spring Cloud Alibaba Nacos Config 是 Spring Cloud Config Server 和 Client 的�
 
 ![img](./img/Lusifer_20190111030328.png)
 
-- 新建配置文件，此处我们以之前创建的 [**服务提供者**](https://www.funtl.com/zh/spring-cloud-alibaba/创建服务提供者.html#创建服务提供者) 项目为例
+- 新建配置文件，此处我们以之前创建的 [**服务提供者**](/spring-cloud-alibaba/创建服务提供者.html#创建服务提供者) 项目为例
 
 ![img](./img/Lusifer_20190111030615.png)
 

@@ -14,7 +14,7 @@ java -jar hello-spring-cloud-alibaba-nacos-provider-1.0.0-SNAPSHOT.jar --spring.
 
 spring-cloud-starter-alibaba-nacos-config 在加载配置的时候，不仅仅加载了以 dataid 为 `${spring.application.name}.${file-extension:properties}` 为前缀的基础配置，还加载了 dataid 为 `${spring.application.name}-${profile}.${file-extension:properties}` 的基础配置。在日常开发中如果遇到多套环境下的不同配置，可以通过 Spring 提供的 `${spring.profiles.active}` 这个配置项来配置。
 
-此处我们以之前创建的 [**服务提供者**](https://www.funtl.com/zh/spring-cloud-alibaba/创建服务提供者.html#创建服务提供者) 项目为例
+此处我们以之前创建的 [**服务提供者**](/spring-cloud-alibaba/创建服务提供者.html#创建服务提供者) 项目为例
 
 ### 在 Nacos Server 中增加配置
 

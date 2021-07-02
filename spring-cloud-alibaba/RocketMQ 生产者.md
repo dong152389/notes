@@ -99,7 +99,7 @@ Binding 在消息中间件与应用程序提供的 Provider 和 Consumer 之间�
 ## 消息生产者服务
 
 ```java
-package com.funtl.hello.spring.cloud.alibaba.rocketmq.provider.service;
+package com.dfd.hello.spring.cloud.alibaba.rocketmq.provider.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.MessageChannel;
@@ -122,9 +122,9 @@ public class ProviderService {
 配置 Output(`Source.class`) 的 Binding 信息并配合 `@EnableBinding` 注解使其生效
 
 ```java
-package com.funtl.hello.spring.cloud.alibaba.rocketmq.provider;
+package com.dfd.hello.spring.cloud.alibaba.rocketmq.provider;
 
-import com.funtl.hello.spring.cloud.alibaba.rocketmq.provider.service.ProviderService;
+import com.dfd.hello.spring.cloud.alibaba.rocketmq.provider.service.ProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

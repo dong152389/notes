@@ -2,7 +2,7 @@
 
 ## 基于 Docker 安装 ElasticSearch
 
-在 [**为什么需要链路追踪**](/zh/spring-cloud-alibaba/为什么需要链路追踪.html#为什么需要链路追踪) 章节中介绍过 SkyWalking 存储方案有多种，官方推荐的方案是 ElasticSearch ，所以我们需要先安装 ElasticSearch。
+在 [**为什么需要链路追踪**](/spring-cloud-alibaba/为什么需要链路追踪.html#为什么需要链路追踪) 章节中介绍过 SkyWalking 存储方案有多种，官方推荐的方案是 ElasticSearch ，所以我们需要先安装 ElasticSearch。
 
 ### docker-compose.yml
 

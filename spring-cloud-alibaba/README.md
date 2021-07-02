@@ -14,7 +14,7 @@ Spring Cloud Alibaba 致力于提供微服务开发的一站式解决方案。�
 
 依托 Spring Cloud Alibaba，您只需要添加一些注解和少量配置，就可以将 Spring Cloud 应用接入阿里微服务解决方案，通过阿里中间件来迅速搭建分布式应用系统。
 
-**注：学习 Spring Cloud Alibaba 之前，先学习一下我之前的 [Spring Cloud](https://www.funtl.com/zh/spring-cloud-netflix/#简介) 课程，效果更佳哦；**
+**注：学习 Spring Cloud Alibaba 之前，先学习一下我之前的 [Spring Cloud](/spring-cloud-netflix/#简介) 课程**
 
 [Spring Cloud Alibaba GitHub](https://github.com/spring-cloud-incubator/spring-cloud-alibaba/blob/master/README-zh.md)
 
