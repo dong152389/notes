@@ -26,7 +26,7 @@
 以 `tb_user` 表为例，实体类代码如下：
 
 ```text
-package com.funtl.my.shop.domain;
+package com.dfd.my.shop.domain;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -103,9 +103,9 @@ public class TbUser implements Serializable {
 注意：Spring 集成 MyBatis 后，不需要手动实现 DAO 层的接口，所有的 SQL 执行语句都写在对应的关系映射配置文件中。
 
 ```text
-package com.funtl.my.shop.web.admin.dao;
+package com.dfd.my.shop.web.admin.dao;
 
-import com.funtl.my.shop.domain.TbUser;
+import com.dfd.my.shop.domain.TbUser;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -124,9 +124,9 @@ public interface TbUserDao {
 ## 第一个-MyBatis-对象关系映射.html#定义业务逻辑接口)定义业务逻辑接口
 
 ```text
-package com.funtl.my.shop.web.admin.service;
+package com.dfd.my.shop.web.admin.service;
 
-import com.funtl.my.shop.domain.TbUser;
+import com.dfd.my.shop.domain.TbUser;
 
 import java.util.List;
 
@@ -143,11 +143,11 @@ public interface TbUserService {
 ## 实现业务逻辑接口
 
 ```text
-package com.funtl.my.shop.web.admin.service.impl;
+package com.dfd.my.shop.web.admin.service.impl;
 
-import com.funtl.my.shop.domain.TbUser;
-import com.funtl.my.shop.web.admin.dao.TbUserDao;
-import com.funtl.my.shop.web.admin.service.TbUserService;
+import com.dfd.my.shop.domain.TbUser;
+import com.dfd.my.shop.web.admin.dao.TbUserDao;
+import com.dfd.my.shop.web.admin.service.TbUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -173,7 +173,7 @@ public class TbUserServiceImpl implements TbUserService {
 ```text
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.funtl.my.shop.web.admin.dao.TbUserDao">
+<mapper namespace="com.dfd.my.shop.web.admin.dao.TbUserDao">
     <select id="selectAll" resultType="TbUser">
         SELECT
           a.id,
@@ -194,10 +194,10 @@ public class TbUserServiceImpl implements TbUserService {
 所有工作准备就绪，我们就可以测试 MyBatis 是否能够正常执行了。创建一个单元测试类，代码如下：
 
 ```text
-package com.funtl.my.shop.web.admin.service.test;
+package com.dfd.my.shop.web.admin.service.test;
 
-import com.funtl.my.shop.domain.TbUser;
-import com.funtl.my.shop.web.admin.dao.TbUserDao;
+import com.dfd.my.shop.domain.TbUser;
+import com.dfd.my.shop.web.admin.dao.TbUserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

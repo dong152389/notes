@@ -33,7 +33,7 @@
     ├─main
     │  ├─java
     │  │  └─com
-    │  │      └─funtl
+    │  │      └─dfd
     │  │          └─hello
     │  │              └─spring
     │  │                  └─boot
@@ -47,7 +47,7 @@
     └─test
         └─java
             └─com
-                └─funtl
+                └─dfd
                     └─hello
                         └─spring
                             └─boot
@@ -70,7 +70,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-spring-boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -124,7 +124,7 @@
 我们创建一个 Controller 来演示一下 Spring Boot 的神奇功能
 
 ```java
-package com.funtl.hello.spring.boot.controller;
+package com.dfd.hello.spring.boot.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

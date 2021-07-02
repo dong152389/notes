@@ -167,7 +167,7 @@ Spring MVC 上传文件需要 `commons-fileupload:commons-fileupload` 依赖支�
 以下为控制器中接收文件的关键代码：
 
 ```java
-package com.funtl.my.shop.web.admin.web.controller;
+package com.dfd.my.shop.web.admin.web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

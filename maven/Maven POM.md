@@ -20,7 +20,7 @@ POM 也包含了目标和插件。在执行任务或目标时，Maven 会使用�
 
 ## POM 的例子
 
-```text
+```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0

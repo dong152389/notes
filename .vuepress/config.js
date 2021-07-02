@@ -66,6 +66,8 @@ module.exports = {
           "/apache-dubbo-zookeeper/": genZookeeper(),
           "/apache-dubbo-rpc/": genRPC(),
           "/apache-dubbo-prepare/": genPrepare(),
+          "/apache-dubbo-ci/": genCi(),
+          "/apache-dubbo-codeing/": genCoding(),
         }
       }
     }
@@ -794,6 +796,94 @@ function genPrepare() {
       collapsable: false,
       children: [
         "搭建用户管理服务"
+      ]
+    }
+  ]
+}
+function genCi() {
+  return [
+    {
+      title: "GitLab 持续集成",
+      collapsable: false,
+      children: [
+        "",
+        "持续集成的操作流程",
+        "使用 GitLab 持续集成",
+        "基于 Docker 安装 GitLab Runner",
+        "持续集成实战用户管理服务",
+      ]
+    },
+    {
+      title: "Jenkins 持续交付",
+      collapsable: false,
+      children: [
+        "什么是 Jenkins",
+        "基于 Docker 安装 Jenkins",
+        "配置 Jenkins",
+        "持续交付实战用户管理服务",
+      ]
+    }
+  ]
+}
+function genCoding() {
+  return [
+    {
+      title: "API Gateway",
+      collapsable: false,
+      children: [
+        "",
+      ]
+    },
+    {
+      title: "FastDFS 分布式文件上传",
+      collapsable: false,
+      children: [
+        "什么是 FastDFS",
+        "基于 Docker 安装 FastDFS",
+        "配置 FastDFS Java 客户端",
+      ]
+    },
+    {
+      title: "Nginx 解决跨域问题",
+      collapsable: false,
+      children: [
+        "跨域现象",
+        "什么是 Nginx",
+        "Nginx 虚拟主机",
+        "Nginx 反向代理",
+        "Nginx 负载均衡",
+        "使用 Nginx 解决跨域问题",
+      ]
+    },
+    {
+      title: "Redis 实现数据缓存",
+      collapsable: false,
+      children: [
+        "Redis 简介",
+        "Redis HA 方案",
+        "Redis Sentinel 集群部署",
+        "Redis 命令汇总",
+        "创建缓存服务提供者",
+        "配置 MyBatis Redis 二级缓存",
+      ]
+    },
+    {
+      title: "Solr 实现全文检索",
+      collapsable: false,
+      children: [
+        "什么是 Solr",
+        "什么是搜索引擎",
+        "基于 Docker 安装 Solr",
+        "Solr 的基本操作",
+        "Spring Boot 整合 Solr",
+      ]
+    },
+    {
+      title: "Apollo 分布式配置中心",
+      collapsable: false,
+      children: [
+        "Apollo 简介",
+        "基于 Docker 安装 Apollo",
       ]
     }
   ]

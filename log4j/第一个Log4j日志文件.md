@@ -15,7 +15,7 @@ slf4j 的全称是 Simple Loging Facade For Java，即它仅仅是一个为 Java
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-spring</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -80,7 +80,7 @@ log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
 创建一个测试类，并测试日志输出效果，代码如下：
 
 ```text
-package com.funtl.hello.spring;
+package com.dfd.hello.spring;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,10 +104,10 @@ public class MyTest {
 此时控制台显示为：
 
 ```text
-2018-06-07 05:15:42,914 INFO [com.funtl.hello.spring.MyTest] - slf4j for info
-2018-06-07 05:15:42,915 ERROR [com.funtl.hello.spring.MyTest] - slf4j for error
-2018-06-07 05:15:42,915 WARN [com.funtl.hello.spring.MyTest] - slf4j for warn
-2018-06-07 05:15:42,916 INFO [com.funtl.hello.spring.MyTest] - slf4j message is : Hello SLF4J
+2018-06-07 05:15:42,914 INFO [com.dfd.hello.spring.MyTest] - slf4j for info
+2018-06-07 05:15:42,915 ERROR [com.dfd.hello.spring.MyTest] - slf4j for error
+2018-06-07 05:15:42,915 WARN [com.dfd.hello.spring.MyTest] - slf4j for warn
+2018-06-07 05:15:42,916 INFO [com.dfd.hello.spring.MyTest] - slf4j message is : Hello SLF4J
 ```
 
 项目根目录下也会多出 `logs/log.log` 目录及文件

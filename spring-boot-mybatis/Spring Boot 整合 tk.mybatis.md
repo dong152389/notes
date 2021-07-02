@@ -22,7 +22,7 @@ tk.mybatis 是在 MyBatis 框架的基础上提供了很多工具，让开发更
 
 ```yaml
 mybatis:
-    type-aliases-package: 实体类的存放路径，如：com.funtl.hello.spring.boot.entity
+    type-aliases-package: 实体类的存放路径，如：com.dfd.hello.spring.boot.entity
     mapper-locations: classpath:mapper/*.xml
 ```
 
@@ -31,7 +31,7 @@ mybatis:
 主要作用是让 DAO 层的接口继承该接口，以达到使用 tk.mybatis 的目的
 
 ```java
-package com.funtl.utils;
+package com.dfd.utils;
 
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;

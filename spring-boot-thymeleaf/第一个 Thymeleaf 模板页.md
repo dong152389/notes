@@ -15,7 +15,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-spring-boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -72,7 +72,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.funtl.hello.spring.boot.HelloSpringBootApplication</mainClass>
+                    <mainClass>com.dfd.hello.spring.boot.HelloSpringBootApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -97,7 +97,7 @@ spring:
 创建一个测试效果的 JavaBean，简单封装一下即可
 
 ```java
-package com.funtl.hello.spring.boot.entity;
+package com.dfd.hello.spring.boot.entity;
 
 import java.io.Serializable;
 
@@ -129,9 +129,9 @@ public class PersonBean implements Serializable {
 创建一个 Controller，造一些测试数据并设置跳转
 
 ```java
-package com.funtl.hello.spring.boot.controller;
+package com.dfd.hello.spring.boot.controller;
 
-import com.funtl.hello.spring.boot.entity.PersonBean;
+import com.dfd.hello.spring.boot.entity.PersonBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

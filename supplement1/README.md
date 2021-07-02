@@ -94,7 +94,7 @@ Spring 4.0 开始支持 Bean Validation 功能。
 已为大家封装好了工具类，享用即可。创建一个名为 `BeanValidator` 的工具类，代码如下：
 
 ```java
-package com.funtl.my.shop.commons.validator;
+package com.dfd.my.shop.commons.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -267,7 +267,7 @@ private String email;
 ```text
 <!-- 配置 Bean Validator 定义 -->
 <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
-<bean id="beanValidator" class="com.funtl.my.shop.commons.validator.BeanValidator">
+<bean id="beanValidator" class="com.dfd.my.shop.commons.validator.BeanValidator">
     <property name="validator" ref="validator" />
 </bean>
 ```
@@ -276,4 +276,4 @@ private String email;
 
 配置完成后，在浏览器端测试直接提交数据，效果如下：
 
-![img](https://www.funtl.com/assets/Lusifer1530018411.png)
+![img](https://www.dfd.com/assets/Lusifer1530018411.png)

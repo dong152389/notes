@@ -11,7 +11,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-spring</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -39,7 +39,7 @@
 在测试包下 `src/main/test` 创建一个名为 `MyTest` 的测试类，代码如下：
 
 ```text
-package com.funtl.hello.spring.test;
+package com.dfd.hello.spring.test;
 
 import org.junit.After;
 import org.junit.Before;

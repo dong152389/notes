@@ -62,14 +62,14 @@ Java Web 的 Maven 基本结构如下：
 
 修改 `pom.xml` 配置，内容如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-maven</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
@@ -100,8 +100,8 @@ Java Web 的 Maven 基本结构如下：
 
 创建一个 `Servlet` 用于测试请求
 
-```text
-package com.funtl.hello.maven.servlet;
+```java
+package com.dfd.hello.maven.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -127,7 +127,7 @@ public class HelloServlet extends HttpServlet {
 
 创建一个 `JSP` 页面，用于测试请求
 
-```text
+```jsp
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -143,7 +143,7 @@ public class HelloServlet extends HttpServlet {
 
 在 `src/main/resources` 目录下创建 `log4j.properties` 配置文件，内容如下：
 
-```text
+```properties
 log4j.rootLogger=INFO, console, file
 
 log4j.appender.console=org.apache.log4j.ConsoleAppender
@@ -162,7 +162,7 @@ log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
 
 `web.xml` 配置文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -171,7 +171,7 @@ log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
 
     <servlet>
         <servlet-name>HelloServlet</servlet-name>
-        <servlet-class>com.funtl.hello.maven.servlet.HelloServlet</servlet-class>
+        <servlet-class>com.dfd.hello.maven.servlet.HelloServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HelloServlet</servlet-name>

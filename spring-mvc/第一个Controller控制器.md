@@ -3,9 +3,9 @@
 ## 概述
 
 ```java
-package com.funtl.my.shop.web.controller;
+package com.dfd.my.shop.web.controller;
 
-import com.funtl.my.shop.service.UserService;
+import com.dfd.my.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -26,7 +26,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>my-shop</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -50,7 +50,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>my-shop</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -189,7 +189,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-depen
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>my-shop-dependencies</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../my-shop-dependencies/pom.xml</relativePath>
@@ -217,7 +217,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-commo
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>my-shop-dependencies</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../my-shop-dependencies/pom.xml</relativePath>
@@ -245,7 +245,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-domai
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>my-shop-dependencies</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../my-shop-dependencies/pom.xml</relativePath>
@@ -259,12 +259,12 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-domai
 
     <dependencies>
         <dependency>
-            <groupId>com.funtl</groupId>
+            <groupId>com.dfd</groupId>
             <artifactId>my-shop-commons</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.funtl</groupId>
+            <groupId>com.dfd</groupId>
             <artifactId>my-shop-domain</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -286,7 +286,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-a
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>my-shop-dependencies</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../my-shop-dependencies/pom.xml</relativePath>
@@ -300,7 +300,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-a
 
     <dependencies>
         <dependency>
-            <groupId>com.funtl</groupId>
+            <groupId>com.dfd</groupId>
             <artifactId>my-shop-commons</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -322,7 +322,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-u
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>my-shop-dependencies</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../my-shop-dependencies/pom.xml</relativePath>
@@ -336,7 +336,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-u
 
     <dependencies>
         <dependency>
-            <groupId>com.funtl</groupId>
+            <groupId>com.dfd</groupId>
             <artifactId>my-shop-commons</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -358,7 +358,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-a
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>my-shop</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>

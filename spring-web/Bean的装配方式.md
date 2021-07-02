@@ -37,7 +37,7 @@
 ">
 
     <context:annotation-config />
-    <context:component-scan base-package="com.funtl.leeshop"/>
+    <context:component-scan base-package="com.dfd.leeshop"/>
 </beans>
 ```
 

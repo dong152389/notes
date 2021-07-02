@@ -18,7 +18,7 @@ Feign 是一个声明式的伪 Http 客户端，它使得写 Http 客户端变�
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>hello-spring-cloud-dependencies</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../hello-spring-cloud-dependencies/pom.xml</relativePath>
@@ -80,7 +80,7 @@ Feign 是一个声明式的伪 Http 客户端，它使得写 Http 客户端变�
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.funtl.hello.spring.cloud.web.admin.feign.WebAdminFeignApplication</mainClass>
+                    <mainClass>com.dfd.hello.spring.cloud.web.admin.feign.WebAdminFeignApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -102,7 +102,7 @@ Feign 是一个声明式的伪 Http 客户端，它使得写 Http 客户端变�
 通过 `@EnableFeignClients` 注解开启 Feign 功能
 
 ```java
-package com.funtl.hello.spring.cloud.web.admin.feign;
+package com.dfd.hello.spring.cloud.web.admin.feign;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -148,7 +148,7 @@ eureka:
 通过 `@FeignClient("服务名")` 注解来指定调用哪个服务。代码如下：
 
 ```java
-package com.funtl.hello.spring.cloud.web.admin.feign.service;
+package com.dfd.hello.spring.cloud.web.admin.feign.service;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -166,9 +166,9 @@ public interface AdminService {
 ### 创建测试用的 Controller
 
 ```java
-package com.funtl.hello.spring.cloud.web.admin.feign.controller;
+package com.dfd.hello.spring.cloud.web.admin.feign.controller;
 
-import com.funtl.hello.spring.cloud.web.admin.feign.service.AdminService;
+import com.dfd.hello.spring.cloud.web.admin.feign.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

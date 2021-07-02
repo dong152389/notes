@@ -46,7 +46,7 @@ Jackson 类库包含了很多注解，可以让我们快速建立 Java 类与 JS
 ### 对象的序列化与反序列化
 
 ```text
-package com.funtl.hello.httpclient;
+package com.dfd.hello.httpclient;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -110,7 +110,7 @@ class Student {
 ### 集合的序列化与反序列化
 
 ```text
-package com.funtl.hello.httpclient;
+package com.dfd.hello.httpclient;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;

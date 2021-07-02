@@ -86,7 +86,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <!-- 用于配置对应实体类所在的包，多个 package 之间可以用 ',' 号分割 -->
-        <property name="typeAliasesPackage" value="com.funtl.my.shop.domain"/>
+        <property name="typeAliasesPackage" value="com.dfd.my.shop.domain"/>
         <!-- 用于配置对象关系映射配置文件所在目录 -->
         <property name="mapperLocations" value="classpath:/mapper/**/*.xml"/>
         <property name="configLocation" value="classpath:/mybatis-config.xml"></property>
@@ -94,7 +94,7 @@
 
     <!-- 扫描 Mapper -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.funtl.my.shop.web.admin.dao" />
+        <property name="basePackage" value="com.dfd.my.shop.web.admin.dao" />
     </bean>
 </beans>
 ```

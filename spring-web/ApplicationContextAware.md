@@ -3,7 +3,7 @@
 当一个类实现了这个接口（`ApplicationContextAware`）之后，这个类就可以方便获得 `ApplicationContext` 中的所有 bean。换句话说，就是这个类可以直接获取 Spring 配置文件中，所有有引用到的 Bean 对象。
 
 ```java
-package com.funtl.leeshop.commons.context;
+package com.dfd.leeshop.commons.context;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -77,7 +77,7 @@ public class SpringContext implements ApplicationContextAware, DisposableBean {
 }
 ```
 
-还需要在 `spring-context.xml` 配置文件中装配 `<bean id="springContext" class="com.funtl.leeshop.commons.context.SpringContext" />`;
+还需要在 `spring-context.xml` 配置文件中装配 `<bean id="springContext" class="com.dfd.leeshop.commons.context.SpringContext" />`;
 
 **注意：请将该 Bean 放在配置顶部，否则使用时会报错**
 
@@ -104,7 +104,7 @@ public class SpringContext implements ApplicationContextAware, DisposableBean {
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>leeshop</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>

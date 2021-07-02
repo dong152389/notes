@@ -77,9 +77,9 @@ int count();
 创建一个名为 `PageInfo` 的分页数据展示对象，代码如下：
 
 ```java
-package com.funtl.my.shop.commons.dto;
+package com.dfd.my.shop.commons.dto;
 
-import com.funtl.my.shop.commons.persistence.BaseEntity;
+import com.dfd.my.shop.commons.persistence.BaseEntity;
 
 import java.io.Serializable;
 import java.util.List;

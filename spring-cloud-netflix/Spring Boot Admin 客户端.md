@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>hello-spring-cloud-dependencies</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../hello-spring-cloud-dependencies/pom.xml</relativePath>
@@ -72,7 +72,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.funtl.hello.spring.cloud.admin.client.AdminClientApplication</mainClass>
+                    <mainClass>com.dfd.hello.spring.cloud.admin.client.AdminClientApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -100,7 +100,7 @@
 程序入口类没有特别需要修改的地方
 
 ```java
-package com.funtl.hello.spring.cloud.admin.client;
+package com.dfd.hello.spring.cloud.admin.client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

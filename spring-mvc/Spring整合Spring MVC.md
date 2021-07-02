@@ -127,7 +127,7 @@ web.view.suffix=.jsp
 
 ```xml
 <!-- 使用 Annotation 自动注册 Bean，在主容器中不扫描 @Controller 注解，在 SpringMVC 中只扫描 @Controller 注解。-->
-<context:component-scan base-package="com.funtl.my.shop">
+<context:component-scan base-package="com.dfd.my.shop">
     <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 </context:component-scan>
 ```

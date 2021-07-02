@@ -13,14 +13,14 @@
 **PS：** 注意这里的 `@MapperScan` 注解是 `tk.mybatis.spring.annotation.MapperScan;` 包下的
 
 ```java
-package com.funtl.hello.spring.boot;
+package com.dfd.hello.spring.boot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.funtl.hello.spring.boot.mapper")
+@MapperScan(basePackages = "com.dfd.hello.spring.boot.mapper")
 public class HelloSpringBootApplication {
 
     public static void main(String[] args) {
@@ -32,10 +32,10 @@ public class HelloSpringBootApplication {
 ## 创建测试类
 
 ```java
-package com.funtl.hello.spring.boot;
+package com.dfd.hello.spring.boot;
 
-import com.funtl.hello.spring.boot.entity.TbUser;
-import com.funtl.hello.spring.boot.mapper.TbUserMapper;
+import com.dfd.hello.spring.boot.entity.TbUser;
+import com.dfd.hello.spring.boot.mapper.TbUserMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.junit.Test;
@@ -155,7 +155,7 @@ public class MyBatisTests {
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-spring-boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -233,7 +233,7 @@ public class MyBatisTests {
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.funtl.hello.spring.boot.HelloSpringBootApplication</mainClass>
+                    <mainClass>com.dfd.hello.spring.boot.HelloSpringBootApplication</mainClass>
                 </configuration>
             </plugin>
 

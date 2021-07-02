@@ -52,10 +52,10 @@ dubbo:
 ### 修改 `UserServiceImpl` 代码为
 
 ```java
-package com.funtl.hello.dubbo.service.user.provider.api.impl;
+package com.dfd.hello.dubbo.service.user.provider.api.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.funtl.hello.dubbo.service.user.api.UserService;
+import com.dfd.hello.dubbo.service.user.api.UserService;
 import org.springframework.beans.factory.annotation.Value;
 
 @Service(version = "${user.service.version}")

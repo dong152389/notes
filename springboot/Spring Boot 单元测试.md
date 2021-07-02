@@ -5,7 +5,7 @@
 主要是通过 `@RunWith` 和 `@SpringBootTest` 注解来开启单元测试功能
 
 ```java
-package com.funtl.hello.spring.boot;
+package com.dfd.hello.spring.boot;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 # CookieUtils
 
 ```text
-package com.funtl.leeshop.commons.utils;
+package com.dfd.leeshop.commons.utils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

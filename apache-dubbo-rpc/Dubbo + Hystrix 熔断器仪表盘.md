@@ -17,7 +17,7 @@
 ## 在 Application 中增加 `@EnableHystrixDashboard` 注解
 
 ```java
-package com.funtl.hello.dubbo.service.user.consumer;
+package com.dfd.hello.dubbo.service.user.consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -39,7 +39,7 @@ public class HelloDubboServiceUserConsumerApplication {
 Spring Boot 2.x 版本开启 Hystrix Dashboard 与 Spring Boot 1.x 的方式略有不同，需要增加一个 `HystrixMetricsStreamServlet` 的配置，代码如下：
 
 ```java
-package com.funtl.hello.dubbo.service.user.consumer.config;
+package com.dfd.hello.dubbo.service.user.consumer.config;
 
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

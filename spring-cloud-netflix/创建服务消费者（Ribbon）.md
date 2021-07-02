@@ -26,7 +26,7 @@ Ribbon 是一个负载均衡客户端，可以很好的控制 `http` 和 `tcp` �
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.funtl</groupId>
+        <groupId>com.dfd</groupId>
         <artifactId>hello-spring-cloud-dependencies</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../hello-spring-cloud-dependencies/pom.xml</relativePath>
@@ -88,7 +88,7 @@ Ribbon 是一个负载均衡客户端，可以很好的控制 `http` 和 `tcp` �
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.funtl.hello.spring.cloud.web.admin.ribbon.WebAdminRibbonApplication</mainClass>
+                    <mainClass>com.dfd.hello.spring.cloud.web.admin.ribbon.WebAdminRibbonApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -110,7 +110,7 @@ Ribbon 是一个负载均衡客户端，可以很好的控制 `http` 和 `tcp` �
 通过 `@EnableDiscoveryClient` 注解注册到服务中心
 
 ```java
-package com.funtl.hello.spring.cloud.web.admin.ribbon;
+package com.dfd.hello.spring.cloud.web.admin.ribbon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -154,7 +154,7 @@ eureka:
 配置注入 `RestTemplate` 的 Bean，并通过 `@LoadBalanced` 注解表明开启负载均衡功能
 
 ```java
-package com.funtl.hello.spring.cloud.web.admin.ribbon.config;
+package com.dfd.hello.spring.cloud.web.admin.ribbon.config;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -177,7 +177,7 @@ public class RestTemplateConfiguration {
 在这里我们直接用的程序名替代了具体的 URL 地址，在 Ribbon 中它会根据服务名来选择具体的服务实例，根据服务实例在请求的时候会用具体的 URL 替换掉服务名，代码如下：
 
 ```java
-package com.funtl.hello.spring.cloud.web.admin.ribbon.service;
+package com.dfd.hello.spring.cloud.web.admin.ribbon.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -198,9 +198,9 @@ public class AdminService {
 ### 创建测试用的 Controller
 
 ```java
-package com.funtl.hello.spring.cloud.web.admin.ribbon.controller;
+package com.dfd.hello.spring.cloud.web.admin.ribbon.controller;
 
-import com.funtl.hello.spring.cloud.web.admin.ribbon.service.AdminService;
+import com.dfd.hello.spring.cloud.web.admin.ribbon.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

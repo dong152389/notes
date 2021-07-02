@@ -99,7 +99,7 @@ Kaptcha 是一个可高度配置的实用验证码生成工具，可自由配置
 `Controller` 层的关键代码如下，主要作用为将生成的验证码放入 `Session` 并输出到页面
 
 ```java
-package com.funtl.my.shop.web.ui.controller;
+package com.dfd.my.shop.web.ui.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;

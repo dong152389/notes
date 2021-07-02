@@ -31,7 +31,7 @@ Netflix 开源了 Hystrix 组件，实现了熔断器模式，Spring Cloud 对�
 ### 在 Application 中增加 `@EnableHystrix` 注解
 
 ```java
-package com.funtl.hello.dubbo.service.user.provider;
+package com.dfd.hello.dubbo.service.user.provider;
 
 import com.alibaba.dubbo.container.Main;
 import org.springframework.boot.SpringApplication;
@@ -53,10 +53,10 @@ public class HelloDubboServiceUserProviderApplication {
 在调用方法上增加 `@HystrixCommand` 配置，此时调用会经过 Hystrix 代理
 
 ```java
-package com.funtl.hello.dubbo.service.user.provider.api.impl;
+package com.dfd.hello.dubbo.service.user.provider.api.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.funtl.hello.dubbo.service.user.api.UserService;
+import com.dfd.hello.dubbo.service.user.api.UserService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Value;
@@ -102,7 +102,7 @@ Exception to show hystrix enabled.
 ### 在 Application 中增加 `@EnableHystrix` 注解
 
 ```java
-package com.funtl.hello.dubbo.service.user.consumer;
+package com.dfd.hello.dubbo.service.user.consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -120,10 +120,10 @@ public class HelloDubboServiceUserConsumerApplication {
 ### 在调用方法上增加 `@HystrixCommand` 注解，并指定 `fallbackMethod` 方法
 
 ```java
-package com.funtl.hello.dubbo.service.user.consumer.controller;
+package com.dfd.hello.dubbo.service.user.consumer.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.funtl.hello.dubbo.service.user.api.UserService;
+import com.dfd.hello.dubbo.service.user.api.UserService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

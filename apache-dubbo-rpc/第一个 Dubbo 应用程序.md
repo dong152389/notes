@@ -17,7 +17,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-dubbo-service-user-api</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -33,7 +33,7 @@
 ### 定义服务接口
 
 ```java
-package com.funtl.hello.dubbo.service.user.api;
+package com.dfd.hello.dubbo.service.user.api;
 
 public interface UserService {
     String sayHi();
@@ -52,7 +52,7 @@ public interface UserService {
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-dubbo-service-user-provider</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -100,7 +100,7 @@ public interface UserService {
         </dependency>
 
         <dependency>
-            <groupId>com.funtl</groupId>
+            <groupId>com.dfd</groupId>
             <artifactId>hello-dubbo-service-user-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
@@ -112,7 +112,7 @@ public interface UserService {
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.funtl.hello.dubbo.service.user.provider.HelloDubboServiceUserProviderApplication</mainClass>
+                    <mainClass>com.dfd.hello.dubbo.service.user.provider.HelloDubboServiceUserProviderApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -125,15 +125,15 @@ public interface UserService {
 
 - `com.alibaba.boot:dubbo-spring-boot-starter:0.2.0`：Dubbo Starter，0.2.0 版本支持 Spring Boot 2.x，是一个长期维护的版本。注：0.1.0 版本已经不推荐使用了，是个短期维护的版本，如果你还在用旧版，请大家尽快升级。
 - `com.alibaba.boot:dubbo-spring-boot-actuator:0.2.0`：Dubbo 的服务状态检查
-- `com.funtl:hello-dubbo-service-user-api:1.0.0-SNAPSHOT`：刚才创建的接口项目，如果无法依赖别忘记先 `mvn clean install` 到本地仓库。
+- `com.dfd:hello-dubbo-service-user-api:1.0.0-SNAPSHOT`：刚才创建的接口项目，如果无法依赖别忘记先 `mvn clean install` 到本地仓库。
 
 ### 通过 `@Service` 注解实现服务提供方
 
 ```java
-package com.funtl.hello.dubbo.service.user.provider.api.impl;
+package com.dfd.hello.dubbo.service.user.provider.api.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.funtl.hello.dubbo.service.user.api.UserService;
+import com.dfd.hello.dubbo.service.user.api.UserService;
 
 @Service(version = "${user.service.version}")
 public class UserServiceImpl implements UserService {
@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
 ### Application
 
 ```java
-package com.funtl.hello.dubbo.service.user.provider;
+package com.dfd.hello.dubbo.service.user.provider;
 
 import com.alibaba.dubbo.container.Main;
 import org.springframework.boot.SpringApplication;
@@ -180,7 +180,7 @@ user:
 dubbo:
   ## Base packages to scan Dubbo Component：@com.alibaba.dubbo.config.annotation.Service
   scan:
-    basePackages: com.funtl.hello.dubbo.service.user.provider.api
+    basePackages: com.dfd.hello.dubbo.service.user.provider.api
   ## ApplicationConfig Bean
   application:
     id: hello-dubbo-service-user-provider
@@ -235,7 +235,7 @@ management:
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.funtl</groupId>
+    <groupId>com.dfd</groupId>
     <artifactId>hello-dubbo-service-user-consumer</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -283,7 +283,7 @@ management:
         </dependency>
 
         <dependency>
-            <groupId>com.funtl</groupId>
+            <groupId>com.dfd</groupId>
             <artifactId>hello-dubbo-service-user-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
@@ -295,7 +295,7 @@ management:
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.funtl.hello.dubbo.service.user.consumer.HelloDubboServiceUserConsumerApplication</mainClass>
+                    <mainClass>com.dfd.hello.dubbo.service.user.consumer.HelloDubboServiceUserConsumerApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -307,10 +307,10 @@ management:
 ### 通过 `@Reference` 注入 `UserService`
 
 ```java
-package com.funtl.hello.dubbo.service.user.consumer.controller;
+package com.dfd.hello.dubbo.service.user.consumer.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.funtl.hello.dubbo.service.user.api.UserService;
+import com.dfd.hello.dubbo.service.user.api.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -330,7 +330,7 @@ public class UserController {
 ### Application
 
 ```java
-package com.funtl.hello.dubbo.service.user.consumer;
+package com.dfd.hello.dubbo.service.user.consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -361,7 +361,7 @@ user:
 # Dubbo Config properties
 dubbo:
   scan:
-    basePackages: com.funtl.hello.dubbo.service.user.consumer.controller
+    basePackages: com.dfd.hello.dubbo.service.user.consumer.controller
   ## ApplicationConfig Bean
   application:
     id: hello-dubbo-service-user-consumer

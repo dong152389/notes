@@ -75,7 +75,7 @@ HttpClient 相比传统 JDK 自带的 `URLConnection`，增加了易用性和灵
 案例代码如下：
 
 ```text
-package com.funtl.hello.httpclient;
+package com.dfd.hello.httpclient;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -148,7 +148,7 @@ public class MyTest {
 案例代码如下：
 
 ```text
-package com.funtl.hello.httpclient;
+package com.dfd.hello.httpclient;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;

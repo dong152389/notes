@@ -57,7 +57,7 @@
         
         <!-- 配置 tk.mybatis 插件 -->
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-            <property name="mappers" value="com.funtl.utils.MyMapper"/>
+            <property name="mappers" value="com.dfd.utils.MyMapper"/>
         </plugin>
 
         <!-- 配置数据库连接 -->
@@ -69,14 +69,14 @@
         </jdbcConnection>
 
         <!-- 配置实体类存放路径 -->
-        <javaModelGenerator targetPackage="com.funtl.hello.spring.boot.entity" targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="com.dfd.hello.spring.boot.entity" targetProject="src/main/java"/>
 
         <!-- 配置 XML 存放路径 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
         <!-- 配置 DAO 存放路径 -->
         <javaClientGenerator
-                targetPackage="com.funtl.hello.spring.boot.mapper"
+                targetPackage="com.dfd.hello.spring.boot.mapper"
                 targetProject="src/main/java"
                 type="XMLMAPPER"/>
 
