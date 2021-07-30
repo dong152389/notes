@@ -1,7 +1,7 @@
 # MapperUtils
 
 ```java
-package com.lusifer.leeshop.server.commons.utils;
+package com.dfd.leeshop.server.commons.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;

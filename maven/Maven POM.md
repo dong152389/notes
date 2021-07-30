@@ -26,7 +26,7 @@ POM 也包含了目标和插件。在执行任务或目标时，Maven 会使用�
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
    http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
-   <groupId>com.lusifer</groupId>
+   <groupId>com.dfd</groupId>
    <artifactId>project</artifactId>
    <version>1.0</version>
 <project>

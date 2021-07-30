@@ -76,7 +76,7 @@
     <context:property-placeholder ignore-unresolvable="true" location="classpath:myshop.properties"/>
 
     <!-- 使用 Annotation 自动注册 Bean,只扫描 @Controller -->
-    <context:component-scan base-package="com.lusifer.myshop" use-default-filters="false">
+    <context:component-scan base-package="com.dfd.myshop" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 

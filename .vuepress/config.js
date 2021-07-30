@@ -9,7 +9,7 @@ module.exports = {
   },
   locales: {
     "/": {
-      lang: "zh-CN",
+      // lang: "zh-CN",
       title: "我的笔记",
       description: "方便阅读和寻找"
     }
@@ -22,8 +22,8 @@ module.exports = {
     editLinks: false,
     locales: {
       "/": {
-        label: "简体中文",
-        selectText: "Languages",
+        // label: "简体中文",
+        // selectText: "Languages",
         lastUpdated: "上次更新",
         nav: [
           {
@@ -42,14 +42,14 @@ module.exports = {
           "/spring/": genSpringSidebar(),
           "/junit/": genJunitSidebar(),
           "/log4j/": genLog4jSidebar(),
-          "/servlet/": genServletSidebar(),
+          // "/servlet/": genServletSidebar(),
           "/spring-web/": genSpringwebSidebar(),
           "/spring-mvc/": genSpringmvcSidebar(),
           "/mybatis/": genMybatisSidebar(),
-          "/myshop1/": genMyshop1Sidebar(),
+          // "/myshop1/": genMyshop1Sidebar(),
           "/spring-transaction/": genSpringTransactionSidebar(),
           "/apache-http-client/": genApachehttpclientnSidebar(),
-          "/myshop2/": genMyshop2Sidebar(),
+          // "/myshop2/": genMyshop2Sidebar(),
           "/supplement1/": genSupplement1Sidebar(),
           "/micro-service-intro/": genmicroserviceintroSidebar(),
           "/linux/": genLinuxSidebar(),
@@ -69,6 +69,12 @@ module.exports = {
           "/apache-dubbo-ci/": genCi(),
           "/apache-dubbo-codeing/": genCoding(),
           "/spring-cloud-alibaba/": genAlibaba(),
+          "/spring-cloud-alibaba-myshop/": genAlibabaShop(),
+          "/vue-prepare/": genVuePrepare(),
+          "/vue/": genVue(),
+          "/vue-cli/": genVueCli(),
+          "/vue-router/": genVueRouter(),
+          "/vuex/": genVuex()
         }
       }
     }
@@ -102,15 +108,16 @@ function genGuideSidebar() {
         "SpringCloudNetflix",
         "Apache-Dubbo",
         "SpringCloudAlibaba",
-      ]
-    },
-    {
-      title: "运维",
-      collapsable: false,
-      children: [
-        "服务网格化"
+        "Vue 渐进式 JavaScript 框架",
       ]
     }
+    // {
+    //   title: "运维",
+    //   collapsable: false,
+    //   children: [
+    //     "服务网格化"
+    //   ]
+    // }
   ];
 }
 
@@ -261,7 +268,7 @@ function genLog4jSidebar() {
   ];
 }
 // 综合复习
-function genServletSidebar() {
+/* function genServletSidebar() {
   return [
     {
       title: "综合复习",
@@ -271,7 +278,7 @@ function genServletSidebar() {
       ]
     }
   ];
-}
+} */
 // SpringWeb
 function genSpringwebSidebar() {
   return [
@@ -327,7 +334,7 @@ function genMybatisSidebar() {
   ];
 }
 // Myshop1
-function genMyshop1Sidebar() {
+/* function genMyshop1Sidebar() {
   return [
     {
       title: "项目实战 MyShop（上）",
@@ -337,7 +344,7 @@ function genMyshop1Sidebar() {
       ]
     }
   ];
-}
+} */
 // SpringTransaction
 function genSpringTransactionSidebar() {
   return [
@@ -360,18 +367,18 @@ function genApachehttpclientnSidebar() {
       collapsable: false,
       children: [
         "",
-        "Apache HttpClient",
+        // "Apache HttpClient",
         "Jackson",
-        "创建 API 接口模块",
+        // "创建 API 接口模块",
         "你怎么理解 RESTful",
         "什么是幂等性",
-        "实现 RESTful 风格的 API"
+        // "实现 RESTful 风格的 API"
       ]
     }
   ];
 }
 // Myshop2
-function genMyshop2Sidebar() {
+/* function genMyshop2Sidebar() {
   return [
     {
       title: "项目实战 MyShop（下）",
@@ -381,7 +388,7 @@ function genMyshop2Sidebar() {
       ]
     }
   ];
-}
+} */
 // 补充知识点
 function genSupplement1Sidebar() {
   return [
@@ -937,6 +944,172 @@ function genAlibaba() {
         "RocketMQ 生产者",
         "RocketMQ 消费者",
         "RocketMQ 自定义 Binding",
+      ]
+    }
+  ]
+}
+function genAlibabaShop() {
+  return [
+    {
+      title: "Alibaba For MyShop",
+      collapsable: false,
+      children: [
+        "",
+        "基础设施"
+      ]
+    },
+    {
+      title: "极限编程",
+      collapsable: false,
+      children: [
+        "了解敏捷开发",
+        "了解 XP 极限编程"
+      ]
+    },
+    {
+      title: "创建项目",
+      collapsable: false,
+      children: [
+        "创建统一的依赖管理",
+        "创建通用的工具类库",
+        "创建通用的领域模型",
+        "创建通用的数据访问",
+        "创建通用的业务逻辑",
+        "创建通用的代码生成",
+        "创建外部的链路追踪",
+      ]
+    },
+    {
+      title: "牛刀小试",
+      collapsable: false,
+      children: [
+        "创建用户注册服务",
+        "理解 RESTful 风格的 API",
+        "再谈 RESTful 风格的 API",
+        "实现 RESTful 风格的 API",
+        "完善用户注册服务",
+        "发送注册成功邮件",
+        "配置 Swagger2 接口文档引擎",
+      ]
+    },
+    {
+      title: "前后分离",
+      collapsable: false,
+      children: [
+        "创建商品服务提供者",
+        "创建商品服务消费者",
+        "创建路由网关统一访问接口",
+        "创建前后分离管理后台"
+      ]
+    },
+  ]
+}
+function genVuePrepare() {
+  return [
+    {
+      title: "前端知识体系",
+      collapsable: false,
+      children: [
+        "",
+        "了解前后分离的演变史",
+        "了解前端 MVVM 模式"
+      ]
+    },
+  ]
+}
+function genVue() {
+  return [
+    {
+      title: "Vue.js",
+      collapsable: false,
+      children: [
+        "",
+        "第一个 Vue 应用程序",
+        "附：Vue 实例的生命周期",
+      ]
+    },
+    {
+      title: "语法篇",
+      collapsable: false,
+      children: [
+        "v-if,v-else",
+        "v-else-if",
+        "v-for",
+      ]
+    },
+    {
+      title: "事件篇",
+      collapsable: false,
+      children: [
+        "v-on"
+      ]
+    },
+    {
+      title: "网络篇",
+      collapsable: false,
+      children: [
+        "使用 Axios 实现异步通信",
+      ]
+    },
+    {
+      title: "布局篇",
+      collapsable: false,
+      children: [
+        "表单输入",
+        "组件基础",
+        "计算属性",
+        "内容分发与自定义事件"
+      ]
+    }
+  ]
+}
+function genVueCli() {
+  return [
+    {
+      title: "vue-cli",
+      collapsable: false,
+      children: [
+        "",
+        "vue-cli 目录结构",
+        "vue-cli src 目录",
+        "附：Mac 系统操作 Vue 的权限问题"
+      ]
+    },{
+      title: "Webpack",
+      collapsable: false,
+      children: [
+        "Webpack 简介",
+        "安装 WebPack",
+        "使用 WebPack"
+      ]
+    }
+  ]
+}
+function genVueRouter() {
+  return [
+    {
+      title: "vue-router",
+      collapsable: false,
+      children: [
+        "",
+        "第一个 Vue 工程项目",
+        "第一个 ElementUI 登录页",
+        "配置嵌套路由",
+        "参数传递",
+        "组件重定向",
+        "路由模式与 404",
+        "路由钩子与异步请求"
+      ]
+    }
+  ]
+}
+function genVuex() {
+  return [
+    {
+      title: "vuex",
+      collapsable: false,
+      children: [
+        ""
       ]
     }
   ]

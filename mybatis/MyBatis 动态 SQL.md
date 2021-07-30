@@ -31,9 +31,9 @@
 ```text
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lusifer.mybatis.dao.DynamicStudentDao">
+<mapper namespace="com.dfd.mybatis.dao.DynamicStudentDao">
     <!-- if -->
-    <select id="selectByIf" resultType="com.lusifer.mybatis.entity.Student">
+    <select id="selectByIf" resultType="com.dfd.mybatis.entity.Student">
         SELECT
             id,
             name,
@@ -60,7 +60,7 @@
 
 ```text
 <!-- where-->
-<select id="selectByWhere" resultType="com.lusifer.mybatis.entity.Student">
+<select id="selectByWhere" resultType="com.dfd.mybatis.entity.Student">
     SELECT
         id,
         name,
@@ -89,7 +89,7 @@
 
 ```text
 <!-- choose -->
-<select id="selectByChoose" resultType="com.lusifer.mybatis.entity.Student">
+<select id="selectByChoose" resultType="com.dfd.mybatis.entity.Student">
     SELECT
         id,
         name,
@@ -130,7 +130,7 @@
 
 ```text
 <!-- foreach -->
-<select id="selectByForeach" resultType="com.lusifer.mybatis.entity.Student">
+<select id="selectByForeach" resultType="com.dfd.mybatis.entity.Student">
     <!-- select * from student where id in (2, 4) -->
     SELECT
         id,
@@ -169,7 +169,7 @@ public List<Student> selectByForeachWithListBase(List<Long> ids);
 
 ```text
 <!-- foreach -->
-<select id="selectByForeachWithListBase" resultType="com.lusifer.mybatis.entity.Student">
+<select id="selectByForeachWithListBase" resultType="com.dfd.mybatis.entity.Student">
     <!-- select * from student where id in (2, 4) -->
     SELECT
         id,
@@ -204,7 +204,7 @@ public List<Student> selectByForeachWithListCustom(List<Student> students);
 
 ```text
 <!-- foreach -->
-<select id="selectByForeachWithListCustom" resultType="com.lusifer.mybatis.entity.Student">
+<select id="selectByForeachWithListCustom" resultType="com.dfd.mybatis.entity.Student">
     <!-- select * from student where id in (2, 4) -->
     SELECT
         id,
@@ -242,7 +242,7 @@ public List<Student> selectByForeachWithListCustom(List<Student> students);
 
 ```text
 <!-- foreach -->
-<select id="selectByForeachWithListCustom" resultType="com.lusifer.mybatis.entity.Student">
+<select id="selectByForeachWithListCustom" resultType="com.dfd.mybatis.entity.Student">
     <!-- select * from student where id in (2, 4) -->
     <include refid="select" />
 
