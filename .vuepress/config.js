@@ -74,7 +74,8 @@ module.exports = {
           "/vue/": genVue(),
           "/vue-cli/": genVueCli(),
           "/vue-router/": genVueRouter(),
-          "/vuex/": genVuex()
+          "/vuex/": genVuex(),
+          "/service-mesh-kubernetes/": serviceMesh()
         }
       }
     }
@@ -110,14 +111,14 @@ function genGuideSidebar() {
         "SpringCloudAlibaba",
         "Vue 渐进式 JavaScript 框架",
       ]
+    },
+    {
+      title: "高级",
+      collapsable: false,
+      children: [
+        "服务网格化"
+      ]
     }
-    // {
-    //   title: "运维",
-    //   collapsable: false,
-    //   children: [
-    //     "服务网格化"
-    //   ]
-    // }
   ];
 }
 
@@ -1110,6 +1111,25 @@ function genVuex() {
       collapsable: false,
       children: [
         ""
+      ]
+    }
+  ]
+}
+function serviceMesh() {
+  return [
+    {
+      title: "Kubernetes 入门",
+      collapsable: false,
+      children: [
+        "",
+        "Kubernetes 安装前的准备",
+        "安装 kubeadm",
+        "配置 kubeadm",
+        "使用 kubeadm 搭建 kubernetes 集群",
+        "使用 kubeadm 配置 slave 节点",
+        "配置网络",
+        "第一个 Kubernetes 容器",
+        "概念总结",
       ]
     }
   ]
