@@ -43,7 +43,6 @@ Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
   - 可以通过安装 master 时的日志查看 sha256 信息
   - 可以通过 `openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'` 命令查看 sha256 信息
 
-以上方式感谢群友 **停 驻** 提供。
 
 ## 验证是否成功
 
