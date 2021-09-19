@@ -51,7 +51,7 @@ vi /etc/systemd/resolved.conf
 
 把 DNS 取消注释，添加 DNS，保存退出，重启即可
 
-![img](C:/Users/dong5/Desktop/my-notes/service-mesh-kubernetes/img/Lusifer_20190602201826.png)
+![img](./img/Lusifer_20190602201826.png)
 
 
 
