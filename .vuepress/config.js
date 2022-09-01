@@ -1131,6 +1131,22 @@ function serviceMesh() {
         "第一个 Kubernetes 容器",
         "概念总结",
       ]
+    },
+    {
+      title: "Kubernetes 进阶",
+      collapsable: false,
+      children: [
+        "Kubernetes 高可用集群",
+        "解决 Node 无法加入的问题",
+        "通过资源配置运行容器",
+        "Ingress 统一访问入口",
+        "准备数据持久化",
+        "实现数据持久化",
+        "Kubernetes ConfigMap",
+        "Kubernetes Dashboard",
+        "Kubectl 与 Docker 命令",
+        "Kubectl 常用命令"
+      ]
     }
   ]
 }
