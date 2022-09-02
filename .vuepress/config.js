@@ -11,7 +11,7 @@ module.exports = {
     "/": {
       // lang: "zh-CN",
       title: "我的笔记",
-      description: "方便阅读和寻找"
+      description: "记录Java的学习过程"
     }
   },
   head: [
@@ -103,19 +103,30 @@ function genGuideSidebar() {
       children: [
         "走进单体应用",
         "GitFlow工作流",
-        "微服务解决复杂问题",
-        "再谈微服务",
+        "微服务概述",
         "SpringBoot",
         "SpringCloudNetflix",
         "Apache-Dubbo",
         "SpringCloudAlibaba",
         "Vue 渐进式 JavaScript 框架",
       ]
-    },
-    {
+    } ,
+   /* {
       title: "高级",
       collapsable: false,
       children: [
+        "服务网格化"
+      ]
+    }, */
+    {
+      title: "初识容器化",
+      collapsable: false,
+      children: [
+        "Docker",
+        "Docker-Compose",
+        "GitLab",
+        "Nexus",
+        "Registry",
         "服务网格化"
       ]
     }
