@@ -680,7 +680,9 @@ function genSpringboot() {
         "",
         "Spring Boot 简介",
         "Spring Boot 优缺点",
-        "第一个 Spring Boot 应用程序",
+        "Spring Boot 快速入门",
+        "Spring Boot 的配置文件",
+        "Spring Boot 自动配置的原理",
         "Spring Boot 单元测试",
         "Spring Boot 常用配置",
       ]
