@@ -75,7 +75,8 @@ module.exports = {
           "/vue-cli/": genVueCli(),
           "/vue-router/": genVueRouter(),
           "/vuex/": genVuex(),
-          "/service-mesh-kubernetes/": serviceMesh()
+          "/service-mesh-kubernetes/": serviceMesh(),
+          "/mycat/": mycat()
         }
       }
     }
@@ -110,24 +111,21 @@ function genGuideSidebar() {
         "SpringCloudAlibaba",
         "Vue 渐进式 JavaScript 框架",
       ]
-    } ,
-   /* {
-      title: "高级",
-      collapsable: false,
-      children: [
-        "服务网格化"
-      ]
-    }, */
+    },
     {
       title: "初识容器化",
       collapsable: false,
       children: [
         "Docker",
         "Docker-Compose",
-        "GitLab",
-        "Nexus",
-        "Registry",
         "服务网格化"
+      ]
+    },
+    {
+      title: "高级",
+      collapsable: false,
+      children: [
+        "MyCat"
       ]
     }
   ];
@@ -593,6 +591,7 @@ function genDockerComposeSidebar() {
         "Docker Compose 模板文件",
         "Docker Compose 实战 Tomcat",
         "Docker Compose 实战 MySQL",
+        "Docker Compose 实战 Redis",
         "Docker Compose 部署项目到容器",
         "Docker Compose 常用命令",
         "YAML 配置文件语言",
@@ -1088,7 +1087,7 @@ function genVueCli() {
         "vue-cli src 目录",
         "附：Mac 系统操作 Vue 的权限问题"
       ]
-    },{
+    }, {
       title: "Webpack",
       collapsable: false,
       children: [
@@ -1159,6 +1158,32 @@ function serviceMesh() {
         "Kubernetes Dashboard",
         "Kubectl 与 Docker 命令",
         "Kubectl 常用命令"
+      ]
+    }
+  ]
+}
+function mycat() {
+  return [
+    {
+      title: "MyCat 入门",
+      collapsable: false,
+      children: [
+        "",
+        "安装",
+        "登录",
+        "搭建读写分离",
+        "垂直拆分—分库",
+        "水平拆分—分表",
+        "常用分片规则"
+      ]
+    },
+    {
+      title: "MyCat 进阶",
+      collapsable: false,
+      children: [
+        "基于 HA 机制的 Mycat 高可用",
+        "Mycat 安全设置",
+        "Mycat 监控工具"
       ]
     }
   ]
