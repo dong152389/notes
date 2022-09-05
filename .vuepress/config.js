@@ -76,7 +76,8 @@ module.exports = {
           "/vue-router/": genVueRouter(),
           "/vuex/": genVuex(),
           "/service-mesh-kubernetes/": serviceMesh(),
-          "/mycat/": mycat()
+          "/mycat/": mycat(),
+          "/gradle/": gradle()
         }
       }
     }
@@ -93,7 +94,8 @@ function genGuideSidebar() {
   return [
     {
       title: "简言",
-      collapsable: false, //collapsable: false 来让一个组永远都是展开状态
+      collapsable: false,
+      sidebarDepth: 5, //collapsable: false 来让一个组永远都是展开状态
       children: [
         "",
       ]
@@ -101,6 +103,7 @@ function genGuideSidebar() {
     {
       title: "开始",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "走进单体应用",
         "GitFlow工作流",
@@ -115,6 +118,7 @@ function genGuideSidebar() {
     {
       title: "初识容器化",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "Docker",
         "Docker-Compose",
@@ -124,8 +128,10 @@ function genGuideSidebar() {
     {
       title: "高级",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
-        "MyCat"
+        "MyCat",
+        "Gradle"
       ]
     }
   ];
@@ -137,6 +143,7 @@ function genIdeaSidebar() {
     {
       title: "Intellij IDEA",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "第一个 IDEA 应用程序"
@@ -151,6 +158,7 @@ function genMavenSidebar() {
     {
       title: "Maven",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Maven安装配置",
@@ -173,6 +181,7 @@ function genDevOpsSidebar() {
     {
       title: "服务网格化",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         ""
       ]
@@ -186,6 +195,7 @@ function genGitFlowSidebar() {
     {
       title: "GitFlow工作流指南",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "什么是Git",
@@ -207,6 +217,7 @@ function genMVCSidebar() {
     {
       title: "三层架构 + MVC",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "mvc模式"
@@ -220,6 +231,7 @@ function genBootStrapSidebar() {
     {
       title: "Bootstrap",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "bootstrap环境安装",
@@ -237,6 +249,7 @@ function genSpringSidebar() {
     {
       title: "Spring",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "spring体系结构",
@@ -253,6 +266,7 @@ function genJunitSidebar() {
     {
       title: "JUnit",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "第一个JUnit单元测试",
@@ -268,6 +282,7 @@ function genLog4jSidebar() {
     {
       title: "Log4j",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "第一个Log4j日志文件",
@@ -283,6 +298,7 @@ function genLog4jSidebar() {
     {
       title: "综合复习",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         ""
       ]
@@ -295,6 +311,7 @@ function genSpringwebSidebar() {
     {
       title: "Spring Web",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "ApplicationContextAware",
@@ -310,6 +327,7 @@ function genSpringmvcSidebar() {
     {
       title: "Spring Mvc",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Spring整合Spring MVC",
@@ -330,6 +348,7 @@ function genMybatisSidebar() {
     {
       title: "MyBatis",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Druid 简介",
@@ -349,6 +368,7 @@ function genMybatisSidebar() {
     {
       title: "项目实战 MyShop（上）",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         ""
       ]
@@ -361,6 +381,7 @@ function genSpringTransactionSidebar() {
     {
       title: "Spring Transaction",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "使用 AspectJ 的 AOP 配置管理事务",
@@ -375,6 +396,7 @@ function genApachehttpclientnSidebar() {
     {
       title: "解决模块间通信问题",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         // "Apache HttpClient",
@@ -393,6 +415,7 @@ function genApachehttpclientnSidebar() {
     {
       title: "项目实战 MyShop（下）",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         ""
       ]
@@ -405,6 +428,7 @@ function genSupplement1Sidebar() {
     {
       title: "Spring",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         ""
       ]
@@ -412,6 +436,7 @@ function genSupplement1Sidebar() {
     {
       title: "Java 工具类",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "CookieUtils",
         "RegexpUtils",
@@ -421,6 +446,7 @@ function genSupplement1Sidebar() {
     {
       title: "JavaScript 工具类",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "DateTime",
       ]
@@ -428,6 +454,7 @@ function genSupplement1Sidebar() {
     {
       title: "JavaScript 插件",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "jQuery Validation",
         "jQuery iCheck",
@@ -441,6 +468,7 @@ function genSupplement1Sidebar() {
     {
       title: "IDEA 插件",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "Lombok",
         "JRebel",
@@ -449,6 +477,7 @@ function genSupplement1Sidebar() {
     {
       title: "其它",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "Kaptcha",
         "解决 Maven 无法自动下载依赖的问题"
@@ -462,6 +491,7 @@ function genMyshop2Sidebar() {
     {
       title: "项目实战 MyShop（下）",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         ""
       ]
@@ -474,6 +504,7 @@ function genmicroserviceintroSidebar() {
     {
       title: "微服务简介",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "走向单体地狱",
@@ -490,6 +521,7 @@ function genLinuxSidebar() {
     {
       title: "Linux",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Linux 与 Windows 比较",
@@ -520,6 +552,7 @@ function genDockerSidebar() {
     {
       title: "Docker",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "为什么要使用 Docker",
@@ -535,6 +568,7 @@ function genDockerSidebar() {
     {
       title: "Docker 镜像",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "使用 Docker 镜像",
         "获取镜像",
@@ -547,6 +581,7 @@ function genDockerSidebar() {
     {
       title: "Docker 容器",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "操作 Docker 容器",
         "启动容器",
@@ -558,6 +593,7 @@ function genDockerSidebar() {
     {
       title: "Docker 仓库",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "访问 Docker 仓库",
         "Docker Hub",
@@ -567,6 +603,7 @@ function genDockerSidebar() {
     {
       title: "Docker 实战",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "数据卷",
         "Docker 构建 Tomcat",
@@ -583,6 +620,7 @@ function genDockerComposeSidebar() {
     {
       title: "Docker Compose",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Docker Compose 安装与卸载",
@@ -606,6 +644,7 @@ function genGitlabSidebar() {
     {
       title: "GitLab",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "安装 Git",
@@ -628,6 +667,7 @@ function genNexusSidebar() {
     {
       title: "Nexus",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "基于 Docker 安装 Nexus",
@@ -643,6 +683,7 @@ function genRegistrySidebar() {
     {
       title: "Registry",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "配置 Docker Registry 客户端",
@@ -657,6 +698,7 @@ function genAgainMicro() {
     {
       title: "再谈微服务",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "传统架构与微服务架构的区别",
@@ -675,6 +717,7 @@ function genSpringboot() {
     {
       title: "SpringBoot",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Spring Boot 简介",
@@ -694,6 +737,7 @@ function genSpringbootThymeleaf() {
     {
       title: "Spring Boot Thymeleaf",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "为什么使用 Thymeleaf",
@@ -713,6 +757,7 @@ function genSpringbootMybatis() {
     {
       title: "Spring Boot MyBatis",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Spring Boot 整合 tk.mybatis",
@@ -729,6 +774,7 @@ function genSpringcloudNetflix() {
     {
       title: "Spring Cloud Netflix",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "创建统一的依赖管理",
@@ -745,6 +791,7 @@ function genSpringcloudNetflix() {
     {
       title: "Spring Cloud 服务配置",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "分布式配置中心",
         "分布式配置中心服务端",
@@ -754,6 +801,7 @@ function genSpringcloudNetflix() {
     {
       title: "Spring Cloud 服务追踪",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "服务链路追踪",
         "Spring Boot Admin",
@@ -768,6 +816,7 @@ function genZookeeper() {
     {
       title: "Apache Zookeeper",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "什么是分布式协调技术",
@@ -786,6 +835,7 @@ function genRPC() {
     {
       title: "Apache Dubbo",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Dubbo 的服务治理",
@@ -806,6 +856,7 @@ function genPrepare() {
     {
       title: "MyShop 开发前的准备",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "了解 XP 极限编程",
@@ -816,6 +867,7 @@ function genPrepare() {
     {
       title: "MyShop 创建第一个服务",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "搭建用户管理服务"
       ]
@@ -827,6 +879,7 @@ function genCi() {
     {
       title: "GitLab 持续集成",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "持续集成的操作流程",
@@ -838,6 +891,7 @@ function genCi() {
     {
       title: "Jenkins 持续交付",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "什么是 Jenkins",
         "基于 Docker 安装 Jenkins",
@@ -852,6 +906,7 @@ function genCoding() {
     {
       title: "API Gateway",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
       ]
@@ -859,6 +914,7 @@ function genCoding() {
     {
       title: "FastDFS 分布式文件上传",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "什么是 FastDFS",
         "基于 Docker 安装 FastDFS",
@@ -868,6 +924,7 @@ function genCoding() {
     {
       title: "Nginx 解决跨域问题",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "跨域现象",
         "什么是 Nginx",
@@ -880,6 +937,7 @@ function genCoding() {
     {
       title: "Redis 实现数据缓存",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "Redis 简介",
         "Redis HA 方案",
@@ -892,6 +950,7 @@ function genCoding() {
     {
       title: "Solr 实现全文检索",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "什么是 Solr",
         "什么是搜索引擎",
@@ -903,6 +962,7 @@ function genCoding() {
     {
       title: "Apollo 分布式配置中心",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "Apollo 简介",
         "基于 Docker 安装 Apollo",
@@ -915,6 +975,7 @@ function genAlibaba() {
     {
       title: "Spring Cloud Alibaba",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "创建统一的依赖管理",
@@ -931,6 +992,7 @@ function genAlibaba() {
     {
       title: "Spring Cloud Alibaba 服务配置",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "Nacos Config 服务端初始化",
         "Nacos Config 客户端的使用",
@@ -940,6 +1002,7 @@ function genAlibaba() {
     {
       title: "Spring Cloud Alibaba 链路追踪",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "为什么需要链路追踪",
         "SkyWalking 服务端配置",
@@ -950,6 +1013,7 @@ function genAlibaba() {
     {
       title: "Spring Cloud Alibaba 异步通信",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "消息队列的流派",
         "RocketMQ 简介",
@@ -966,6 +1030,7 @@ function genAlibabaShop() {
     {
       title: "Alibaba For MyShop",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "基础设施"
@@ -974,6 +1039,7 @@ function genAlibabaShop() {
     {
       title: "极限编程",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "了解敏捷开发",
         "了解 XP 极限编程"
@@ -982,6 +1048,7 @@ function genAlibabaShop() {
     {
       title: "创建项目",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "创建统一的依赖管理",
         "创建通用的工具类库",
@@ -995,6 +1062,7 @@ function genAlibabaShop() {
     {
       title: "牛刀小试",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "创建用户注册服务",
         "理解 RESTful 风格的 API",
@@ -1008,6 +1076,7 @@ function genAlibabaShop() {
     {
       title: "前后分离",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "创建商品服务提供者",
         "创建商品服务消费者",
@@ -1022,6 +1091,7 @@ function genVuePrepare() {
     {
       title: "前端知识体系",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "了解前后分离的演变史",
@@ -1035,6 +1105,7 @@ function genVue() {
     {
       title: "Vue.js",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "第一个 Vue 应用程序",
@@ -1044,6 +1115,7 @@ function genVue() {
     {
       title: "语法篇",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "v-if,v-else",
         "v-else-if",
@@ -1053,6 +1125,7 @@ function genVue() {
     {
       title: "事件篇",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "v-on"
       ]
@@ -1060,6 +1133,7 @@ function genVue() {
     {
       title: "网络篇",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "使用 Axios 实现异步通信",
       ]
@@ -1067,6 +1141,7 @@ function genVue() {
     {
       title: "布局篇",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "表单输入",
         "组件基础",
@@ -1081,6 +1156,7 @@ function genVueCli() {
     {
       title: "vue-cli",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "vue-cli 目录结构",
@@ -1090,6 +1166,7 @@ function genVueCli() {
     }, {
       title: "Webpack",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "Webpack 简介",
         "安装 WebPack",
@@ -1103,6 +1180,7 @@ function genVueRouter() {
     {
       title: "vue-router",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "第一个 Vue 工程项目",
@@ -1121,6 +1199,7 @@ function genVuex() {
     {
       title: "vuex",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         ""
       ]
@@ -1132,6 +1211,7 @@ function serviceMesh() {
     {
       title: "Kubernetes 入门",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "Kubernetes 安装前的准备",
@@ -1147,6 +1227,7 @@ function serviceMesh() {
     {
       title: "Kubernetes 进阶",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "Kubernetes 高可用集群",
         "解决 Node 无法加入的问题",
@@ -1167,6 +1248,7 @@ function mycat() {
     {
       title: "MyCat 入门",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "",
         "安装",
@@ -1180,10 +1262,32 @@ function mycat() {
     {
       title: "MyCat 进阶",
       collapsable: false,
+      sidebarDepth: 5,
       children: [
         "基于 HA 机制的 Mycat 高可用",
         "Mycat 安全设置",
         "Mycat 监控工具"
+      ]
+    }
+  ]
+}
+function gradle() {
+  return [
+    {
+      title: "Gradle 入门",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "",
+        "Gradle 与 IDEA 整合"
+      ]
+    },
+    {
+      title: "Gradle 进阶",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "Gradle 进阶"
       ]
     }
   ]
