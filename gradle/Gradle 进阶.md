@@ -210,7 +210,7 @@ B -> C
 | 日志选项                                                     | -Dorg.gradle.logging.level=(quiet,warn,lifecycle,info,debug): 通过 Gradle 属性设置日志记录级别。 <br />-q, --quiet: 只能记录错误信息 <br />-w, --warn: 设置日志级别为 warn <br />-i, --info: 将日志级别设置为 info <br />-d, --debug:登录调试模式(包括正常的堆栈跟踪) |
 | 其它(*)                                                      | -x:-x 等价于: --exclude-task : 常见 gradle -x test clean build <br />--rerun-tasks: 强制执行任务，忽略 up-to-date ,常见 gradle build --rerun-tasks <br />--continue: 忽略前面失败的任务,继续执行,而不是在遇到第一个失败时立即停止执行。每 个遇到的故障都将在构建结束时报告，常见：gradle build --continue。 <br />gradle init --type pom :将 maven 项目转换为 gradle 项目(根目录执行) <br />gradle [taskName] :执行自定义任务 |
 
-https://docs.gradle.org/current/userguide/command_line_interface.html#sec:command_line_executing_tasks
+[Command-Line Interface (gradle.org)](https://docs.gradle.org/current/userguide/command_line_interface.html#sec:command_line_executing_tasks)
 
 > 拓展 1：gradle 任务名是缩写: 任务名支持驼峰式命名风格的任务名缩写，如：connectTask 简写为：cT,执行任务 gradle cT。
 >
@@ -307,7 +307,7 @@ clean.group("dfd") //案例：给已有的clean任务重新指定组信息
 | War                      | 组装 WAR 档案                                                |
 | Zip                      | 组装 ZIP 归档文件。默认是压缩 ZIP 的内容                     |
 
-https://docs.gradle.org/current/dsl/index.html
+[Gradle DSL Version 7.5.1](https://docs.gradle.org/current/dsl/index.html)
 
 具体使用例如：
 
@@ -353,7 +353,7 @@ class CustomTask extends DefaultTask {
 
 3. 通过 API 指定执行顺序
 
-详细请参考官网：https://docs.gradle.org/current/dsl/org.gradle.api.Task.html
+详细请参考官网：[Task - Gradle DSL Version 7.5.1](https://docs.gradle.org/current/dsl/org.gradle.api.Task.html)
 
 ### 动态分配任务
 

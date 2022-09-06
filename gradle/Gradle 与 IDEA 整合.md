@@ -362,7 +362,7 @@ test {
     gradle appRun
     ~~~
 
-  * http://akhikhl.github.io/gretty-doc/Gretty-configuration.html
+  * [Gretty configuration (akhikhl.github.io)](http://akhikhl.github.io/gretty-doc/Gretty-configuration.html)
 
 ## Gradle 对测试支持
 
