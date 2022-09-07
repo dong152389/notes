@@ -39,6 +39,7 @@ module.exports = {
           "/gitflow/": genGitFlowSidebar(),
           "/mvc/": genMVCSidebar(),
           "/bootstrap/": genBootStrapSidebar(),
+          "/hibernate/": genHibernate(),
           "/spring/": genSpringSidebar(),
           "/junit/": genJunitSidebar(),
           "/log4j/": genLog4jSidebar(),
@@ -239,6 +240,36 @@ function genBootStrapSidebar() {
         "媒体查询的用法",
         "bootstrap表格",
         "bootstrap字体图标"
+      ]
+    }
+  ];
+}
+
+// hibernate
+function genHibernate() {
+  return [
+    {
+      title: "Hibernate",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "",
+        "创建映射",
+        "核心的配置",
+        "Hibernate 常见配置",
+        "Hibernate 的 API",
+        "持久化规格编写",
+        "主键生成策略",
+        "持久化类的三种状态",
+        "Hibernate 的一级缓存",
+        "Hibernate 的事务管理",
+        "Service 层",
+        "Hibernate 的其他 API",
+        "Hibernate 一对多的映射",
+        "Hibernate 一对多的关系配置",
+        "Hibernate 多对多的关系",
+        "Hibernate 的查询方式",
+        "Hibernate 的抓取策略"
       ]
     }
   ];

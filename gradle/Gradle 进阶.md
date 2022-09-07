@@ -430,3 +430,24 @@ tasks.getByPath(":dongdong").doFirst({ println "东东好小啊" })
 
 ### 任务的规则
 
+当我们执行、依赖一个不存在的任务时，Gradle 会执行失败,报错误信息。那我们能否对其进行改进,当执行一个不存在的任务时，不是报错而是打印提示信息呢？
+
+```groovy
+task hello {
+    doLast {
+        println 'hello 你好'
+    }
+}
+tasks.addRule("对该规则的一个描述，便于调试、查看等") {
+    String taskName ->
+        task(taskName) {
+            doLast {
+                println "该${taskName}任务不存在，请查证后再执行"
+            }
+        }
+}
+```
+
+测试: 使用 <font color="red">gradle abc hello</font> 进行测试,此时当 abc 任务不存在时，也不会报异常【不中断执行】而是提示自定义的规则信息，继续执行 hello 任务。此外，它还可以根据不同的规则动态创建需要的任务等情况 。
+
+### 任务的 onlyIf 断言  
