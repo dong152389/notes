@@ -1310,7 +1310,27 @@ function gradle() {
       sidebarDepth: 5,
       children: [
         "",
-        "Gradle 与 IDEA 整合"
+        "常见的项目构建工具",
+        "Gradle 安装",
+        "Gradle 项目目录结构",
+        "创建 Gradle 项目",
+        "修改 Maven 下载源",
+        "Wrapper 包装器"
+      ]
+    },
+    {
+      title: "Gradle 与 IDEA 整合",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "Groovy 简介",
+        "安装 Groovy",
+        "创建 Groovy 项目",
+        "Groovy 基本语法",
+        "在 IDEA 中创建普通 Java 工程",
+        "在 IDEA 中创建普通 WEB 项目",
+        "项目部署",
+        "Gradle 对测试支持"
       ]
     },
     {
@@ -1318,7 +1338,11 @@ function gradle() {
       collapsable: false,
       sidebarDepth: 5,
       children: [
-        "Gradle 进阶"
+        "项目的生命周期",
+        "settings 文件",
+        "Task",
+        "Gradle 中的文件操作",
+        "Dependencies"
       ]
     }
   ]

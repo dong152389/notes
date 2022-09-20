@@ -1,66 +1,8 @@
-# Gradle 进阶
-
-## 项目的生命周期
-
-Gradle 项目的生命周期分为三大阶段：Initialization -> Configuration -> Execution. 每个阶段都有自己的职责，具体如下
-
-![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-01_09-06-08.png)
-
-<font color="blue">Initialization 阶段</font>主要目的是初始化构建, 它又分为两个子过程
-
-* 一个是执行 Init Script
-* 一个是执行 Setting Script
-
-<font color="blue">init.gradle</font> 文件会在每个项目 build 之前被调用，用于做一些初始化的操作，它主要有如下作用
-
-* 配置内部的仓库信息（如公司的 maven 仓库信息）
-* 配置一些全局属性
-* 配置用户名及密码信息（如公司仓库的用户名和密码信息）
-
-<font color="blue">Setting Script </font>则更重要, 它初始化了一次构建所参与的所有模块。
-
-<font color="blue">Configuration 阶段</font> 这个阶段开始加载项目中所有模块的 Build Script。所谓 "加载" 就是执行 build.gradle 中的语句，根据脚本代码创建对应的 task ，最终根据所有 task 生成由 Task 组成的**有向无环图(Directed Acyclic Graphs)**，如下:  
-
-![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-01_09-15-16.png)
-
-从而构成如下**有向无环树**
-
-![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-01_09-23-24.png)
-
-<font color="blue">Execution </font>阶段 这个阶段会根据上个阶段构建好的有向无环图，按着顺序执行 Task【Action 动作】。
-
-## settings 文件  
-
-首先对 settings 文件的几点说明：
-
-1. 作用：主要是在项目初始化阶段确定一下引入哪些工程需要加入到项目构建中,为构建项目工程树做准备。
-2. 工程树：gradle 中有工程树的概念，类似于 maven 中的 project 与 module。  
-3. 内容：里面主要定义了当前 gradle 项目及子 project 的项目名称 。
-4. 位置：必须放在根工程目录下。
-5. 名字：为 settings.gradle 文件，不能发生变化。
-6. 对应实例：与 org.gradle.api.initialization.Settings 实例是一一对应的关系。每个项目只有一个 settings 文件。
-7. 关注：作为开发者我们只需要关注该文件中的 include 方法即可。使用相对路径【 : 】引入子工程。  
-8. 一个子工程只有在 setting 文件中配置了才会被 gradle 识别，这样在构建的时候才会被包含进去 。
-
-~~~groovy
-//根工程项目名
-rootProject.name = 'root'
-//包含的子工程名称
-include 'subject01'
-include 'subject02'
-include 'subject03'
-//包含的子工程下的子工程名称
-include 'subject01:subproject011'
-include 'subject01:subproject012'
-~~~
-
-项目名称中 ":" 代表项目的分隔符， 类似路径中的 "/"。如果以 ":" 开头则表示相对于 root project 。然后 Gradle 会为每个带有build.gradle 脚本文件的工程构建一个与之对应的 Project 对象 。
-
-## Task
+# Task
 
 项目实质上是 Task 对象的集合。一个 Task 表示一个逻辑上较为独立的执行过程，比如编译 Java 源代码，拷贝文件，打包 Jar 文件，甚至可以是执行一个系统命令。另外，一个 Task 可以读取和设置 Project 的 Property 以完成特定的操作。  
 
-### 任务入门
+## 任务入门
 
 [Build Script Basics (gradle.org)](https://docs.gradle.org/current/userguide/tutorial_using_tasks.html)
 
@@ -81,7 +23,7 @@ task A {
 提示 2 :task 的 doFirst、doLast 方法是执行阶段完成，并且 doFirst 在 doLast 执行之前执行。
 提示 3:区分任务的配置段和任务的行为,任务的配置段在配置阶段执行,任务的行为在执行阶段执行  
 
-### 任务的行为
+## 任务的行为
 
 ~~~groovy
 def map = new HashMap<String, Object>();
@@ -113,7 +55,7 @@ a.doLast {
 
 **底层原理分析**：无论是定义任务自身的 action，还是添加的 doLast、doFirst 方法，其实底层都被放入到一个 Action 的 List中了，最初这个 action List 是空的，当我们设置了 action【任务自身的行为】,它先将 action 添加到列表中，此时列表中只有一个 action,后续执行 doFirst 的时候 doFirst 在 action 前面添加，执行 doLast 的时候 doLast 在 action 后面添加。<font color="red">doFirst永远添加在 actions List 的第一位</font>，保证添加的 Action 在现有的 action List 元素的最前面；<font color="red">doLast 永远都是在 action List末尾添加</font>，保证其添加的 Action 在现有的 action List 元素的最后面。一个往前面添加,一个往后面添加，<font color="red">最后这个 action List 就按顺序形成了 doFirst、doSelf、doLast 三部分的 Actions，就达到 doFirst、doSelf、doLast 三部分的 Actions 顺序执行的目的。</font>
 
-### 任务的依赖方式
+## 任务的依赖方式
 
 Task 之间的依赖关系可以在以下几部分设置：  
 
@@ -196,7 +138,7 @@ A -> B、C
 B -> C
 任务 A 依赖任务 B 和任务 C、任务 B 依赖 C 任务。执行任务 A 的时候，显然任务 C 被重复依赖了，C 只会执行一次。  
 
-### 任务执行
+## 任务执行
 
 任务执行语法：<font color="#317eff">gradle [taskName...] [--option-name...]</font>
 
@@ -222,7 +164,7 @@ B -> C
 >
 > 
 
-### 任务定义方式
+## 任务定义方式
 
 任务定义方式，总体分为两大类：一种是通过 Project 中的 task() 方法，另一种是通过 tasks 对象的 create 或者 register 方法。  
 
@@ -285,7 +227,7 @@ clean.group("dfd") //案例：给已有的clean任务重新指定组信息
 
 ![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-05_14-37-40.png)
 
-### 任务类型
+## 任务类型
 
 前面我们定义的 task 都是 DefaultTask 类型的,如果要完成某些具体的操作完全需要我们自己去编写 gradle 脚本，势必有些麻烦，那有没有一些现成的任务类型可以使用呢？有的，Gradle 官网给出了一些现成的任务类型帮助我们快速完成想要的任务，我们只需要在创建任务的时候，指定当前任务的类型即可，然后即可使用这种类型中的属性和 API 方法了。  
 
@@ -343,7 +285,7 @@ class CustomTask extends DefaultTask {
 
 ![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-05_15-38-29.png)
 
-### 任务的执行顺序
+## 任务的执行顺序
 
 在 Gradle 中,有三种方式可以指定 Task 执行顺序：
 
@@ -355,7 +297,7 @@ class CustomTask extends DefaultTask {
 
 详细请参考官网：[Task - Gradle DSL Version 7.5.1](https://docs.gradle.org/current/dsl/org.gradle.api.Task.html)
 
-### 动态分配任务
+## 动态分配任务
 
 gradle 的强大功能不仅仅用于定义任务的功能。例如，可以使用它在循环中注册同一类型的多个任务
 
@@ -375,7 +317,7 @@ tasks.named('task0') { dependsOn('task2', 'task3') }
 
 ![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-05_15-59-16.png)
 
-### 任务的关闭与开启
+## 任务的关闭与开启
 
 每个任务都有一个<font color="red"> enabled </font>默认为的标志<font color="red"> true </font>。将其设置为 <font color="red"> false</font>阻止执行任何任务动作。禁用的任务将标记为<font color="red"> 跳过 </font>。
 
@@ -389,7 +331,7 @@ task disableMe {
 //disableMe.enabled = false //设置关闭任务
 ~~~
 
-### 任务的超时
+## 任务的超时
 
 每个任务都有一个 timeout 可用于限制其执行时间的属性。当任务达到超时时，其任务执行线程将被中断。该任务将被标记为失败。终结器任务仍将运行。如果 --continue 使用，其他任务可以在此之后继续运行。不响应中断的任务无法超时。Gradle 的所有内置任务均会及时响应超时。
 
@@ -410,7 +352,7 @@ task b() {
 
 在控制台使用: gradle a b 测试会发现执行 a 的时候,由于 a 执行超时，抛出异常，所以没有继续往下执行【b 也没执行】。然后在控制台使用: gradle a b –continue,测试会发现 a 虽然执行失败，但是 b 还是执行了  。
 
-### 任务的查找
+## 任务的查找
 
 ~~~groovy
 task dongdong {
@@ -428,7 +370,7 @@ tasks.getByPath(":dongdong").doFirst({ println "东东好小啊" })
 
 ![](./assets/Snipaste_2022-09-05_17-02-45.png)
 
-### 任务的规则
+## 任务的规则
 
 当我们执行、依赖一个不存在的任务时，Gradle 会执行失败,报错误信息。那我们能否对其进行改进,当执行一个不存在的任务时，不是报错而是打印提示信息呢？
 
@@ -450,4 +392,43 @@ tasks.addRule("对该规则的一个描述，便于调试、查看等") {
 
 测试: 使用 <font color="red">gradle abc hello</font> 进行测试,此时当 abc 任务不存在时，也不会报异常【不中断执行】而是提示自定义的规则信息，继续执行 hello 任务。此外，它还可以根据不同的规则动态创建需要的任务等情况 。
 
-### 任务的 onlyIf 断言  
+## 任务的 onlyIf 断言
+
+断言就是一个条件表达式。Task 有一个 onlyIf 方法。它接受一个闭包作为参数，<font color="red">如果该闭包返回 true 则该任务执行，否则跳过</font>。这有很多用途，比如控制程序哪些情况下打什么包，什么时候执行单元测试，什么情况下执行单元测试的时候不执行网络测试等。具体案例如下所示：  
+
+~~~groovy
+task hello {
+    doLast {
+        println 'hello 东东'
+    }
+}
+//如果hello任务没有dd这个属性，就会执行
+hello.onlyIf { !project.hasProperty('dd') }
+~~~
+
+测试：通过-P 为 Project 添加 dd 属性。`gradle hello -Pdd`
+
+## 默认任务  
+
+Gradle 允许您定义一个或多个在没有指定其他任务时执行的默认任务。
+
+~~~groovy
+defaultTasks 'myClean', 'myRun'
+tasks.register('myClean') {
+    doLast {
+        println 'Default Cleaning!'
+    }
+}
+tasks.register('myRun') {
+    doLast {
+        println 'Default Running!'
+    }
+}
+tasks.register('other') {
+    doLast {
+        println "I'm not a default task!"
+    }
+}
+~~~
+
+![](assets/Snipaste_2022-09-08_10-25-16.png)
