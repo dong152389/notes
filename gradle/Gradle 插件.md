@@ -55,3 +55,97 @@ task taskVersion {
 ![](./assets/Snipaste_2022-09-27_15-36-59.png)
 
 可通过如下方式使用一个 Java 插件：  
+
+~~~groovy
+apply plugin : 'java' //map具名参数方式
+~~~
+
+或者：  
+
+~~~groovy
+//也可以使用闭包作为project.apply方法的一个参数
+apply{
+	plugin 'java'
+}
+~~~
+
+通过上述代码就将 Java 插件应用到我们的项目中了，对于 Gradle 自带的核心插件都有唯一的 plugin id，其中 java 是Java 插件的 plugin id,这个 plugin id 必须是唯一的，可使用应用包名来保证 plugin id 的唯一性。这里的 java 对应的具体类型是 `org.gradle.api.plugins.JavaPlugin`，所以可以使用如下方式使用 Java 插件。 
+
+~~~groovy
+//使用方式1： Map具名参数,全类名
+apply plugin:org.gradle.api.plugins.JavaPlugin
+//org.gradle.api.plugins默认导入： 使用方式2
+apply plugin:JavaPlugin
+apply plugin: 'java' //核心插件，无需事先引入， 使用方式3:插件的id
+~~~
+
+Gradle 中提供的二进制插件【核心插件】，可参考：[Gradle Plugin Reference](https://docs.gradle.org/current/userguide/plugin_reference.html)。
+
+<font color="#ec7d35">**第三种：对象插件之第三方插件**</font>
+
+如果是使用第三方发布的二进制插件，一般需要配置对应的仓库和类路径
+
+~~~groovy
+//使用传统的应用方式，必须要放在文件的开始
+buildscript {
+    ext {
+        springBootVersion = "2.3.3.RELEASE"
+    }
+    repositories {
+        mavenLocal()
+        jcenter()
+    } // 此处先引入插件
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+//再应用插件
+apply plugin: 'org.springframework.boot' //社区插件,需要事先引入，不必写版本号
+~~~
+
+但是如果是第三方插件已经被托管在 https://plugins.gradle.org/ 网站上，就可以不用在 buildscript 里配置 classpath依赖了，直接使用新出的 plugins DSL 的方式引用。
+
+~~~groovy
+plugins {
+    id 'org.springframework.boot' version '2.4.1'
+}
+~~~
+
+> 注意：
+>
+> 1. 如果使用老式插件方式 buildscript{}要放在 build.gradle 文件的最前面,而新式 plugins{}没有该限制。
+> 2. 托管在网站 gradle 插件官网的第三方插件有两种使用方式，一是传统的 buildscript 方式，一种是 plugins DSL 方式 。  
+
+<font color="#ec7d35">**第四种：对象插件之用户自定义插件**</font>
+
+~~~groovy
+interface GreetingPluginExtension {
+    Property<String> getMessage()
+
+    Property<String> getGreeter()
+}
+
+class GreetingPlugin implements Plugin<Project> {
+    void apply(Project project) {
+        def extension = project.extensions.create('greeting', GreetingPluginExtension)
+        project.task('hello') {
+            doLast {
+                println "${extension.message.get()} from ${extension.greeter.get()}"
+            }
+        }
+    }
+}
+
+apply plugin: GreetingPlugin
+// Configure the extension using a DSL block
+greeting {
+    message = 'Hi'
+    greeter = 'Gradle'
+}
+~~~
+
+参考地址：[Developing Custom Gradle Plugins](https://docs.gradle.org/current/userguide/custom_plugins.html)
+我们直接执行 hello 任务 `./gradle hello` 即可，这种方式实现的插件我们一般不使用，因为这种方式局限性太强，只能本
+Project，而其他的 Project 不能使用。  
+
+  
