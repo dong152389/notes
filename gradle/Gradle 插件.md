@@ -148,4 +148,247 @@ greeting {
 我们直接执行 hello 任务 `./gradle hello` 即可，这种方式实现的插件我们一般不使用，因为这种方式局限性太强，只能本
 Project，而其他的 Project 不能使用。  
 
+## buildSrc 项目
+
+buildSrc 是 Gradle 默认的插件目录，编译 Gradle 的时候会自动识别这个目录，将其中的代码编译为插件。
+
+1. 首先先建立一个名为 buildSrc 的 java Module,将 buildSrc 从 included modules 移除，重新构建,然后只保留 build.gradle 和 src/main 目录，其他全部删掉，注意名字一定是 buildSrc，不然会找不到插件。  
+
+2. 然后修改 Gradle 中的内容
+
+   ~~~groovy
+   apply plugin: 'groovy' //必须
+   apply plugin: 'maven-publish'
+   dependencies {
+       implementation gradleApi() //必须
+       implementation localGroovy() //必须
+   }
+   repositories {
+       google()
+       jcenter()
+       mavenCentral() //必须
+   }
+   //把项目入口设置为src/main/groovy
+   sourceSets {
+       main {
+           groovy {
+               srcDir 'src/main/groovy'
+           }
+       }
+   }
+   ~~~
+
+3. 创建入口目录，在 src/main 下创建代码入口目录
+
+   ![](./assets/Snipaste_2022-09-29_11-00-48.png)
+
+4. 然后实现插件代码 Text.groovy，注意文件后缀为 groovy，文件要引入 package com.gradle
+
+   ~~~groovy
+   package com.gradle
+   
+   import org.gradle.api.Plugin
+   import org.gradle.api.Project
+   
+   class Text implements Plugin<Project> {
+       @Override
+       void apply(Project project) {
+           project.task("dfd") {
+               doLast {
+                   println("自定义dfd插件")
+               }
+           }
+       }
+   }
+   ~~~
+
+5. 接下来在 main 目录下创建 resources 目录，在 resources 目录下创建 META-INF 目录，在 META-INF 目录下创建 gradle-plugins 目录，在 gradle-plugins 目录下创建 properties 文件。
+
+6. properties 文件可以自己命名，但是要以.properties 结尾，比如 com.dfd.plugin.properties,其 com.dfd.plugin 就是定义的包名路径。
+
+   ![](./assets/Snipaste_2022-09-29_11-08-13.png)
+
+7. 最后需要在 properties 文件中指明我们实现插件的全类名 implementation-class=com.gradle.Text
+
+8. 到目前为止我们的插件项目已经写完了，在 module 引入我们写的插件 apply plugin:'com.dfd.plugin'，然后执行插件的。
+
+   ![](./assets/image-20220929111346445.png)
+
+> 这种形式的写法，在我们整个工程的 module 都可以使用，但也只是限制在本工程，其他工程不能使用。
+
+<font color="red">**改进**</font>
+
+第二种写插件的方式他只能在本工程中使用，而其他的项目工程不能使用，有时候我们需要一个插件在多个工程中使用，这时候我们就需要把插件上传 maven 中。  
+
+* 第一步：首先将上述 buildSrc 目录复制一份，修改文件夹名，然后在 settings.gradle 文件中使用 include 引入
+* 第二步：修改 build.gradle 文件，发布到 maven 仓库中
+
+~~~groovy
+apply plugin: 'groovy' //必须
+apply plugin: 'maven-publish'
+dependencies {
+    implementation gradleApi() //必须
+    implementation localGroovy() //必须
+}
+repositories {
+    google()
+    jcenter()
+    mavenCentral() //必须
+}
+sourceSets { //把项目入口设置为src/main/groovy
+    main {
+        groovy {
+            srcDir 'src/main/groovy'
+        }
+    }
+}
+publishing {
+    publications {
+        myLibrary(MavenPublication) {
+            groupId = 'com.dfd.plugin' //指定GAV坐标信息
+            artifactId = 'library'
+            version = '1.1'
+            from components.java//发布jar包
+			//from components.web///引入war插件，发布war包
+        }
+    }
+    repositories {
+        maven { url "$rootDir/lib/release" }
+        //发布项目到私服中
+        // maven {
+        // name = 'myRepo' //name属性可选,表示仓库名称，url必填
+        // //发布地址:可以是本地仓库或者maven私服
+        // //url = layout.buildDirectory.dir("repo")
+        // //url='http://my.org/repo'
+        // // change URLs to point to your repos, e.g. http://my.org/repo
+        // //认证信息:用户名和密码
+        // credentials {
+        // username = 'joe'
+        // password = 'secret'
+        // }
+        // }
+    }
+}
+~~~
+
+* 第三步：执行 publish 指令,发布到根 project 或者 maven 私服仓库。  
+* 第四步：使用插件，在项目级 build.gradle 文件中将插件添加到 classpath:
+
+~~~groovy
+buildscript {
+    repositories {
+        maven { url "$rootDir/lib/release" }
+    } 
+    dependencies {
+        classpath "com.atguigu.plugin:library:1.1"
+    }
+} 
+apply plugin: 'java'
+//是在 buildSrc 中定义的插件 ID
+apply plugin: 'com.dfd.plugin'
+~~~
+
+* 第五步：执行 gradle build 指令就会在控制台看到自定义插件的输出，说明自定义插件就已经生效了。
+
+## 插件的关注点
+
+* **插件的引用**
+
+  ~~~groovy
+  apply plugin: '插件名'
+  ~~~
+
+* **主要的功能[任务]**
+
+  当我们在工程中引入插件后，插件会自动的为我们的工程添加一些额外的任务来完成相应的功能。以 Java 插件为例，当我们加入 java 插件之后，就加入了如下功能：
+
+  ![](./assets/Snipaste_2022-10-07_14-47-29.png)
+
+  具体大家可通过 gradle tasks 查看加入某个插件前后的区别。
+  说明：Gradle 中的任务依赖关系是很重要的，它们之间的依赖关系就形成了构建的基本流程。
+
+* **工程目录结构**
+
+  一些插件对工程目结构有约定，所以我们一般遵循它的约定结构来创建工程，这也是 Gradle 的`约定优于配置`原则。例如 java 插件规定的项目源集目录结构如下所示：  
+
+  ![](./assets/Snipaste_2022-10-07_14-51-26.png)
+
+  如果要使用某个插件就应该按照它约定的目录结构设置，这样能大大提高我们的效率，当然各目录结构也可以自己定义。  
+
+* **依赖管理**
+
+  比如前面我们提到的依赖的类型【依赖管理】部分，不同的插件提供了不同的依赖管理。  
+
+* **常用的属性**
+
+  例如：Java 插件会为工程添加一些常用的属性，我们可以直接在编译脚本中直接使用。
+
+  | 属性名称               | 类型         | 默认值                          | 描述                             |
+  | ---------------------- | ------------ | ------------------------------- | -------------------------------- |
+  | reportsDirName         | String       | reports                         | 生成报告的目录名称               |
+  | reportsDir             | File（只读） | buildDir/reportsDirName         | 生成报告的目录                   |
+  | testResultsDirName     | String       | test-results                    | 生成测试result.xml文件的目录名称 |
+  | testResultsDir         | File（只读） | reportsDir/testReportDirName    | 生成测试报告的目录               |
+  | libsDirName            | String       | libs                            | 生成 lib 库的目录名称            |
+  | libsDir                | File（只读） | buildDir/libsDirName            | 生成 lib 库的目录                |
+  | distsDirName           | String       | distributions                   | 生成发布文件的目录名称           |
+  | distsDir               | File（只读） | buildDir/distsDirName           | 生成发布文件的目录               |
+  | docsDirName            | String       | docs                            | 生成帮助文档的目录名称           |
+  | docsDir                | File（只读） | buildDir/docsDirName            | 生成帮助文档的目录               |
+  | dependencyCacheDirName | String       | dependency-cache                | 存储缓存资源依赖信息的目录名称   |
+  | dependencyCacheDir     | File（只读） | buildDir/dependencyCacheDirName | 存储缓存资源依赖信息的目录       |
   
+  其他属性：
+  
+  | 属性名称            | 类型                                                     | 默认值              | 描述                                               |
+  | ------------------- | -------------------------------------------------------- | ------------------- | -------------------------------------------------- |
+  | sourceSets          | SourceSetContainer (只读)                                | Not null            | 包含工程的资源集合（source sets.）                 |
+  | sourceCompatibility | JavaVersion，也可以使用字符串或数字，比如 '1.5' 或者 1.5 | 根据使用的 JVM 定   | 编译 java文件时指定使用的java 版本                 |
+  | targetCompatibility | JavaVersion，也可以使用字符串或数字，比如 '1.5' 或者 1.5 | sourceCompatibility | 生成 classes 的 java 版本                          |
+  | archivesBaseName    | String                                                   | projectName         | 作为归档文件的默认名称，如 JAR 或者 ZIP 文件的名称 |
+  
+## Java 插件分析
+
+参考官网：https://docs.gradle.org/current/userguide/plugin_reference.html,以 Java 插件为例，讲解需要关注的几点：
+
+* **我们要关注插件使用**
+
+  ~~~groovy
+  plugins {
+  	id 'java'
+  }
+  ~~~
+
+* **我们要关注插件的功能**
+  我们可通过官方文档介绍了解某个插件功能或者百度、再或者大家可以通过 gradle tasks 查看加入 java 插件前后的区别。
+
+* **项目布局**
+  一般加入一个插件之后，插件也会提供相应的目录结构，例如：java 插件的目录结构。
+
+  ![](./assets/Snipaste_2022-10-07_14-51-26.png)
+
+  当然这个默认的目录结构也是可以改动的例如：
+
+  ~~~groovy
+  sourceSets {
+      main {
+          java {
+              srcDirs = ['src/java']
+          } 
+          resources {
+              srcDirs = ['src/resources']
+          }
+      }
+  }
+  ~~~
+
+  也可设置源集的属性等信息。  
+
+* **依赖管理：以 java 插件为例，提供了很多依赖管理项**  
+
+  ![](./assets/Snipaste_2022-10-07_16-34-35.png)
+
+  ​	![](./assets/Snipaste_2022-10-07_16-35-36.png)
+
+* **额外的属性和方法：**
+  可参考官方文档： sourceCompatibility(JavaVersion.VERSION_1_8)  

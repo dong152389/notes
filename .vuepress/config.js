@@ -1342,7 +1342,8 @@ function gradle() {
         "settings 文件",
         "Task",
         "Gradle 中的文件操作",
-        "Dependencies"
+        "Dependencies",
+        "Gradle 插件"
       ]
     }
   ]
