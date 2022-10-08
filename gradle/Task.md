@@ -51,7 +51,7 @@ a.doLast {
 }
 ~~~
 
-![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-01_10-30-12.png)
+![](./assets/Snipaste_2022-09-01_10-30-12.png)
 
 **底层原理分析**：无论是定义任务自身的 action，还是添加的 doLast、doFirst 方法，其实底层都被放入到一个 Action 的 List中了，最初这个 action List 是空的，当我们设置了 action【任务自身的行为】,它先将 action 添加到列表中，此时列表中只有一个 action,后续执行 doFirst 的时候 doFirst 在 action 前面添加，执行 doLast 的时候 doLast 在 action 后面添加。<font color="red">doFirst永远添加在 actions List 的第一位</font>，保证添加的 Action 在现有的 action List 元素的最前面；<font color="red">doLast 永远都是在 action List末尾添加</font>，保证其添加的 Action 在现有的 action List 元素的最后面。一个往前面添加,一个往后面添加，<font color="red">最后这个 action List 就按顺序形成了 doFirst、doSelf、doLast 三部分的 Actions，就达到 doFirst、doSelf、doLast 三部分的 Actions 顺序执行的目的。</font>
 
@@ -129,7 +129,7 @@ task B {
 
 测试：gradle B ,控制台显示如下
 
-![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-01_11-03-34.png)
+![](./assets/Snipaste_2022-09-01_11-03-34.png)
 
 <font color="red">拓展 1：当一个 Task 依赖多个 Task 的时候，被依赖的 Task 之间如果没有依赖关系，那么它们的执行顺序是随机的,并无影响。</font>
 
@@ -160,7 +160,7 @@ B -> C
 >
 > 拓展 3：gradle 默认各指令之间相互的依赖关系：  
 >
-> ![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-02_11-19-55.png)
+> ![](./assets/Snipaste_2022-09-02_11-19-55.png)
 >
 > 
 
@@ -225,7 +225,7 @@ clean.group("dfd") //案例：给已有的clean任务重新指定组信息
 
 可以在 idea 中看到: <font color="red">上面自定义的那几个任务和 gradle 自带的 clean 任务已经跑到：dfd 组了。</font>
 
-![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-05_14-37-40.png)
+![](./assets/Snipaste_2022-09-05_14-37-40.png)
 
 ## 任务类型
 
@@ -283,7 +283,7 @@ class CustomTask extends DefaultTask {
 
 测试：`gradle MyDefinitionTask`
 
-![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-05_15-38-29.png)
+![](./assets/Snipaste_2022-09-05_15-38-29.png)
 
 ## 任务的执行顺序
 
@@ -315,7 +315,7 @@ tasks.named('task0') { dependsOn('task2', 'task3') }
 
 使用`gradle -q task0`执行
 
-![](C:\Users\Fengdong.Duan\Desktop\笔记\57.Gradle\assets\Snipaste_2022-09-05_15-59-16.png)
+![](./assets/Snipaste_2022-09-05_15-59-16.png)
 
 ## 任务的关闭与开启
 

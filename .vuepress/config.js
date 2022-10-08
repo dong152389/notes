@@ -1339,11 +1339,13 @@ function gradle() {
       sidebarDepth: 5,
       children: [
         "项目的生命周期",
-        "settings 文件",
+        "Settings 文件",
         "Task",
         "Gradle 中的文件操作",
         "Dependencies",
-        "Gradle 插件"
+        "Gradle 插件",
+        "Build.gradle 文件",
+        "Publishing 项目发布"
       ]
     }
   ]

@@ -1,4 +1,4 @@
-# settings 文件
+# Settings 文件
 
 首先对 settings 文件的几点说明：
 
