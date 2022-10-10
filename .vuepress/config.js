@@ -1345,7 +1345,9 @@ function gradle() {
         "Dependencies",
         "Gradle 插件",
         "Build.gradle 文件",
-        "Publishing 项目发布"
+        "Publishing 项目发布",
+        "生命周期中 Hook",
+        "创建 Springboot 项目"
       ]
     }
   ]
