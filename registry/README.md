@@ -6,7 +6,7 @@
 
 ## 安装
 
-在之前的 [Docker 私有仓库](https://www.dfd.com/2018/05/13/docker/Docker-私有仓库/) 章节中已经提到过如何配置和使用容器运行私有仓库，这里我们使用 `docker-compose` 来安装，配置如下：
+在之前的 [Docker 私有仓库](/docker/Docker%20私有仓库/) 章节中已经提到过如何配置和使用容器运行私有仓库，这里我们使用 `docker-compose` 来安装，配置如下：
 
 ```yaml
 version: '3.1'

@@ -1347,7 +1347,8 @@ function gradle() {
         "Build.gradle 文件",
         "Publishing 项目发布",
         "生命周期中 Hook",
-        "创建 Springboot 项目"
+        "创建 Springboot 项目",
+        "基于 SSM 多模块项目案例"
       ]
     }
   ]
