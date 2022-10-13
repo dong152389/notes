@@ -78,7 +78,8 @@ module.exports = {
           "/vuex/": genVuex(),
           "/service-mesh-kubernetes/": serviceMesh(),
           "/mycat/": mycat(),
-          "/gradle/": gradle()
+          "/gradle/": gradle(),
+          "/redis/": redis()
         }
       }
     }
@@ -132,7 +133,8 @@ function genGuideSidebar() {
       sidebarDepth: 5,
       children: [
         "MyCat",
-        "Gradle"
+        "Gradle",
+        "Redis"
       ]
     }
   ];
@@ -1348,7 +1350,22 @@ function gradle() {
         "Publishing 项目发布",
         "生命周期中 Hook",
         "创建 Springboot 项目",
-        "基于 SSM 多模块项目案例"
+        "基于 SSM 多模块项目案例",
+        "微服务实战"
+      ]
+    }
+  ]
+}
+function redis() {
+  return [
+    {
+      title: "Redis 入门",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "",
+        "Redis 概述安装",
+        "常用五大数据类型"
       ]
     }
   ]
