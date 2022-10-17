@@ -12,17 +12,12 @@
 
 Web1.0的时代，数据访问量很有限，用一夫当关的高性能的单点服务器可以解决大部分问题。
 
-<<<<<<< HEAD
 ![image-20221013172517393](./assets/image-20221013172517393.png)
-=======
-![image-20221013172517393](.\assets\image-20221013172517393.png)
->>>>>>> 3f24919e55b5c0bb7de5309f768e49ecf3c4c98b
 
 ### Web2.0 时代
 
 随着Web2.0的时代的到来，用户访问量大幅度提升，同时产生了大量的用户数据。加上后来的智能移动设备的普及，所有的互联网平台都面临了巨大的性能挑战。
 
-<<<<<<< HEAD
 ![image-20221013172846608](./assets/image-20221013172846608.png)
 
 ### 解决CPU及内存压力
@@ -32,17 +27,6 @@ Web1.0的时代，数据访问量很有限，用一夫当关的高性能的单�
 ### 解决IO压力
 
 ![image-20221013172942744](./assets/image-20221013172942744.png)
-=======
-![image-20221013172846608](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221013172846608.png)
-
-### 解决CPU及内存压力
-
-![image-20221013172918394](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221013172918394.png)
-
-### 解决IO压力
-
-![image-20221013172942744](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221013172942744.png)
->>>>>>> 3f24919e55b5c0bb7de5309f768e49ecf3c4c98b
 
 ## NoSQL 数据库
 
@@ -77,7 +61,6 @@ NoSQL 不依赖业务逻辑方式存储，而以简单的key-value模式存储�
 
 ### Redis
 
-<<<<<<< HEAD
 * 几乎覆盖了Memcached的绝大部分功能
 * 数据都在内存中，支持持久化，主要用作备份恢复
 * 除了支持简单的key-value模式，还支持多种数据结构的存储，比如 list、set、hash、zset等。
@@ -123,6 +106,3 @@ Apache Cassandra是一款免费的开源NoSQL数据库，其设计目的在于�
 
 [DB-Engines Ranking - popularity ranking of database management systems](https://db-engines.com/en/ranking)
 
-=======
-### MongoDB
->>>>>>> 3f24919e55b5c0bb7de5309f768e49ecf3c4c98b
