@@ -1352,6 +1352,7 @@ function gradle() {
         "创建 Springboot 项目",
         "基于 SSM 多模块项目案例",
         "微服务实战"
+<<<<<<< HEAD
       ]
     }
   ]
@@ -1366,6 +1367,8 @@ function redis() {
         "",
         "Redis 概述安装",
         "常用五大数据类型"
+=======
+>>>>>>> 3f24919e55b5c0bb7de5309f768e49ecf3c4c98b
       ]
     }
   ]
