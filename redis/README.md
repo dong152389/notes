@@ -49,7 +49,7 @@ NoSQL 不依赖业务逻辑方式存储，而以简单的key-value模式存储�
 ### NoSQL 不适用场景
 
 * 需要事务支持
-* 基于sql的结构化查询存储，处理复杂的关系,需要**<font color="red">即席</font>**查询。
+* 基于sql的结构化查询存储，处理复杂的关系,需要<font color="red">**即席**</font>查询。
 * <font color="red">（用不着sql 的和用了sql也不行的情况，请考虑用NoSql）</font>
 
 ### Memcache
