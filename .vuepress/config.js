@@ -1365,7 +1365,10 @@ function redis() {
       children: [
         "",
         "Redis 概述安装",
-        "常用五大数据类型"
+        "常用五大数据类型",
+        "Redis 配置文件介绍",
+        "Redis 的发布和订阅",
+        "Redis 新数据类型"
       ]
     }
   ]
