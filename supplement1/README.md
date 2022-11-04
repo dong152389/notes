@@ -276,4 +276,4 @@ private String email;
 
 配置完成后，在浏览器端测试直接提交数据，效果如下：
 
-![img](https://www.dfd.com/assets/Lusifer1530018411.png)
+![img](../assets/img/Lusifer1530018411.png)
