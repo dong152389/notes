@@ -134,7 +134,7 @@ bitop and unique:users:and:20201104_03 unique:users:20201103unique:users:2020110
 
 计算出任意一天都访问过网站的用户数量（例如月活跃就是类似这种），可以使用or求并集。
 
-![image-20221107105836173](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221107105836173.png)
+![image-20221107105836173](./assets/image-20221107105836173.png)
 
 ### Bitmaps与set对比
 
@@ -281,5 +281,129 @@ bitop and unique:users:and:20201104_03 unique:users:20201103unique:users:2020110
 
 ​		比如数据集 {1, 3, 5, 7, 5, 7, 8}， 那么这个数据集的基数集为 {1, 3, 5 ,7, 8}, 基数(不重复元素)为5。 基数估计就是在误差可接受的范围内，快速计算基数。
 
+### 命令
 
+#### pfadd
+
+（1）格式
+
+`pfadd <key>< element> [element ...]`添加指定元素到 HyperLogLog 中。
+
+![image-20221108100018387](./assets/image-20221108100018387.png)
+
+ 
+
+（2）实例
+
+![image-20221108100158496](./assets/image-20221108100158496.png)
+
+将所有元素添加到指定HyperLogLog数据结构中。如果执行命令后HLL估计的近似基数发生变化，则返回1，否则返回0。
+
+#### pfcount
+
+（1）格式
+
+`pfcount<key> [key ...]`<font color="red">计算HLL的近似基数</font>，可以计算多个HLL，比如用HLL存储每天的UV，计算一周的UV可以使用7天的UV合并计算即可。
+
+![image-20221108110802912](./assets/image-20221108110802912.png)
+
+（2）实例
+
+![image-20221108133651358](./assets/image-20221108133651358.png)
+
+#### pfmerge
+
+（1）格式
+
+`pfmerge<destkey><sourcekey> [sourcekey ...]`将一个或多个HLL合并后的结果存储在另一个HLL中，比如每月活跃用户可以使用每天的活跃用户来合并计算可得。
+
+![image-20221108133842484](./assets/image-20221108133842484.png)
+
+（2）实例
+
+![image-20221108134024500](./assets/image-20221108134024500.png)
+
+## Geospatial
+
+### 简介
+
+Redis 3.2 中增加了对GEO类型的支持。GEO，Geographic，地理信息的缩写。该类型，就是元素的2维坐标，在地图上就是经纬度。redis基于该类型，提供了经纬度设置，查询，范围查询，距离查询，经纬度Hash等常见操作。
+
+### 命令
+
+#### geoadd
+
+（1）格式
+
+`geoadd <key> <longitude> <latitude> <member> [longitude latitude member...]`添加地理位置（经度，纬度，名称）。
+
+![image-20221108140151047](./assets/image-20221108140151047.png)
+
+（2）实例
+
+~~~sh
+geoadd china:city 121.47 31.23 shanghai
+
+geoadd china:city 106.50 29.53 chongqing 114.05 22.52 shenzhen 116.38 39.90 beijing
+~~~
+
+两极无法直接添加，一般会下载城市数据，直接通过 Java 程序一次性导入。
+
+有效的经度从 -180 度到 180 度。有效的纬度从 -85.05112878 度到 85.05112878 度。
+
+当坐标位置超出指定范围时，该命令将会返回一个错误。
+
+已经添加的数据，是无法再次往里面添加的。
+
+#### geopos
+
+（1）格式
+
+`geopos <key> <member> [member...]`获得指定地区的坐标值。
+
+![image-20221108153304370](./assets/image-20221108153304370.png)
+
+（2）实例
+
+![image-20221108153347202](./assets/image-20221108153347202.png)
+
+#### geodist
+
+（1）格式
+
+`geodist <key> <member1> <member2> [m|km|ft|mi `获取两个位置之间的直线距离。
+
+![image-20221108154121784](./assets/image-20221108154121784.png)
+
+（2）实例
+
+获取两个位置之间的直线距离。
+
+![image-20221108154932354](./assets/image-20221108154932354.png)
+
+单位：
+
+* m 表示单位为米[默认值]。
+
+* km 表示单位为千米。
+
+* mi 表示单位为英里。
+
+* ft 表示单位为英尺。
+
+如果用户没有显式地指定单位参数， 那么 GEODIST 默认使用米作为单位。
+
+#### georadius
+
+（1）格式
+
+`georadius <key> <longitude> <latitude> radius m|km|ft|mi`**以给定的经纬度为中心，找出某一半径内的元素**。
+
+![image-20221108164905902](./assets/image-20221108164905902.png)
+
+经度 纬度 距离 单位。
+
+（2）实例
+
+![image-20221108164949469](./assets/image-20221108164949469.png)
 
