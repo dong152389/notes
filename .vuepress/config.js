@@ -1369,7 +1369,10 @@ function redis() {
         "Redis 配置文件介绍",
         "Redis 的发布和订阅",
         "Redis 新数据类型",
-        "Jedis"
+        "Jedis",
+        "Redis 与 SpringBoot 整合",
+        "Redis 事务—锁机制",
+        "Redis 事务—秒杀案例"
       ]
     }
   ]
