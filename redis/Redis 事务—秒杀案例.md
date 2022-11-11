@@ -6,3 +6,13 @@
 
 ## 秒杀并发模拟
 
+使用工具ab模拟测试
+
+CentOS6 默认安装
+
+CentOS7需要手动安装
+
+~~~sh
+yum install httpd-tools
+~~~
+
