@@ -259,3 +259,112 @@ public class Seckill {
 通过以上的测试可以看到在抢空后依然出现了抢购成功的提示。并且发现库存数量为负数。
 
 ![image-20221114110729713](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221114110729713.png)
+
+利用乐观锁解决超卖问题。
+
+![image-20221123163501599](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221123163501599.png)
+
+~~~java
+package com.atguigu;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Transaction;
+
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * @author DD
+ * @create 2022年11月14日 下午2:14:44
+ */
+public class SecKill {
+
+    // 秒杀过程
+    public static boolean doSecKill(String uid, String prodid) throws IOException {
+        // 1 uid和prodid非空判断
+        if (uid == null || prodid == null) {
+            return false;
+        }
+
+        // 2 连接redis,通过连接池方式
+        JedisPool poolInstance = JedisPoolUtil.getJedisPoolInstance();
+        Jedis jedis = poolInstance.getResource();
+
+        // 3 拼接key
+        // 3.1 库存key
+        String kcKey = "sk:" + prodid + ":qt";
+        // 3.2 秒杀成功用户key
+        String userKey = "sk:" + prodid + ":user";
+        // 监视库存
+        jedis.watch(kcKey);
+
+
+        // 4 获取库存，如果库存null，秒杀还没有开始
+        String kc = jedis.get(kcKey);
+        if (kc == null || "".equals(kc)) {
+            System.out.println("秒杀还没有开始，请等待");
+			JedisPoolUtil.release(poolInstance, jedis);
+            return false;
+        }
+
+        // 5 判断用户是否重复秒杀操作
+        if (jedis.sismember(userKey, uid)) {
+            System.out.println("已经秒杀成功了，不能重复秒杀");
+			JedisPoolUtil.release(poolInstance, jedis);
+            return false;
+        }
+
+        // 6 判断如果商品数量，库存数量小于1，秒杀结束
+        if (Integer.parseInt(kc) <= 0) {
+            System.out.println("秒杀已经结束了");
+			JedisPoolUtil.release(poolInstance, jedis);
+            return false;
+        }
+
+        // 7 秒杀过程
+        // 开启事务
+        Transaction transaction = jedis.multi();
+
+
+        // 8 组合操作
+        //库存-1
+        transaction.decr(kcKey);
+        //把秒杀成功用户添加清单里面
+        transaction.sadd(userKey, uid);
+
+
+        List<Object> exec = transaction.exec();
+
+        if (exec == null || exec.size() == 0) {
+            System.out.println("秒杀失败了....");
+            JedisPoolUtil.release(poolInstance, jedis);
+            return false;
+        }
+
+
+        System.out.println("秒杀成功了..");
+		JedisPoolUtil.release(poolInstance, jedis);
+        return true;
+    }
+}
+~~~
+
+### 库存遗留
+
+~~~sh
+ab -n 2000 -c 100 -p postfile -T 'application/x-www-form-urlencoded' http://IP:PORT/seckill/doseckill
+~~~
+
+已经秒光，可是还有库存。原因，就是<font color="red">乐观锁导致很多请求都失败</font>。先点的没秒到，后点的可能秒到了。
+
+**解决方案：LUA脚本**
+
+* 将复杂的或者多步的redis操作，写为一个脚本，一次提交给redis执行，减少反复连接redis的次数。提升性能。
+* LUA脚本是类似redis事务，有一定的原子性，不会被其他命令插队，可以完成一些redis事务性的操作。
+* 但是注意redis的lua脚本功能，只有在Redis 2.6以上的版本才可以使用。
+* 利用lua脚本淘汰用户，解决超卖问题。
+* redis 2.6版本以后，通过lua脚本解决**争抢问题**，实际上是**redis** **利用其单线程的特性，用任务队列的方式解决多任务并发问题**。
+
+![image-20221123173625861](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221123173625861.png)
+
