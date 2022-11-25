@@ -1372,7 +1372,8 @@ function redis() {
         "Jedis",
         "Redis 与 SpringBoot 整合",
         "Redis 事务—锁机制",
-        "Redis 事务—秒杀案例"
+        "Redis 事务—秒杀案例",
+        "Redis 持久化—RDB"
       ]
     }
   ]

@@ -2,7 +2,7 @@
 
 ## 解决计数器和人员记录的事务操作
 
-![image-20221110170018811](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221110170018811.png)
+![image-20221110170018811](./assets/image-20221110170018811.png)
 
 ## 代码编写
 
@@ -185,15 +185,15 @@ ab -n 2000 -c 200 -k -p ~/postfile -T application/x-www-form-urlencoded http://i
 
 ### 使用Jmeter模拟测试
 
-![image-20221114133648254](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221114133648254.png)
+![image-20221114133648254](./assets/image-20221114133648254.png)
 
-![image-20221114133655194](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221114133655194.png)
+![image-20221114133655194](./assets/image-20221114133655194.png)
 
 ## 问题
 
 ### 超时
 
-![image-20221114151331158](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221114151331158.png)
+![image-20221114151331158](./assets/image-20221114151331158.png)
 
 使用连接池可以有效解决这个问题，节省每次连接redis服务带来的消耗，把连接好的实例反复利用。通过参数管理连接的行为。
 
@@ -254,30 +254,17 @@ public class Seckill {
 
 ### 超卖
 
-![image-20221114171132223](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221114171132223.png)
+![image-20221114171132223](./assets/image-20221114171132223.png)
 
 通过以上的测试可以看到在抢空后依然出现了抢购成功的提示。并且发现库存数量为负数。
 
-![image-20221114110729713](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221114110729713.png)
+![image-20221114110729713](./assets/image-20221114110729713.png)
 
 利用乐观锁解决超卖问题。
 
-![image-20221123163501599](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221123163501599.png)
+![image-20221123163501599](./assets/image-20221123163501599.png)
 
 ~~~java
-package com.atguigu;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Transaction;
-
-import java.io.IOException;
-import java.util.List;
-
-/**
- * @author DD
- * @create 2022年11月14日 下午2:14:44
- */
 public class SecKill {
 
     // 秒杀过程
@@ -366,5 +353,79 @@ ab -n 2000 -c 100 -p postfile -T 'application/x-www-form-urlencoded' http://IP:P
 * 利用lua脚本淘汰用户，解决超卖问题。
 * redis 2.6版本以后，通过lua脚本解决**争抢问题**，实际上是**redis** **利用其单线程的特性，用任务队列的方式解决多任务并发问题**。
 
-![image-20221123173625861](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221123173625861.png)
+![image-20221123173625861](./assets/image-20221123173625861.png)
+
+~~~lua
+#秒杀脚本
+local userid=KEYS[1];
+local prodid=KEYS[2];			
+local qtkey='sk:'..prodid..":qt";
+local usersKey='sk:'..prodid..":user";
+local userExists=redis.call("sismember",usersKey,userid);
+if tonumber(userExists)==1 then 
+   return 2;
+end
+local num= redis.call("get" ,qtkey);
+if tonumber(num)<=0 then 
+   return 0;
+else 
+   redis.call("decr",qtkey);
+   redis.call("sadd",usersKey,userid);
+end
+return 1
+~~~
+
+~~~java
+public class SecKill {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecKill.class);
+
+    /**
+    *	执行脚本
+    */
+    static String secKillScript =
+            "local userid=KEYS[1];\r\n" +
+                    "local prodid=KEYS[2];\r\n" +
+                    "local qtkey='sk:'..prodid..\":qt\";\r\n" +
+                    "local usersKey='sk:'..prodid..\":user\";\r\n" +
+                    "local userExists=redis.call(\"sismember\",usersKey,userid);\r\n" +
+                    "if tonumber(userExists)==1 then \r\n" +
+                    "   return 2;\r\n" +
+                    "end\r\n" +
+                    "local num= redis.call(\"get\" ,qtkey);\r\n" +
+                    "if tonumber(num)<=0 then \r\n" +
+                    "   return 0;\r\n" + "else \r\n" +
+                    "   redis.call(\"decr\",qtkey);\r\n" +
+                    "   redis.call(\"sadd\",usersKey,userid);\r\n" +
+                    "end\r\n" +
+                    "return 1";
+
+
+
+    public static boolean doSecKill(String uid, String prodid) throws IOException {
+
+        JedisPool jedispool = JedisPoolUtil.getJedisPoolInstance();
+        Jedis jedis = jedispool.getResource();
+
+        // String sha1= .secKillScript;
+        System.out.println(secKillScript);
+        String sha1 = jedis.scriptLoad(secKillScript);
+
+        Object result = jedis.evalsha(sha1, 2, uid, prodid);
+
+        String reString = String.valueOf(result);
+        if ("0".equals(reString)) {
+            System.err.println("已抢空！！");
+        } else if ("1".equals(reString)) {
+            System.out.println("抢购成功！！！！");
+        } else if ("2".equals(reString)) {
+            System.err.println("该用户已抢过！！");
+        } else {
+            System.err.println("抢购异常！！");
+        }
+        jedis.close();
+        return true;
+    }
+}
+~~~
 
