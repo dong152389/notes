@@ -6,7 +6,7 @@ Bootstrap 安装是非常容易的。本章将讲解如何下载并安装 Bootst
 
 ## 下载 Bootstrap
 
-您可以从 http://getbootstrap.com/ 上下载 Bootstrap 的最新版本。
+您可以从 [Bootstrap · The most popular HTML, CSS, and JS library in the world. (getbootstrap.com)](https://getbootstrap.com/)上下载 Bootstrap 的最新版本。
 
 ## 文件结构
 
@@ -14,7 +14,7 @@ Bootstrap 安装是非常容易的。本章将讲解如何下载并安装 Bootst
 
 当您下载了 Bootstrap 的已编译的版本，解压缩 ZIP 文件，您将看到下面的文件/目录结构：
 
-![img](../assets/img/Lusifer1526581943.png)
+![img](./assets/Lusifer1526581943.png)
 
 如上图所示，可以看到已编译的 CSS 和 JS（bootstrap.*），以及已编译压缩的 CSS 和 JS（bootstrap.min.*）。同时也包含了 Glyphicons 的字体，这是一个可选的 Bootstrap 主题。
 
@@ -22,7 +22,7 @@ Bootstrap 安装是非常容易的。本章将讲解如何下载并安装 Bootst
 
 一个使用了 Bootstrap 的基本的 HTML 模板如下所示：
 
-```text
+```html
 <!DOCTYPE html>
 <html>
    <head>
@@ -55,6 +55,7 @@ Bootstrap 安装是非常容易的。本章将讲解如何下载并安装 Bootst
 
 现在让我们尝试使用 Bootstrap 输出 "Hello, world!"：
 
-```text
+```html
 <h1>Hello, world!</h1>
 ```
+

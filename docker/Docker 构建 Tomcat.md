@@ -61,4 +61,4 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 
 通过浏览器访问
 
-![img](../assets/img/20171103174843.png)
+![img](C:\Users\Fengdong.Duan\Desktop\my-notes\docker\assets\20171103174843.png)

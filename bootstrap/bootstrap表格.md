@@ -42,7 +42,7 @@ Bootstrap 提供了一个清晰的创建表格的布局。下表列出了 Bootst
 
 如果您想要一个只带有内边距（padding）和水平分割的基本表，请添加 class `.table`，如下面实例所示：
 
-```text
+```html
 <table class="table">
   <caption>基本的表格布局</caption>
   <thead>
@@ -63,4 +63,3 @@ Bootstrap 提供了一个清晰的创建表格的布局。下表列出了 Bootst
   </tbody>
 </table>
 ```
-

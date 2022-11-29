@@ -2,7 +2,7 @@
 
 ## 简易架构图
 
-![img](../assets/img/Lusifer201807030001.png)
+![img](./assets/Lusifer201807030001.png)
 
 ## Apache HttpClient 简介
 
@@ -74,7 +74,7 @@ HttpClient 相比传统 JDK 自带的 `URLConnection`，增加了易用性和灵
 
 案例代码如下：
 
-```text
+```java
 package com.dfd.hello.httpclient;
 
 import org.apache.http.HttpEntity;
@@ -139,15 +139,44 @@ public class MyTest {
 
 控制台输出结果：
 
-```text
-{"draw":1,"recordsTotal":1,"recordsFiltered":1,"data":[{"id":33,"created":1530542074000,"updated":1530542074000,"title":"ad1","subTitle":"ad1","titleDesc":"ad1","url":"https://sale.jd.com/act/XkCzhoisOMSW.html","pic":"https://m.360buyimg.com/babel/jfs/t20164/187/1771326168/92964/b42fade7/5b359ab2N93be3a65.jpg","pic2":"","content":"<p><br></p>","tbContentCategory":{"id":89,"created":null,"updated":null,"parent":null,"isParent":null,"name":"幻灯片","status":null,"sortOrder":null}}],"error":null}
+```json
+{
+  "draw": 1,
+  "recordsTotal": 1,
+  "recordsFiltered": 1,
+  "data": [
+    {
+      "id": 33,
+      "created": 1530542074000,
+      "updated": 1530542074000,
+      "title": "ad1",
+      "subTitle": "ad1",
+      "titleDesc": "ad1",
+      "url": "https://sale.jd.com/act/XkCzhoisOMSW.html",
+      "pic": "https://m.360buyimg.com/babel/jfs/t20164/187/1771326168/92964/b42fade7/5b359ab2N93be3a65.jpg",
+      "pic2": "",
+      "content": "<p><br></p>",
+      "tbContentCategory": {
+        "id": 89,
+        "created": null,
+        "updated": null,
+        "parent": null,
+        "isParent": null,
+        "name": "幻灯片",
+        "status": null,
+        "sortOrder": null
+      }
+    }
+  ],
+  "error": null
+}
 ```
 
 ### 创建 HttpPost 请求
 
 案例代码如下：
 
-```text
+```java
 package com.dfd.hello.httpclient;
 
 import org.apache.http.HttpEntity;
@@ -229,6 +258,35 @@ public class MyTest {
 
 控制台输出结果：
 
-```text
-{"draw":1,"recordsTotal":1,"recordsFiltered":1,"data":[{"id":33,"created":1530542074000,"updated":1530542074000,"title":"ad1","subTitle":"ad1","titleDesc":"ad1","url":"https://sale.jd.com/act/XkCzhoisOMSW.html","pic":"https://m.360buyimg.com/babel/jfs/t20164/187/1771326168/92964/b42fade7/5b359ab2N93be3a65.jpg","pic2":"","content":"<p><br></p>","tbContentCategory":{"id":89,"created":null,"updated":null,"parent":null,"isParent":null,"name":"幻灯片","status":null,"sortOrder":null}}],"error":null}
+```json
+{
+  "draw": 1,
+  "recordsTotal": 1,
+  "recordsFiltered": 1,
+  "data": [
+    {
+      "id": 33,
+      "created": 1530542074000,
+      "updated": 1530542074000,
+      "title": "ad1",
+      "subTitle": "ad1",
+      "titleDesc": "ad1",
+      "url": "https://sale.jd.com/act/XkCzhoisOMSW.html",
+      "pic": "https://m.360buyimg.com/babel/jfs/t20164/187/1771326168/92964/b42fade7/5b359ab2N93be3a65.jpg",
+      "pic2": "",
+      "content": "<p><br></p>",
+      "tbContentCategory": {
+        "id": 89,
+        "created": null,
+        "updated": null,
+        "parent": null,
+        "isParent": null,
+        "name": "幻灯片",
+        "status": null,
+        "sortOrder": null
+      }
+    }
+  ],
+  "error": null
+}
 ```

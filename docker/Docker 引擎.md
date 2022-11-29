@@ -10,4 +10,4 @@ Docker 引擎是一个包含以下主要组件的客户端服务器应用程序�
 
 Docker 引擎组件的流程如下图所示：
 
-![img](../assets/img/620140640_31678.png)
+![img](C:\Users\Fengdong.Duan\Desktop\my-notes\docker\assets\620140640_31678.png)
