@@ -8,7 +8,7 @@ MyBatis 的单表 CRUD 的相关操作方法
 
 继续以 `tb_user` 表为例，修改映射文件，增加如下配置：
 
-```text
+```xml
 <insert id="insert">
     INSERT INTO tb_user (
       id,
@@ -34,7 +34,7 @@ MyBatis 的单表 CRUD 的相关操作方法
 
 单元测试代码如下：
 
-```text
+```java
 @Test
 public void testInsert() {
     TbUser tbUser = new TbUser();
@@ -53,7 +53,7 @@ public void testInsert() {
 
 继续以 `tb_user` 表为例，修改映射文件，增加如下配置：
 
-```text
+```xml
 <delete id="delete">
     DELETE FROM tb_user WHERE id = #{id}
 </delete>
@@ -61,12 +61,11 @@ public void testInsert() {
 
 单元测试代码如下：
 
-```text
+```java
 @Test
 public void testDelete() {
     TbUser tbUser = new TbUser();
     tbUser.setId(37L);
-
     tbUserDao.delete(tbUser);
 }
 ```
@@ -75,7 +74,7 @@ public void testDelete() {
 
 继续以 `tb_user` 表为例，修改映射文件，增加如下配置：
 
-```text
+```xml
 <select id="getById" resultType="TbUser">
     SELECT
       a.id,
@@ -94,7 +93,7 @@ public void testDelete() {
 
 单元测试代码如下：
 
-```text
+```java
 @Test
 public void testGetById() {
     TbUser tbUser = tbUserDao.getById(36L);
@@ -106,7 +105,7 @@ public void testGetById() {
 
 继续以 `tb_user` 表为例，修改映射文件，增加如下配置：
 
-```text
+```xml
 <update id="update">
     UPDATE
       tb_user
@@ -123,7 +122,7 @@ public void testGetById() {
 
 单元测试代码如下：
 
-```text
+```java
 @Test
 public void testUpdate() {
     TbUser tbUser = tbUserDao.getById(36L);
@@ -137,7 +136,7 @@ public void testUpdate() {
 
 继续以 `tb_user` 表为例，修改映射文件，增加如下配置：
 
-```text
+```xml
 <select id="selectByName" resultType="TbUser">
     SELECT
       a.id,
@@ -158,7 +157,7 @@ public void testUpdate() {
 
 单元测试代码如下：
 
-```text
+```java
 @Test
 public void testSelectByName() {
     List<TbUser> tbUsers = tbUserDao.selectByName("uni");

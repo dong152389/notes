@@ -4,7 +4,7 @@
 
 `pom.xml` 文件如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -38,7 +38,7 @@
 
 在测试包下 `src/main/test` 创建一个名为 `MyTest` 的测试类，代码如下：
 
-```text
+```java
 package com.dfd.hello.spring.test;
 
 import org.junit.After;

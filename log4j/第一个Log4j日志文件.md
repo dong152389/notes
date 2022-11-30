@@ -8,7 +8,7 @@ slf4j 的全称是 Simple Loging Facade For Java，即它仅仅是一个为 Java
 
 继续之前的项目，`pom.xml` 配置如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -47,7 +47,7 @@ slf4j 的全称是 Simple Loging Facade For Java，即它仅仅是一个为 Java
 
 在 `src/main/resources` 目录下创建名为 `log4j.properties` 的属性配置文件
 
-```text
+```properties
 log4j.rootLogger=INFO, console, file
 
 log4j.appender.console=org.apache.log4j.ConsoleAppender
@@ -79,12 +79,7 @@ log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
 
 创建一个测试类，并测试日志输出效果，代码如下：
 
-```text
-package com.dfd.hello.spring;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+```java
 public class MyTest {
 
     public static final Logger logger = LoggerFactory.getLogger(MyTest.class);

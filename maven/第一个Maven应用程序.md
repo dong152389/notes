@@ -8,19 +8,19 @@
 
 选择 `File` -> `New` -> `Project...`
 
-![img](../assets/img/Lusifer1528025821.png)
+![img](./assets/Lusifer1528025821.png)
 
 选择 `Maven` 项目
 
-![img](../assets/img/Lusifer1528025904.png)
+![img](./assets/Lusifer1528025904.png)
 
 填写项目信息
 
-![img](../assets/img/Lusifer1528025957.png)
+![img](./assets/Lusifer1528025957.png)
 
 选择工作空间
 
-![img](../assets/img/Lusifer1528026009.png)
+![img](./assets/Lusifer1528026009.png)
 
 ## 目录结构
 
@@ -54,7 +54,7 @@ Java Web 的 Maven 基本结构如下：
 
 在 IDEA 界面的右侧 `Maven Projects` 选项，可以管理 Maven 项目的整个生命周期、插件、依赖等
 
-![img](../assets/img/Lusifer1528027638.png)
+![img](./assets/Lusifer1528027638.png)
 
 ## 完善 Java Web 程序
 
@@ -101,14 +101,6 @@ Java Web 的 Maven 基本结构如下：
 创建一个 `Servlet` 用于测试请求
 
 ```java
-package com.dfd.hello.maven.servlet;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 public class HelloServlet extends HttpServlet {
 
     @Override

@@ -9,11 +9,11 @@ Lombok 是一个可以通过简单的注解形式来帮助我们简化消除一�
 
 IDEA 中依次点击 `File` --> `Settings` --> `Plugins` 搜索 Lombok 安装即可
 
-![img](../assets/img/Lusifer1512345603.png)
+![img](./assets/Lusifer1512345603.png)
 
 ## 查看是否安装成功
 
-![img](../assets/img/Lusifer1512345786.png)
+![img](./assets/Lusifer1512345786.png)
 
 ## 使用 Lombok
 
@@ -49,5 +49,5 @@ public class ItemCatNode implements Serializable {
 }
 ```
 
-![img](../assets/img/Lusifer1512346835.png)
+![img](./assets/Lusifer1512346835.png)
 

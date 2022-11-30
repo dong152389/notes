@@ -140,4 +140,4 @@ private void sortList(List<TbContentCategory> sourceList, List<TbContentCategory
 
 ### 演示效果
 
-![img](../assets/img/Lusifer1529862549.png)
+![img](./assets/Lusifer1529862549.png)

@@ -10,17 +10,17 @@
 
 确保已安装 JDK，并设置 `JAVA_HOME` 环境变量到 Windows 环境变量。
 
-![img](../assets/img/Lusifer1511451715.png)
+![img](./assets/Lusifer1511451715.png)
 
 ## 下载 Apache Maven
 
 下载地址：http://maven.apache.org/download.cgi
 
-![img](../assets/img/Lusifer1511451890.png)
+![img](./assets/Lusifer1511451890.png)
 
 下载 Maven 的 zip 文件，例如： apache-maven-3.5.2-bin.zip，将它解压到你要安装 Maven 的文件夹。假设你解压缩到文件夹 – D:\apache-maven-3.5.2
 
-![img](../assets/img/Lusifer1511452022.png)
+![img](./assets/Lusifer1511452022.png)
 
 注意：在这一步，只是文件夹和文件，安装不是必需的。
 
@@ -28,11 +28,11 @@
 
 添加 `MAVEN_HOME` 环境变量到 Windows 环境变量，并将其指向你的 Maven 文件夹。
 
-![img](../assets/img/Lusifer1511452135.png)
+![img](./assets/Lusifer1511452135.png)
 
 ## 添加到环境变量 - PATH
 
-![img](../assets/img/Lusifer1511452190.png)
+![img](./assets/Lusifer1511452190.png)
 
 ## 验证
 

@@ -43,7 +43,7 @@
 
 ### @Configuration
 
-@Configuration注解主要标注在某个类上，相当于xml配置文件中的<beans>
+@Configuration注解主要标注在某个类上，相当于xml配置文件中的`<beans>`
 
 ## Run
 

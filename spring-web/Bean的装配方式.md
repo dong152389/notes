@@ -87,13 +87,13 @@ Spring 还提供了 3 个功能基本和 `@Component` 等效的注解：
 
 需要在类上使用注解 `@Scope`，其 value 属性用于指定作用域。默认为 singleton。
 
-![img](../assets/img/Lusifer1514921149.png)
+![img](./assets/Lusifer1514921149.png)
 
 ### @Value
 
 需要在属性上使用注解 `@Value`，该注解的 value 属性用于指定要注入的值。
 
-![img](../assets/img/Lusifer1514921245.png)
+![img](./assets/Lusifer1514921245.png)
 
 使用该注解完成属性注入时，类中无需 setter。当然，若属性有 setter，则也可将其加到 setter 上。
 
@@ -103,9 +103,9 @@ Spring 还提供了 3 个功能基本和 `@Component` 等效的注解：
 
 使用该注解完成属性注入时，类中无需 setter。当然，若属性有 setter，则也可将其加到 setter 上。
 
-![img](../assets/img/Lusifer1514921700.png)
+![img](./assets/Lusifer1514921700.png)
 
-![img](../assets/img/Lusifer1514921733.png)
+![img](./assets/Lusifer1514921733.png)
 
 ### @Resource
 
@@ -120,7 +120,7 @@ private UserService userService;
 
 在方法上使用 `@PostConstruct` 相当于初始化
 
-![img](../assets/img/Lusifer1514922518.png)
+![img](./assets/Lusifer1514922518.png)
 
 ## 注解与 XML 配置的区别
 

@@ -21,4 +21,4 @@ services:
 
 地址：http://ip:port/ 用户名：admin 密码：admin123
 
-![img](../assets/img/Lusifer1521047001.png)
+![img](./assets/Lusifer1521047001.png)

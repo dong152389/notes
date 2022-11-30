@@ -4,7 +4,7 @@
 
 编写完相关代码后，我们可以使用单元测试查看 MyBatis 的执行效果，需要增加单元测试相关依赖，配置如下：
 
-```text
+```xml
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-test</artifactId>
@@ -25,12 +25,7 @@
 
 以 `tb_user` 表为例，实体类代码如下：
 
-```text
-package com.dfd.my.shop.domain;
-
-import java.io.Serializable;
-import java.util.Date;
-
+```java
 public class TbUser implements Serializable {
     private Long id;
     private String username;
@@ -102,14 +97,7 @@ public class TbUser implements Serializable {
 
 注意：Spring 集成 MyBatis 后，不需要手动实现 DAO 层的接口，所有的 SQL 执行语句都写在对应的关系映射配置文件中。
 
-```text
-package com.dfd.my.shop.web.admin.dao;
-
-import com.dfd.my.shop.domain.TbUser;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
+```java
 @Repository
 public interface TbUserDao {
 
@@ -123,13 +111,7 @@ public interface TbUserDao {
 
 ## 第一个-MyBatis-对象关系映射.html#定义业务逻辑接口)定义业务逻辑接口
 
-```text
-package com.dfd.my.shop.web.admin.service;
-
-import com.dfd.my.shop.domain.TbUser;
-
-import java.util.List;
-
+```java
 public interface TbUserService {
 
     /**
@@ -142,17 +124,7 @@ public interface TbUserService {
 
 ## 实现业务逻辑接口
 
-```text
-package com.dfd.my.shop.web.admin.service.impl;
-
-import com.dfd.my.shop.domain.TbUser;
-import com.dfd.my.shop.web.admin.dao.TbUserDao;
-import com.dfd.my.shop.web.admin.service.TbUserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
+```java
 @Service
 public class TbUserServiceImpl implements TbUserService {
 
@@ -170,7 +142,7 @@ public class TbUserServiceImpl implements TbUserService {
 
 映射文件，简称为 Mapper，主要完成 DAO 层中 SQL 语句的映射。映射文件名随意，一般放在 `src/resources/mapper` 文件夹中。这里映射文件名称定为 `TbUserMapper.xml`。
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dfd.my.shop.web.admin.dao.TbUserDao">
@@ -193,19 +165,7 @@ public class TbUserServiceImpl implements TbUserService {
 
 所有工作准备就绪，我们就可以测试 MyBatis 是否能够正常执行了。创建一个单元测试类，代码如下：
 
-```text
-package com.dfd.my.shop.web.admin.service.test;
-
-import com.dfd.my.shop.domain.TbUser;
-import com.dfd.my.shop.web.admin.dao.TbUserDao;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.List;
-
+```java
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:spring-context.xml", "classpath:spring-context-druid.xml", "classpath:spring-context-mybatis.xml"})
 public class TbUserServiceTest {

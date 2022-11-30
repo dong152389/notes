@@ -22,23 +22,23 @@
 
 ### `df -h`（查看挂载点）
 
-![img](../assets/img/Lusifer_201810310001.png)
+![img](./assets/Lusifer_201810310001.png)
 
 ### `lvdisplay`（显示当前的 logical volume）
 
-![img](../assets/img/Lusifer_201810310002.png)
+![img](./assets/Lusifer_201810310002.png)
 
 **备注：** 注意这里目前有两个，一个是文件系统所在的 `volume`，另一个是 `swap` 分区使用的 `volume`，当然，我们需要扩容的是第一个
 
 ### `vgdisplay`（显示当前的 volume group）
 
-![img](../assets/img/Lusifer_201810310003.png)
+![img](./assets/Lusifer_201810310003.png)
 
 **备注：** 注意 `VG SIZE`，这里应该是你当前的可用空间大小，待扩容完毕，这里显示的应该是最终的大小
 
 ### `pvdisplay`（显示当前的 physical volume）
 
-![img](../assets/img/Lusifer_201810310004.png)
+![img](./assets/Lusifer_201810310004.png)
 
 ## 开始 LVM 扩容
 
@@ -48,11 +48,11 @@
 fdisk -l
 ```
 
-![img](../assets/img/Lusifer_201810310005.png)
+![img](./assets/Lusifer_201810310005.png)
 
 因为这台机器默认开启了 LVM，所以目前有一个 `extended` 分区和一个 `LVM` 分区，并且他们是完全重叠的。这是因为，LVM 分区作为一个虚拟的分区，完全占用了这个 extended 分区，原理图见下：
 
-![img](../assets/img/Bg7zYac6&690.png)
+![img](./assets/Bg7zYac6&690.png)
 
 因此，现在需要做的就是将 extended partition (`sda2`) 扩展到最大，然后创建一个新的 LVM logical partition (`sda6`)，用它来填满 sda2
 
@@ -64,11 +64,11 @@ fdisk -l |grep '/dev'
 
 #### 1 块磁盘效果图
 
-![img](../assets/img/Lusifer_201810310006.png)
+![img](./assets/Lusifer_201810310006.png)
 
 #### 2 块磁盘效果图（新增磁盘，尚未挂载）
 
-![img](../assets/img/Lusifer_201810310007.png)
+![img](./assets/Lusifer_201810310007.png)
 
 ### 创建 `sdb` 分区
 
@@ -78,7 +78,7 @@ n	# 新建分区
 l	# 选择逻辑分区，如果没有，则首先创建扩展分区（p），然后再添加逻辑分区（硬盘：最多四个分区 P-P-P-P 或 P-P-P-E）
 ```
 
-![img](../assets/img/Lusifer_201810310008.png)
+![img](./assets/Lusifer_201810310008.png)
 
 ```text
 回车
@@ -89,13 +89,13 @@ w	# 写入磁盘分区
 
 ### 格式化磁盘
 
-![img](../assets/img/Lusifer_201810310009.png)
+![img](./assets/Lusifer_201810310009.png)
 
 ```text
 mkfs -t ext4 /dev/sdb1
 ```
 
-![img](../assets/img/Lusifer_201810310010.png)
+![img](./assets/Lusifer_201810310010.png)
 
 ### 创建 PV
 
@@ -109,7 +109,7 @@ pvcreate /dev/sdb1
 pvscan
 ```
 
-![img](../assets/img/Lusifer_201810310011.png)
+![img](./assets/Lusifer_201810310011.png)
 
 ### 扩容 VG
 
@@ -117,7 +117,7 @@ pvscan
 vgdisplay
 ```
 
-![img](../assets/img/Lusifer_201810310012.png)
+![img](./assets/Lusifer_201810310012.png)
 
 ```text
 vgextend ubuntu-vg /dev/sdb1
@@ -125,9 +125,9 @@ vgextend ubuntu-vg /dev/sdb1
 
 ### 扩容 LV
 
-![img](../assets/img/Lusifer_201810310013.png)
+![img](./assets/Lusifer_201810310013.png)
 
-![img](../assets/img/Lusifer_201810310014.png)
+![img](./assets/Lusifer_201810310014.png)
 
 ```text
 # 增加指定大小

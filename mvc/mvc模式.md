@@ -15,8 +15,8 @@ MVC，即 Model 模型、View 视图，及 Controller 控制器。
 - Model 处理后，将处理结果再交给 Controller
 - Controller 在接到处理结果后，根据处理结果找到要作为向客户端发回的响应 View 页面。页面经渲染（数据填充）后，再发送给客户端。
 
-![img](../assets/img/Lusifer2018060421090002.png)
+![img](./assets/Lusifer2018060421090002.png)
 
 ## 三层架构 + MVC 示意图
 
-![img](../assets/img/Lusifer2018060421090003.png)
+![img](./assets/Lusifer2018060421090003.png)

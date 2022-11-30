@@ -46,7 +46,7 @@ editor.create();
 
 配置完成后，在浏览器端显示如下：
 
-![img](../assets/img/Lusifer1530124826.png)
+![img](./assets/Lusifer1530124826.png)
 
 ### 服务端支持
 

@@ -18,7 +18,7 @@
 
 - 你需要知道 log4j 的 Maven 坐标，例如：
 
-```text
+```xml
 <groupId>log4j</groupId>
 <artifactId>log4j</artifactId>
 <version>1.2.17</version>
@@ -27,7 +27,7 @@
 - 它会自动下载 log4j 的 1.2.17 版本库
 - 声明 Maven 的坐标转换成 `pom.xml` 文件
 
-```text
+```xml
 <dependencies>
     <dependency>
 	<groupId>log4j</groupId>

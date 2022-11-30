@@ -23,7 +23,7 @@ YAML 支持的数据结构有三种：
 
 对象的一组键值对，使用冒号结构表示
 
-```text
+```yaml
 animal: pets
 ```
 
@@ -31,7 +31,7 @@ animal: pets
 
 一组连词线开头的行，构成一个数组
 
-```text
+```yaml
 - Cat
 - Dog
 - Goldfish
@@ -39,7 +39,7 @@ animal: pets
 
 数据结构的子成员是一个数组，则可以在该项下面缩进一个空格
 
-```text
+```yaml
 - Array
  - Cat
  - Dog

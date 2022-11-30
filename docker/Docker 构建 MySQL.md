@@ -69,4 +69,4 @@ bc49c9de4cdf        mysql:latest        "docker-entrypoint..."   4 minutes ago  
 
 使用客户端工具连接 MySQL
 
-![img](C:\Users\Fengdong.Duan\Desktop\my-notes\docker\assets\20171103184144.png)
+![img](./assets/20171103184144.png)

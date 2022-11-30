@@ -4,7 +4,7 @@
 
 在 `pom.xml` 文件中增加 MyBatis 相关依赖：
 
-```text
+```xml
 <dependency>
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis</artifactId>
@@ -28,7 +28,7 @@
 
 创建一个名为 `mybatis-config.xml` 的配置文件，内容如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
@@ -77,7 +77,7 @@
 
 创建一个名为 `spring-context-mybatis.xml` 的 Spring 配置文件，内容如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">

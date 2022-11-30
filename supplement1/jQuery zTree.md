@@ -81,4 +81,4 @@ public List<TbContentCategory> treeData(String id) {
 
 ### 演示效果
 
-![img](../assets/img/Lusifer1529873938.png)
+![img](./assets/Lusifer1529873938.png)

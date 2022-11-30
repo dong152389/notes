@@ -4,7 +4,7 @@
 
 在 `pom.xml` 文件中新增 `com.alibaba:druid` 和 `mysql:mysql-connector-java` 依赖
 
-```text
+```xml
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>druid</artifactId>
@@ -21,7 +21,7 @@
 
 配置数据库连接 `jdbc.properties` ，配置代码如下：
 
-```text
+```properties
 # JDBC
 # MySQL 8.x: com.mysql.cj.jdbc.Driver
 jdbc.driverClass=com.mysql.jdbc.Driver
@@ -42,7 +42,7 @@ jdbc.testSql=SELECT 'x' FROM DUAL
 
 创建一个名为 `spring-context-druid.xml` 的 Spring 配置文件，内容如下：
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -92,7 +92,7 @@ Druid 提供了大量的监控数据，只需要在 `web.xml` 中配置一个 Se
 
 修改 `web.xml` 配置文件，增加 Druid 提供的 Servlet
 
-```text
+```xml
 <servlet>
     <servlet-name>DruidStatView</servlet-name>
     <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
@@ -105,4 +105,4 @@ Druid 提供了大量的监控数据，只需要在 `web.xml` 中配置一个 Se
 
 打开浏览器，输入：http://localhost:8080/druid/index.html 浏览器显示效果如下：
 
-![img](../assets/img/Lusifer1528842755.png)
+![img](./assets/Lusifer1528842755.png)

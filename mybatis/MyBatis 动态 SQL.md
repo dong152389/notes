@@ -2,7 +2,7 @@
 
 动态 SQL，主要用于解决查询条件不确定的情况：在程序运行期间，根据用户提交的查询条件进行查询。提交的查询条件不同，执行的 SQL 语句不同。若将每种可能的情况均逐一列出，对所有条件进行排列组合，将会出现大量的 SQL 语句。此时，可使用动态 SQL 来解决这样的问题。
 
-![img](../assets/img/Lusifer1514409215.png)
+![img](./assets/Lusifer1514409215.png)
 
 动态 SQL，即通过 MyBatis 提供的各种标签对条件作出判断以实现动态拼接 SQL 语句。
 
@@ -14,7 +14,7 @@
 
 特别是对于小于号（`<`），在 XML 中是绝对不能出现的。否则，一定出错。
 
-![img](../assets/img/Lusifer1514409933.png)
+![img](./assets/Lusifer1514409933.png)
 
 ## if 标签
 
@@ -28,7 +28,7 @@
 
 为了解决两个条件均未做设定的情况，在 `where` 后添加了一个“`1=1`”的条件。这样就不至于两个条件均未设定而出现只剩下一个 `where`，而没有任何可拼接的条件的不完整 SQL 语句。
 
-```text
+```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dfd.mybatis.dao.DynamicStudentDao">
@@ -58,7 +58,7 @@
 
 ### 定义映射文件
 
-```text
+```xml
 <!-- where-->
 <select id="selectByWhere" resultType="com.dfd.mybatis.entity.Student">
     SELECT
@@ -87,7 +87,7 @@
 
 ### 定义映射文件
 
-```text
+```xml
 <!-- choose -->
 <select id="selectByChoose" resultType="com.dfd.mybatis.entity.Student">
     SELECT
@@ -126,9 +126,9 @@
 
 动态 SQL 的判断中使用的都是 OGNL 表达式。OGNL 表达式中的数组使用 `array` 表示，数组长度使用 `array.length` 表示。
 
-![img](../assets/img/Lusifer1514413085.png)
+![img](./assets/Lusifer1514413085.png)
 
-```text
+```xml
 <!-- foreach -->
 <select id="selectByForeach" resultType="com.dfd.mybatis.entity.Student">
     <!-- select * from student where id in (2, 4) -->
@@ -156,7 +156,7 @@
 
 #### 定义 DAO 接口
 
-```text
+```java
 /**
  * 使用 foreach 标签以 list 基本类型的形式查询
  * @param ids
@@ -167,7 +167,7 @@ public List<Student> selectByForeachWithListBase(List<Long> ids);
 
 #### 定义映射文件
 
-```text
+```xml
 <!-- foreach -->
 <select id="selectByForeachWithListBase" resultType="com.dfd.mybatis.entity.Student">
     <!-- select * from student where id in (2, 4) -->
@@ -191,7 +191,7 @@ public List<Student> selectByForeachWithListBase(List<Long> ids);
 
 #### 定义 DAO 接口
 
-```text
+```java
 /**
  * 使用 foreach 标签以 list 自定义类型的形式查询
  * @param students
@@ -202,7 +202,7 @@ public List<Student> selectByForeachWithListCustom(List<Student> students);
 
 #### 定义映射文件
 
-```text
+```xml
 <!-- foreach -->
 <select id="selectByForeachWithListCustom" resultType="com.dfd.mybatis.entity.Student">
     <!-- select * from student where id in (2, 4) -->
@@ -228,7 +228,7 @@ public List<Student> selectByForeachWithListCustom(List<Student> students);
 
 ### 修改映射文件
 
-```text
+```xml
 <sql id="select">
     SELECT
         id,
@@ -240,7 +240,7 @@ public List<Student> selectByForeachWithListCustom(List<Student> students);
 </sql>
 ```
 
-```text
+```xml
 <!-- foreach -->
 <select id="selectByForeachWithListCustom" resultType="com.dfd.mybatis.entity.Student">
     <!-- select * from student where id in (2, 4) -->
@@ -255,4 +255,4 @@ public List<Student> selectByForeachWithListCustom(List<Student> students);
 </select>
 ```
 
-![img](../assets/img/Lusifer1514414809.png)
+![img](./assets/Lusifer1514414809.png)

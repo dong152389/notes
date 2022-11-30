@@ -29,7 +29,7 @@ services:
 
 http://ip:5000/v2/
 
-![img](../assets/img/Lusifer1520955730.png)
+![img](./assets/Lusifer1520955730.png)
 
 - 终端访问
 
@@ -37,4 +37,4 @@ http://ip:5000/v2/
 curl http://ip:5000/v2/
 ```
 
-![img](../assets/img/Lusifer1520955773.png)
+![img](./assets/Lusifer1520955773.png)
