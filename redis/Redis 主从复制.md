@@ -135,7 +135,7 @@ redis-server ~/myredis/redis6381.conf
 
 **反客为主的自动版**，能够后台监控主机是否故障，如果故障了根据投票数自动将从库转换为主库。
 
-![image-20221202105613448](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221202105613448.png)
+![image-20221202105613448](./assets/image-20221202105613448.png)
 
 ### 使用步骤
 
@@ -170,7 +170,7 @@ redis-server ~/myredis/redis6381.conf
 
 ### 故障恢复
 
-![image-20221202150028596](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221202150028596.png)
+![image-20221202150028596](./assets/image-20221202150028596.png)
 
 优先级在redis.conf中默认：slave-priority 100，值越小优先级越高，偏移量是指获得原主机数据最全的，每个redis实例启动后都会随机生成一个40位的runid。
 
