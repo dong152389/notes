@@ -11,7 +11,7 @@
 
 ![image-20221130165957242](./assets/image-20221130165957242.png)
 
-## 如何安装
+## 安装
 
 1. 拷贝多个redis.conf文件include(写绝对路径)
 2. <font color="#007c6a">开启daemonize yes</font>
@@ -84,6 +84,118 @@ redis-server ~/myredis/redis6381.conf
 4. 从机重启需重设：`slaveof 127.0.0.1 6379`
 
 **可以将配置增加到文件中。永久生效**。
+
+## 安装（Docker）
+
+目录结构如下
+
+redis-sentinel
+├── redis
+│   ├──  docker-compose.yml
+│   └── master
+│    	└── data
+│   └── slave1
+│    	└── data
+│   └── slave2
+│    	└── data
+├── sentinel
+  ├── docker-compose.yml
+   ├── sentinel1.conf
+   ├── sentinel2.conf
+   └── sentinel3.conf
+
+~~~yml
+version: "3.8"
+
+services:
+  master:
+    image: redis:7.0.5
+    container_name: redis-master
+    hostname: redis-master
+    restart: always
+    volumes:
+      - ./master/data:/data
+    ports:
+      - 6379:6379
+    ### 这里的slave-announce-ip、slave-announce-port是宿主机IP与端口，不设置的话哨兵模式下访问的是容器内IP端口，不能为外部应用提供服务，原因是由于端口或IP映射导致的无法连接的问题。例如 docker 这种容器，当你使用了端口映射后，运行在 docker 中的 redis 是不知道正真的端口或 IP 的，所以在哨兵模式下，哨兵就无法连接到 master 和 replica。当遇到这种情况后，其实还有另一种解决方式，就是直接使用 docker 的主机网络（启动时加上 --net=host）。
+    command: ["redis-server","--requirepass 111111","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6379"]
+
+  slave1:
+    image: redis:7.0.5
+    container_name: redis-slave-1
+    hostname: redis-slave-1
+    restart: always
+    volumes:
+      - ./slave1/data:/data
+    ports:
+      - 6380:6379
+    command: ["redis-server","--requirepass 111111","--slaveof redis-master 6379","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6380"]
+
+  slave2:
+    image: redis:7.0.5
+    container_name: redis-slave-2
+    hostname: redis-slave-2
+    restart: always
+    volumes:
+      - ./slave2/data:/data
+    ports:
+      - 6381:6379
+    command: ["redis-server","--requirepass 111111","--slaveof redis-master 6379","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6381"]
+~~~
+
+~~~yaml
+version: "3.8"
+
+services:
+  sentinel1:
+    image: redis:7.0.5
+    restart: always
+    container_name: redis-sentinel-1
+    ports:
+      - 26379:26379
+    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
+    volumes:
+      - ./sentinel1.conf:/usr/local/etc/redis/sentinel.conf
+
+  sentinel2:
+    image: redis:7.0.5
+    restart: always
+    container_name: redis-sentinel-2
+    ports:
+      - 26380:26379
+    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
+    volumes:
+      - ./sentinel2.conf:/usr/local/etc/redis/sentinel.conf
+
+  sentinel3:
+    image: redis:7.0.5
+    restart: always
+    container_name: redis-sentinel-3
+    ports:
+      - 26381:26379
+    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
+    volumes:
+      - ./sentinel3.conf:/usr/local/etc/redis/sentinel.conf
+
+networks:
+  default:
+    external:
+	  # 次名称是redis目录启动后自动创建的网络名称，如果没看到，可以使用down命令将其删除，就可以看到这个名称了
+      name: redis_default
+~~~
+
+~~~properties
+# 将此文件复制3份 分别叫做sentinel1.conf、sentinel2.conf、sentinel3.conf
+port 26379
+dir "/tmp"
+sentinel monitor mymaster 192.168.25.10 6379 2
+# 用于验证主节点和副本的密码
+sentinel auth-pass mymaster 111111
+sentinel down-after-milliseconds mymaster 30000
+sentinel parallel-syncs mymaster 1
+sentinel failover-timeout mymaster 180000
+sentinel deny-scripts-reconfig yes
+~~~
 
 ## 常用 3 招
 

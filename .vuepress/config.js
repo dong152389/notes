@@ -1375,7 +1375,8 @@ function redis() {
         "Redis 事务—秒杀案例",
         "Redis 持久化—RDB",
         "Redis 持久化—AOF",
-        "Redis 主从复制"
+        "Redis 主从复制",
+        "Redis 集群",
       ]
     }
   ]
