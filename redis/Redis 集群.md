@@ -14,12 +14,6 @@
 
 Redis 集群实现了对Redis的水平扩容，即启动N个redis节点，将整个数据库分布存储在这N个节点中，每个节点存储总数据的1/N。
 
-Redis 集群通过分区（partition）来提供一定程度的可用性（availability）：即使集群中有一部分节点失效或者无法进行通讯， 集群也可以继续处理命令请求。
-
-## 什么是集群
-
-Redis 集群实现了对Redis的水平扩容，即启动N个redis节点，将整个数据库分布存储在这N个节点中，每个节点存储总数据的1/N。
-
 Redis 集群通过分区（partition）来提供一定程度的可用性（availability）： 即使集群中有一部分节点失效或者无法进行通讯， 集群也可以继续处理命令请求。
 
 ## 安装
@@ -83,7 +77,303 @@ Redis 集群通过分区（partition）来提供一定程度的可用性（avail
 
 ## 安装（Docker）
 
+### 创建目录及文件
 
+分别在 `192.168.25.99` 和 `192.168.25.100` 两台机器上执行以下操作。
+
+~~~sh
+# 创建目录
+mkdir -p /usr/local/docker/redis-cluster
+# 切换至指定目录
+cd /usr/local/docker/redis-cluster
+# 编写 redis-cluster.tmpl 文件
+vi redis-cluster.tmpl
+~~~
+
+### 编写配置文件
+
+`192.168.25.99` 机器的 `redis-cluster.tmpl` 文件内容如下：
+
+~~~
+port ${PORT}
+requirepass 111111
+masterauth 111111
+protected-mode no
+daemonize no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 15000
+cluster-announce-ip 192.168.25.99
+cluster-announce-port ${PORT}
+cluster-announce-bus-port 1${PORT}
+~~~
+
+`192.168.25.100` 机器的 `redis-cluster.tmpl` 文件内容如下：
+
+~~~
+port ${PORT}
+requirepass 111111
+masterauth 111111
+protected-mode no
+daemonize no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 15000
+cluster-announce-ip 192.168.25.100
+cluster-announce-port ${PORT}
+cluster-announce-bus-port 1${PORT}
+~~~
+
+- `port`：节点端口；
+- `requirepass`：添加访问认证；
+- `masterauth`：如果主节点开启了访问认证，从节点访问主节点需要认证；
+- `protected-mode`：保护模式，默认值 yes，即开启。开启保护模式以后，需配置 `bind ip` 或者设置访问密码；关闭保护模式，外部网络可以直接访问；
+- `daemonize`：是否以守护线程的方式启动（后台启动），默认 no；
+- `appendonly`：是否开启 AOF 持久化模式，默认 no；
+- `cluster-enabled`：是否开启集群模式，默认 no；
+- `cluster-config-file`：集群节点信息文件；
+- `cluster-node-timeout`：集群节点连接超时时间；
+- `cluster-announce-ip`：集群节点 IP，填写宿主机的 IP；
+- `cluster-announce-port`：集群节点映射端口；
+- `cluster-announce-bus-port`：集群节点总线端口。
+
+>　　每个 Redis 集群节点都需要打开**两个 TCP 连接**。一个用于为客户端提供服务的正常 Redis TCP 端口，例如 6379。还有一个基于 6379 端口加 10000 的端口，比如 16379。
+>
+>　​	第二个端口用于集群总线，这是一个使用二进制协议的节点到节点通信通道。节点使用集群总线进行故障检测、配置更新、故障转移授权等等。客户端永远不要尝试与集群总线端口通信，与正常的 Redis 命令端口通信即可，但是请确保防火墙中的这两个端口都已经打开，否则 Redis 集群节点将无法通信。
+
+在 `192.168.25.99` 机器的 `redis-cluster` 目录下执行以下命令：
+
+~~~sh
+for port in `seq 6371 6373`; do \
+  mkdir -p ${port}/conf \
+  && PORT=${port} envsubst < redis-cluster.tmpl > ${port}/conf/redis.conf \
+  && mkdir -p ${port}/data;\
+done
+~~~
+
+在 `192.168.25.100` 机器的 `redis-cluster` 目录下执行以下命令：
+
+~~~sh
+for port in `seq 6374 6376`; do \
+  mkdir -p ${port}/conf \
+  && PORT=${port} envsubst < redis-cluster.tmpl > ${port}/conf/redis.conf \
+  && mkdir -p ${port}/data;\
+done
+~~~
+
+`192.168.25.99` 目录结构：
+
+![image-20221213093431735](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221213093431735.png)
+
+`192.168.25.100` 目录结构：
+
+![image-20221213093739842](C:\Users\Fengdong.Duan\AppData\Roaming\Typora\typora-user-images\image-20221213093739842.png)
+
+~~~
+============================== 192.168.25.99 ==============================
+port 6371
+requirepass 111111
+masterauth 111111
+protected-mode no
+daemonize no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 15000
+cluster-announce-ip 192.168.25.99
+cluster-announce-port 6371
+cluster-announce-bus-port 16371
+
+port 6372
+requirepass 111111
+masterauth 111111
+protected-mode no
+daemonize no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 15000
+cluster-announce-ip 192.168.25.99
+cluster-announce-port 6372
+cluster-announce-bus-port 16372
+
+port 6373
+requirepass 111111
+masterauth 111111
+protected-mode no
+daemonize no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 15000
+cluster-announce-ip 192.168.25.99
+cluster-announce-port 6373
+cluster-announce-bus-port 16373
+============================== 192.168.25.99 ==============================
+~~~
+
+~~~
+============================== 192.168.25.100 ==============================
+port 6374
+requirepass 111111
+masterauth 111111
+protected-mode no
+daemonize no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 15000
+cluster-announce-ip 192.168.25.100
+cluster-announce-port 6374
+cluster-announce-bus-port 16374
+
+port 6375
+requirepass 111111
+masterauth 111111
+protected-mode no
+daemonize no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 15000
+cluster-announce-ip 192.168.25.100
+cluster-announce-port 6375
+cluster-announce-bus-port 16375
+
+port 6376
+requirepass 111111
+masterauth 111111
+protected-mode no
+daemonize no
+appendonly yes
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 15000
+cluster-announce-ip 192.168.25.100
+cluster-announce-port 6376
+cluster-announce-bus-port 16376
+============================== 192.168.25.100 ==============================
+~~~
+
+在 `192.168.25.99` 机器的 `/usr/local/docker/redis-cluster` 目录下创建 `docker-compose.yml` 文件并编辑。
+
+~~~yaml
+# 描述 Compose 文件的版本信息
+version: "3.8"
+
+# 定义服务，可以多个
+services:
+  redis-6371: # 服务名称
+    image: redis:6.2.5 # 创建容器时所需的镜像
+    container_name: redis-6371 # 容器名称
+    restart: always # 容器总是重新启动
+    network_mode: "host" # host 网络模式
+    volumes: # 数据卷，目录挂载
+      - ./6371/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./6371/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf # 覆盖容器启动后默认执行的命令
+
+  redis-6372:
+    image: redis:6.2.5
+    container_name: redis-6372
+    restart: always
+    network_mode: "host"
+    volumes:
+      - ./6372/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./6372/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-6373:
+    image: redis:6.2.5
+    container_name: redis-6373
+    restart: always
+    network_mode: "host"
+    volumes:
+      - ./6373/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./6373/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+~~~
+
+在 `192.168.25.100` 机器的 `/usr/local/docker/redis-cluster` 目录下创建 `docker-compose.yml` 文件并编辑。
+
+~~~yaml
+# 描述 Compose 文件的版本信息
+version: "3.8"
+
+# 定义服务，可以多个
+services:
+  redis-6374: # 服务名称
+    image: redis:6.2.5 # 创建容器时所需的镜像
+    container_name: redis-6374 # 容器名称
+    restart: always # 容器总是重新启动
+    network_mode: "host" # host 网络模式
+    volumes: # 数据卷，目录挂载
+      - ./6374/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./6374/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf # 覆盖容器启动后默认执行的命令
+
+  redis-6375:
+    image: redis:6.2.5
+    container_name: redis-6375
+    restart: always
+    network_mode: "host"
+    volumes:
+      - ./6375/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./6375/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+
+  redis-6376:
+    image: redis:6.2.5
+    container_name: redis-6376
+    restart: always
+    network_mode: "host"
+    volumes:
+      - ./6376/conf/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./6376/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
+~~~
+
+### 启动
+
+执行`docker-compose up -d`，启动两台服务器。
+
+### 创建 Redis Cluster 集群
+
+~~~sh
+# 进入容器
+docker exec -it redis-6371 bash
+# 切换至指定目录
+cd /usr/local/bin/
+~~~
+
+~~~sh
+redis-cli -a 111111 --cluster create 192.168.25.99:6371 192.168.25.99:6372 192.168.25.99:6373 192.168.25.100:6374 192.168.25.100:6375 192.168.25.100:6376 --cluster-replicas 1
+~~~
+
+![image-20221212132519599](./assets/image-20221212131514714.png)
+
+### 查看集群状态
+
+~~~sh
+# 进入容器
+docker exec -it redis-6371 bash
+# 切换至指定目录
+cd /usr/local/bin/
+redis-cli -a 111111 --cluster check 192.168.25.100:6375
+~~~
+
+### 查看集群信息和节点信息
+
+~~~sh
+# 连接至集群某个节点
+redis-cli -c -a 111111 -h 192.168.25.100 -p 6376
+# 查看集群信息
+cluster info
+# 查看集群结点信息
+cluster nodes
+~~~
 
 ## 登录
 

@@ -89,20 +89,40 @@ redis-server ~/myredis/redis6381.conf
 
 目录结构如下
 
-redis-sentinel
 ├── redis
-│   ├──  docker-compose.yml
-│   └── master
-│    	└── data
-│   └── slave1
-│    	└── data
+│   ├── docker-compose.yml
+│   ├── master
+│   │   ├── conf
+│   │   │   └── redis.conf
+│   │   └── data
+│   │       ├── appendonlydir
+│   │       │   ├── appendonly.aof.1.base.rdb
+│   │       │   ├── appendonly.aof.1.incr.aof
+│   │       │   └── appendonly.aof.manifest
+│   │       └── dump.rdb
+│   ├── slave1
+│   │   ├── conf
+│   │   │   └── redis.conf
+│   │   └── data
+│   │       ├── appendonlydir
+│   │       │   ├── appendonly.aof.15.base.rdb
+│   │       │   ├── appendonly.aof.15.incr.aof
+│   │       │   └── appendonly.aof.manifest
+│   │       └── dump.rdb
 │   └── slave2
-│    	└── data
-├── sentinel
-  ├── docker-compose.yml
-   ├── sentinel1.conf
-   ├── sentinel2.conf
-   └── sentinel3.conf
+│       ├── conf
+│       │   └── redis.conf
+│       └── data
+│           ├── appendonlydir
+│           │   ├── appendonly.aof.15.base.rdb
+│           │   ├── appendonly.aof.15.incr.aof
+│           │   └── appendonly.aof.manifest
+│           └── dump.rdb
+└── sentinel
+    ├── docker-compose.yml
+    ├── sentinel1.conf
+    ├── sentinel2.conf
+    └── sentinel3.conf
 
 ~~~yml
 version: "3.8"

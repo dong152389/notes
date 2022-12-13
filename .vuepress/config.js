@@ -1377,6 +1377,8 @@ function redis() {
         "Redis 持久化—AOF",
         "Redis 主从复制",
         "Redis 集群",
+        "Redis 应用问题解决",
+        "Redis6 新功能",
       ]
     }
   ]
