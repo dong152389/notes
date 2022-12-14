@@ -165,11 +165,11 @@ done
 
 `192.168.25.99` 目录结构：
 
-![image-20221213093431735](C:\Users\Fengdong.Duan\Desktop\my-notes\redis\assets\image-20221213093431735.png)
+![image-20221213093431735](./assets/image-20221213093431735.png)
 
 `192.168.25.100` 目录结构：
 
-![image-20221213093739842](C:\Users\Fengdong.Duan\AppData\Roaming\Typora\typora-user-images\image-20221213093739842.png)
+![image-20221213093739842](./assets/image-20221213093739842.png)
 
 ~~~
 ============================== 192.168.25.99 ==============================

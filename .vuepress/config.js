@@ -79,7 +79,8 @@ module.exports = {
           "/service-mesh-kubernetes/": serviceMesh(),
           "/mycat/": mycat(),
           "/gradle/": gradle(),
-          "/redis/": redis()
+          "/redis/": redis(),
+          "/shiro/": shiro()
         }
       }
     }
@@ -134,7 +135,8 @@ function genGuideSidebar() {
       children: [
         "MyCat",
         "Gradle",
-        "Redis"
+        "Redis",
+        "Shiro"
       ]
     }
   ];
@@ -1371,6 +1373,13 @@ function redis() {
         "Redis 新数据类型",
         "Jedis",
         "Redis 与 SpringBoot 整合",
+      ]
+    },
+    {
+      title: "Redis 进阶",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
         "Redis 事务—锁机制",
         "Redis 事务—秒杀案例",
         "Redis 持久化—RDB",
@@ -1379,6 +1388,18 @@ function redis() {
         "Redis 集群",
         "Redis 应用问题解决",
         "Redis6 新功能",
+      ]
+    }
+  ]
+}
+function shiro() {
+  return [
+    {
+      title: "Shiro 入门",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "",
       ]
     }
   ]
