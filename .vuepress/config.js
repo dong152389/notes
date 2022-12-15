@@ -1400,6 +1400,7 @@ function shiro() {
       sidebarDepth: 5,
       children: [
         "",
+        "基本使用",
       ]
     }
   ]
