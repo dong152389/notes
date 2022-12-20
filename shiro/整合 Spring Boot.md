@@ -493,9 +493,410 @@ public class ShiroConfig {
 
 Shiro 提供了记住我（RememberMe）的功能，比如访问一些网站时，关闭了浏览器，下次再打开时还是能记住你是谁，下次访问时无需再登录即可访问。
 
-**1、基本流程**
+### 基本流程
 
 1. 首先在登录页面选中 RememberMe 然后登录成功；如果是浏览器登录，一般会 把 RememberMe 的 Cookie 写到客户端并保存下来
 2. 关闭浏览器再重新打开；会发现浏览器还是记住你的。
 3. 访问一般的网页服务器端，仍然知道你是谁，且能正常访问。
 4. 但是，如果我们访问电商平台时，如果要查看我的订单或进行支付时，此时还 是需要再进行身份认证的，以确保当前用户还是你。
+
+### 代码实现
+
+~~~java
+@Configuration
+public class ShiroConfig {
+    @Autowired
+    private CustomRealm customRealm;
+    @Autowired
+    private CustomRealm2 customRealm2;
+
+    @Bean
+    public DefaultShiroFilterChainDefinition shiroFilterChainDefinition() {
+        DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+        //设置不认证可以访问的资源
+        chainDefinition.addPathDefinition("/user/login", "anon");
+        chainDefinition.addPathDefinition("/login", "anon");
+        //设置需要进行登录认证的拦截范围
+        chainDefinition.addPathDefinition("/**", "authc");
+        //设置RememberMe
+        chainDefinition.addPathDefinition("/**", "user");
+        return chainDefinition;
+    }
+
+    @Bean
+    public DefaultWebSecurityManager webSecurityManager() {
+        //1 创建 defaultWebSecurityManager 对象
+        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager();
+        //2 创建认证对象，并设置认证策略
+        ModularRealmAuthenticator modularRealmAuthenticator = new ModularRealmAuthenticator();
+        modularRealmAuthenticator.setAuthenticationStrategy(new AllSuccessfulStrategy());
+        //2 创建加密对象，并设置相关属性
+        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
+        //2.1 采用 md5 加密
+        matcher.setHashAlgorithmName(Sha256Hash.ALGORITHM_NAME);
+        //2.2 迭代加密次数
+        matcher.setHashIterations(3);
+        //3 将加密对象存储到 myRealm 中
+        customRealm.setCredentialsMatcher(matcher);
+        //4 将 myRealm 存入 defaultWebSecurityManager 对象
+        defaultWebSecurityManager.setRealms(Arrays.asList(customRealm2, customRealm));
+        //5 设置Remember me
+        defaultWebSecurityManager.setRememberMeManager(rememberMeManager());
+        //6 返回
+        return defaultWebSecurityManager;
+    }
+
+    private RememberMeManager rememberMeManager() {
+        CookieRememberMeManager rememberMeManager = new CookieRememberMeManager();
+        rememberMeManager.setCookie(rememberMeCookie());
+        rememberMeManager.setCipherKey(Base64.decode("4AvVhmFLUs0KTA3Kprsdag=="));
+        return rememberMeManager;
+    }
+
+    /**
+     * 生成Cookie
+     * @return
+     */
+    private Cookie rememberMeCookie() {
+        SimpleCookie cookie = new SimpleCookie("rememberMe");
+        //设置跨域
+        //cookie.setDomain(domain);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        return cookie;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor getAuthorizationAttributeSourceAdvisor() {
+        AuthorizationAttributeSourceAdvisor sourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        sourceAdvisor.setSecurityManager(webSecurityManager());
+        return sourceAdvisor;
+    }
+
+}
+~~~
+
+~~~java
+@Controller
+@RequestMapping("user")
+public class UserController {
+    @PostMapping("login")
+    public String userLogin(@RequestParam(defaultValue = "false") boolean rememberMe, @RequestParam("username") String username, @RequestParam("password") String password, HttpSession session) {
+        //1 获取 Subject 对象
+        Subject subject = SecurityUtils.getSubject();
+        //2 封装请求数据到 token 对象中
+        AuthenticationToken token = new UsernamePasswordToken(username, password, rememberMe);
+        //3 调用 login 方法进行登录认证
+        try {
+            subject.login(token);
+            session.setAttribute("user", token.getPrincipal().toString());
+            return "main";
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            session.setAttribute("fail", e.getMessage());
+            return "fail";
+        }
+    }
+    
+    //登录认证验证 rememberMe
+    @GetMapping("rememberMe")
+    public String userLogin() {
+        //二次打开浏览器时，无法在session中得到"user"
+        //二次打开浏览器时，即使数据库中的密码发生变化，仍能访问资源
+        return "main";
+    }
+}
+~~~
+
+### 测试
+
+~~~
+通过地址访问 rememberMe
+http://localhost:8080/user/rememberMe
+过滤器拦截跳回登录页面
+勾选记住我登录后，可以正常访问
+然后关闭浏览器，继续访问
+http://localhost:8080/user/rememberMe
+不会被拦截器拦截
+但是二次打开浏览器时，无法在session中得到"user"
+~~~
+
+## 用户登出
+
+用户登录后，配套的有登出操作。直接通过Shiro过滤器即可实现登出。
+
+### 代码实现
+
+修改main.html
+
+~~~html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shiro 登录认证后主页面</title>
+</head>
+<body>
+<h1>Shiro 登录认证后主页面</h1>
+<br>
+登录用户为：<span th:text="${session.user}"></span>
+<br>
+<a href="/logout">登出</a>
+</body>
+~~~
+
+修改配置类
+
+~~~java
+@Bean
+public DefaultShiroFilterChainDefinition shiroFilterChainDefinition() {
+    DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+    //设置不认证可以访问的资源
+    chainDefinition.addPathDefinition("/user/login", "anon");
+    chainDefinition.addPathDefinition("/login", "anon");
+    //配置登出过滤器
+    chainDefinition.addPathDefinition("/logout","logout");
+    //设置需要进行登录认证的拦截范围
+    chainDefinition.addPathDefinition("/**", "authc");
+    //设置RememberMe
+    chainDefinition.addPathDefinition("/**", "user");
+    return chainDefinition;
+}
+~~~
+
+## 授权、角色认证
+
+### 授权
+
+用户登录后，需要验证是否具有指定角色指定权限。Shiro也提供了方便的工具进行判断。 
+
+这个工具就是Realm的doGetAuthorizationInfo方法进行判断。触发权限判断的有两种方式。
+
+（1）在页面中通过shiro:**xx**属性判断
+
+（2）在接口服务中通过注解@Requires**xx****进行判断
+
+### 后端接口服务注解
+
+通过给接口服务方法添加注解可以实现权限校验，可以加在控制器方法上，也可以加 在业务方法上，一般加在控制器方法上。常用注解如下：
+
+* **@RequiresAuthentication**  
+  * 验证用户是否登录，等同于方法subject.isAuthenticated()
+
+* **@RequiresUser**
+
+  * 验证用户是否被记忆：
+    * 登录认证成功subject.isAuthenticated()为true 
+    * 登录后被记忆subject.isRemembered()为true
+
+* **@RequiresGuest**
+
+  * 验证是否是一个guest的请求，是否是游客的请求
+  * 此时subject.getPrincipal()为null
+
+* **@RequiresRoles** 
+
+  * 验证subject是否有相应角色，有角色访问方法，没有则会抛出异常 AuthorizationException。
+
+    * ~~~java
+      @RequiresRoles(“aRoleName”) 
+      public void someMethod(); //只有subject有aRoleName角色才能访问方法someMethod()
+      ~~~
+
+* **@RequiresPermissions**
+
+  * 验证subject是否有相应权限，有权限访问方法，没有则会抛出异常 AuthorizationException。
+
+  * ~~~java
+    @RequiresPermissions(“file:read”,”wite:aFile.txt”)
+    public void someMethod(); //subject必须同时含有file:read和wite:aFile.txt权限才能访问方法someMethod()
+    ~~~
+
+### 授权验证
+
+**（1）创建表**
+
+~~~sql
+create table shirodb.role
+(
+    id       bigint auto_increment comment '编号'
+        primary key,
+    name     varchar(30) null comment '角色名',
+    `desc`   varchar(50) null comment '描述',
+    realname varchar(20) null comment '角色显示名'
+)
+comment '角色表' charset = utf8;
+
+create table shirodb.role_user
+(
+    id  bigint auto_increment comment '编号'
+        primary key,
+    uid bigint null comment '用户 id',
+    rid bigint null comment '角色 id'
+)
+comment '角色用户映射表' charset = utf8;
+
+create table shirodb.permissions
+(
+    id     bigint auto_increment comment '编号'
+        primary key,
+    name   varchar(30) null comment '权限名',
+    info   varchar(30) null comment '权限信息',
+    `desc` varchar(50) null comment '描述'
+)
+comment '权限表' charset = utf8;
+
+create table shirodb.role_ps
+(
+    id  bigint auto_increment comment '编号'
+        primary key,
+    rid bigint null comment '角色 id',
+    pid bigint null comment '权限 id'
+)
+comment '角色权限映射' charset = utf8;
+~~~
+
+**（2）修改Controller**
+
+~~~java
+//登录认证验证角色
+@RequiresRoles(value = {"userMag"})
+@GetMapping("roles")
+@ResponseBody
+public String userLoginRoles() {
+    log.info("登录认证验证角色");
+    return "验证角色成功";
+}
+
+//登录认证验证权限
+@RequiresPermissions(value = {"user:delete"})
+@GetMapping("permissions")
+@ResponseBody
+public String userLoginPermissions() {
+    log.info("登录认证验证权限");
+    return "验证权限成功";
+}
+~~~
+
+**（3）新增Mapper**
+
+~~~java
+@Mapper
+public interface RoleMapper extends BaseMapper<Role> {
+    /**
+     * 根据用户名查询角色列表
+     * @param userName  用户名
+     * @return 角色名称集合
+     */
+    List<String> selectRolesByUserName(String userName);
+}
+
+@Mapper
+public interface PermissionsMapper extends BaseMapper<Permissions> {
+    /**
+     * 根据角色的集合查询所对应的权限集合
+     * @param roleList 角色集合
+     * @return 权限名称集合
+     */
+    List<String> selectPermissionsByRoleList(@Param("roles") List<String> roleList);
+}
+~~~
+
+~~~xml
+<select id="selectRolesByUserName" resultType="java.lang.String">
+    select name
+    from role
+    where id in (select rid from role_user where uid in (select id from user where name =
+    #{userName,jdbcType=VARCHAR}))
+</select>
+
+<select id="selectPermissionsByRoleList" resultType="java.lang.String">
+    SELECT p.info
+    FROM permissions p
+    WHERE
+    p.id IN (
+    SELECT rp.pid
+    FROM role_ps rp
+    WHERE
+    rp.rid IN ( SELECT r.id
+    FROM role r WHERE r.name IN (
+    <foreach collection='roles' item='name' separator=','
+             open='('
+             close=')'>
+        #{name,jdbcType=VARCHAR}
+    </foreach>
+    )))
+</select>
+~~~
+
+**（4）CustomRealm 改造**
+
+~~~java
+//授权
+@Override
+protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    log.info("进入自定义授权的方法");
+    //1 创建对象，存储当前登录的用户的权限和角色
+    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    String userName = principals.getPrimaryPrincipal().toString();
+    List<String> roleList;
+    List<String> permissionsList;
+    if (StrUtil.equals(userName, "admin")) {
+        //超级管理员，拥有所有的权限和角色
+        roleList = roleService.list().stream().map(Role::getName).collect(Collectors.toList());
+        permissionsList = permissionsService.list().stream().map(Permissions::getInfo).collect(Collectors.toList());
+    } else {
+        //2 从数据库查询角色
+        roleList = roleService.selectRolesByUserName(userName);
+        //3 从数据库查询权限
+        permissionsList = permissionsService.selectPermissionsByRoleList(roleList);
+    }
+    //4 设置角色和权限
+    info.setRoles((CollUtil.newHashSet(roleList)));
+    info.setStringPermissions((CollUtil.newHashSet(permissionsList)));
+    return info;
+}
+~~~
+
+**（5）main.html 改造**
+
+~~~html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shiro 登录认证后主页面</title>
+</head>
+<body>
+<h1>Shiro 登录认证后主页面</h1>
+<br>
+登录用户为：<span th:text="${session.user}"></span>
+<br>
+<a href="/logout">登出</a>
+<br>
+<a href="/user/roles">测试授权-角色验证</a>
+<br>
+<a href="/user/permissions">测试授权-权限验证</a>
+</body>
+~~~
+
+**（6）异常处理**
+
+~~~java
+/**
+ * 权限异常处理
+ */
+@RestControllerAdvice
+public class PermissionsException {
+    @ExceptionHandler(UnauthorizedException.class)
+    public String unauthorizedException(Exception ex) {
+        return "无权限";
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public String authorizationException(Exception ex) {
+        return "权限认证失败";
+    }
+}
+~~~
