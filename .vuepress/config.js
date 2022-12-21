@@ -1402,6 +1402,17 @@ function shiro() {
         "",
         "基本使用",
       ]
+    },
+    {
+      title: "Shiro 进阶",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "整合 Spring Boot",
+        "整合 Thymeleaf",
+        "EhCache",
+        "会话管理",
+      ]
     }
   ]
-}
+}       

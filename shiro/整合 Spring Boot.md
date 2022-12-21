@@ -406,9 +406,9 @@ public class UserController {
 
 （4）启动，访问测试
 
-![image-20221219145424370](C:\Users\Fengdong.Duan\Desktop\my-notes\shiro\assets\image-20221219145424370.png)
+![image-20221219145424370](./assets/image-20221219145424370.png)
 
-![image-20221219145553217](C:\Users\Fengdong.Duan\Desktop\my-notes\shiro\assets\image-20221219145553217.png)
+![image-20221219145553217](./assets/image-20221219145553217.png)
 
 ## 多个 Realm 的认证策略设置
 
@@ -682,8 +682,9 @@ public DefaultShiroFilterChainDefinition shiroFilterChainDefinition() {
 通过给接口服务方法添加注解可以实现权限校验，可以加在控制器方法上，也可以加 在业务方法上，一般加在控制器方法上。常用注解如下：
 
 * **@RequiresAuthentication**  
-  * 验证用户是否登录，等同于方法subject.isAuthenticated()
-
+  
+* 验证用户是否登录，等同于方法subject.isAuthenticated()
+  
 * **@RequiresUser**
 
   * 验证用户是否被记忆：

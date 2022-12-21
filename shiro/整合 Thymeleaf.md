@@ -43,29 +43,59 @@ public ShiroDialect shiroDialect(){
 </shiro:notAuthenticated>
 <!-- 用户已经身份验证通过，即没有调用 Subject.login 进行登录，包括记住我自动登录的也属于未进行身份验证 -->
 
-principal 标签
+<!-- principal 标签 -->
 <shiro: principal/>
 <shiro:principal property="username"/>
-相当于((User)Subject.getPrincipals()).getUsername()。
-lacksPermission 标签
+<!-- 相当于((User)Subject.getPrincipals()).getUsername() -->
+
+<!-- lacksPermission 标签 -->
 <shiro:lacksPermission name="org:create">
 </shiro:lacksPermission>
-如果当前 Subject 没有权限将显示 body 体内容。
-hasRole 标签
+<!-- 如果当前 Subject 没有权限将显示 body 体内容 -->
+
+<!-- hasRole 标签 -->
 <shiro:hasRole name="admin">
 </shiro:hasRole>
-如果当前 Subject 有角色将显示 body 体内容。
-hasAnyRoles 标签
+<!-- 如果当前 Subject 有角色将显示 body 体内容 -->
+
+<!-- hasAnyRoles 标签 -->
 <shiro:hasAnyRoles name="admin,user">
 </shiro:hasAnyRoles>
-如果当前 Subject 有任意一个角色（或的关系）将显示 body 体内容。
-lacksRole 标签
+<!-- 如果当前 Subject 有任意一个角色（或的关系）将显示 body 体内容 -->
+
+<!-- lacksRole 标签 -->
 <shiro:lacksRole name="abc">
 </shiro:lacksRole>
-如果当前 Subject 没有角色将显示 body 体内容。
-hasPermission 标签
+<!-- 如果当前 Subject 没有角色将显示 body 体内容 -->
+
+<!-- hasPermission 标签 -->
 <shiro:hasPermission name="user:create">
 </shiro:hasPermission>
-如果当前 Subject 有权限将显示 body 体内容
+<!-- 如果当前 Subject 有权限将显示 body 体内容 -->
 ~~~
 
+~~~html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shiro 登录认证后主页面</title>
+</head>
+<body>
+<h1>Shiro 登录认证后主页面</h1>
+<br>
+登录用户为：<span th:text="${session.user}"></span>
+<br>
+<a href="/logout">登出</a>
+<br>
+<a href="/user/roles">测试授权-角色验证</a>
+<br>
+<a href="/user/permissions">测试授权-权限验证</a>
+<br>
+<a href="/user/permissions" shiro:hasPermission="user:add">测试授权-权限验证</a>
+</body>
+~~~
+
+![image-20221221111524480](./assets/image-20221221111524480.png)
+
+![image-20221221111546496](./assets/image-20221221111546496.png)
