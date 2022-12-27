@@ -80,7 +80,8 @@ module.exports = {
           "/mycat/": mycat(),
           "/gradle/": gradle(),
           "/redis/": redis(),
-          "/shiro/": shiro()
+          "/shiro/": shiro(),
+          "/distributed-lock/": distributedLock()
         }
       }
     }
@@ -136,7 +137,8 @@ function genGuideSidebar() {
         "MyCat",
         "Gradle",
         "Redis",
-        "Shiro"
+        "Shiro",
+        "分布式锁"
       ]
     }
   ];
@@ -1415,4 +1417,16 @@ function shiro() {
       ]
     }
   ]
-}       
+}
+function distributedLock(){
+  return [
+    {
+      title: "传统锁",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "",
+      ]
+    }
+  ] 
+}
