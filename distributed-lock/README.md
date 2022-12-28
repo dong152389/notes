@@ -322,6 +322,18 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
 
 原来和上述synchronized一致。
 
+### 添加事务
+
+如果添加了事务注解，所添加的锁会失效。问题发生的原因主要是：**@Transactional注解的底层还是基于 AOP 思想来完成的，前置方法里开启了事务，然后进入到调用方法中开始加锁、执行业务、释放锁、然后才提交事务，但是在提交事务之前可能会其他线程已经查询到库存，导致超卖。**
+
+![image-20221228095211151](./assets/image-20221228095211151.png)
+
+~~~java
+@Transactional(isolation = Isolation.READ_UNCOMMITTED) //将事务的模式修改为读未提交
+~~~
+
+**一定不能这么做，这样会发生脏读、不可重复读和幻读。**
+
 ## 多服务问题
 
 但是上述的锁仅在单例模式或者但应用部署的时候才有效。
@@ -362,4 +374,95 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
 ![image-20221227163240312](./assets/image-20221227163240312.png)
 
 ### 多服务模式
+
+启动多个服务并使用nginx负载均衡，结构如下：
+
+![1606453095867](./assets/1606453095867.png)
+
+启动两个服务：8888、9999。
+
+![image-20221228104913474](./assets/image-20221228104913474.png)
+
+#### 安装配置 nginx
+
+[nginx: download](http://nginx.org/en/download.html)
+
+![image-20221228144339405](./assets/image-20221228144339405.png)
+
+#### 修改配置文件
+
+~~~properties
+#user  nobody;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+    
+    upstream distributedLock {
+        server localhost:8888;
+        server localhost:9999;
+    }
+
+    server {
+        listen       80;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass http://distributedLock;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
+}
+~~~
+
+#### 启动
+
+![image-20221228145736488](./assets/image-20221228145736488.png)
+
+在浏览器中测试：localhost/stock/deduct 是我的nginx服务器地址
+
+![image-20221228150351922](./assets/image-20221228150351922.png)
+
+经过测试，通过nginx访问服务一切正常。
+
+**再次使用Jmeter进行压测，发现库存出现超卖现象，仅仅吞吐有所提高。**
 
