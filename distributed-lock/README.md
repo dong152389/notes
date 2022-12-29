@@ -466,3 +466,95 @@ http {
 
 **再次使用Jmeter进行压测，发现库存出现超卖现象，仅仅吞吐有所提高。**
 
+## MySQL 锁演示
+
+除了使用jvm锁之外，还可以使用数据锁：**悲观锁** 或者 **乐观锁**
+
+* 一个SQL：直接更新时判断，在更新中判断库存是否大于0。
+
+  * ~~~sql
+    update db_stock set `count` = `count`-1 where product_code = '1001' and `count` >=1
+    ~~~
+
+  * 可以解决上述问题，但是会引发新的问题。
+
+    * 如果有多行记录会导致一起减少
+
+      ![image-20221229110917528](./assets/image-20221229110917528.png)
+
+    * 无法记录库存变化前后的状态
+
+
+### MySQL 锁范围
+
+#### 表级所
+
+MySQL 中锁定粒度最大的一种锁，是针对非索引字段加的锁，对当前操作的整张表加锁，实现简单，**资源消耗也比较少**，加锁快，**不会出现死锁**。其锁定粒度**最大**，触发锁冲突的概率最高，并发度最低，MyISAM 和 InnoDB 引擎都支持表级锁。
+
+如果下所示，终端1如果不提交 / 回滚事务，终端2就一直在等待，直到终端1提交，终端2经过7秒等待也完成插入。
+
+![image-20221229144353276](./assets/image-20221229144353276.png)
+
+![image-20221229144410649](./assets/image-20221229144410649.png)
+
+#### 行级锁
+
+MySQL 中锁定粒度最小的一种锁，是针对**索引字段**加的锁，只针对**当前操作的记录**进行加锁。行级锁能大大减少数据库操作的冲突。其加锁粒度最小，并发度高，但加锁的**开销也最大**，加锁慢，会出现**死锁**。
+
+首先添加索引字段。可以看到，终端1还未提交事务，终端二已经完成了更新。
+
+![image-20221229150857683](./assets/image-20221229150857683.png)
+
+![image-20221229151944904](./assets/image-20221229151944904.png)
+
+![image-20221229151957100](./assets/image-20221229151957100.png)
+
+> <font color="red">使用行级锁的条件</font>
+>
+> 1. 锁的查询或者更新的条件必须是索引字段。
+> 2. 查询或者更新的条件必须是具体值。
+
+### 悲观锁
+
+在MySQL的InnoDB中，预设的Tansaction isolation level 为REPEATABLE READ（可重读）
+
+**在SELECT 的读取锁定主要分为两种方式：**
+
+- SELECT ... LOCK IN SHARE MODE　（共享锁）
+- SELECT ... FOR UPDATE                     （排他锁）
+
+这两种方式在事务(Transaction) 进行当中SELECT 到同一个数据表时，都必须等待其它事务数据被提交(Commit)后才会执行。
+
+而主要的不同在于LOCK IN SHARE MODE 在有一方事务要Update 同一个表单时很容易造成死锁。
+
+简单的说，如果SELECT 后面若要UPDATE 同一个表单，最好使用SELECT ... FOR UPDATE。
+
+~~~java
+/**
+     * 使用排它锁根据ProductCode查询
+     * @param productCode   商品Code
+     * @return 库存列表
+     */
+@Select("select id,product_code, stock_code,`count` from lock.db_stock where product_code = #{productCode,jdbcType=VARCHAR} for update")
+List<Stock> selectForUpdate(@Param("productCode") String productCode);
+}
+~~~
+
+~~~java
+@Override
+@Transactional
+public void deduct() {
+    List<Stock> stocks = stockMapper.selectForUpdate("1001");
+    // 判断哪个仓库最近且有货。这需要有个算法，这里就选择第一个
+    Stock stock = stocks.get(0);
+    // 再减库存
+    if (stock != null && stock.getCount() > 0) {
+        stock.setCount(stock.getCount() - 1);
+        updateById(stock);
+    }
+}
+~~~
+
+![image-20221229190743407](./assets/image-20221229190743407.png)
+
+### 乐观锁
