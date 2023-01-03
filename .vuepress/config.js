@@ -1423,7 +1423,7 @@ function distributedLock(){
     {
       title: "传统锁",
       collapsable: false,
-      sidebarDepth: 5,
+      sidebarDepth: 6,
       children: [
         "",
       ]

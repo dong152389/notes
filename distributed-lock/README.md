@@ -570,5 +570,114 @@ public void deduct() {
 
 乐观锁（ Optimistic Locking ） 相对悲观锁而言，乐观锁假设认为数据一般情况下不会造成冲突，所以在数据进行提交更新的时候，才会正式对数据的冲突与否进行检测，如果发现冲突了，则重试。那么如何实现乐观锁呢？
 
-使用数据版本（Version）记录机制实现，这是乐观锁最常用的实现方式。一般是通过为数据库表增加一个数字类型的 “version” 字段来实现。当读取数据时，将version字段的值一同读出，数据每更新一 次，对此version值加一。当我们提交更新的时候，判断数据库表对应记录 的当前版本信息与第一次取 出来的version值进行比对，如果数据库表当前版本号与第一次取出来的version值相等，则予以更新。
+使用数据版本（Version）记录机制实现，这是乐观锁最常用的实现方式。一般是通过为数据库表增加一个数字类型的 “version” 字段来实现。当读取数据时，将 version 字段的值一同读出，数据每更新一 次，对此version值加一。当我们提交更新的时候，判断数据库表对应记录 的当前版本信息与第一次取 出来的 version 值进行比对，如果数据库表当前版本号与第一次取出来的 version 值相等，则予以更新。
+
+~~~java
+/**
+     * 使用排它锁根据ProductCode查询
+     * @param productCode   商品Code
+     * @return 库存列表
+     */
+@Select("select id,product_code, stock_code,`count` from lock.db_stock where product_code = #{productCode,jdbcType=VARCHAR} for update")
+    List<Stock> selectForUpdate(@Param("productCode") String productCode);
+}
+~~~
+
+~~~java
+@Service
+@Slf4j
+public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements StockService {
+    @Autowired
+    private StockMapper stockMapper;
+
+    @Override
+    @Transactional
+    public void deduct() {
+        //查询出来库存对象
+        Stock stock = stockMapper.selectById(1L);
+        // 再减库存
+        if (stock != null && stock.getCount() > 0) {
+            // 获取版本号
+            Integer oldVersion = stock.getVersion();
+
+            // 更新
+            stock.setCount(stock.getCount() - 1);
+            stock.setVersion(oldVersion + 1);
+
+            if (stockMapper.update(stock, new UpdateWrapper<Stock>().eq(Stock.COL_ID, stock.getId()).eq(Stock.COL_VERSION, oldVersion)) ==0) {
+                deduct();
+            }
+        }
+    }
+}
+~~~
+
+![image-20230103111137535](./assets/image-20230103111137535.png)
+
+#### 引发的问题
+
+1. 当运行压力测试的时候，错误率高达98%。后台抛出了栈内存异常。
+
+![image-20230103134233994](./assets/image-20230103134233994.png)
+
+![image-20230103134439446](./assets/image-20230103134439446.png)
+
+2. 因为程序中一直在自旋，这个问题是可能会出现的。程序中加上一个20ms的等待。
+
+![image-20230103140447130](./assets/image-20230103140447130.png)
+
+~~~java
+@Override
+@Transactional
+public void deduct() {
+    //查询出来库存对象
+    Stock stock = stockMapper.selectById(1L);
+    // 再减库存
+    if (stock != null && stock.getCount() > 0) {
+        // 获取版本号
+        Integer oldVersion = stock.getVersion();
+
+        // 更新
+        stock.setCount(stock.getCount() - 1);
+        stock.setVersion(oldVersion + 1);
+
+        if (stockMapper.update(stock, new UpdateWrapper<Stock>().eq(Stock.COL_ID, stock.getId()).eq(Stock.COL_VERSION, oldVersion)) ==0) {
+            try {
+                // 休眠20ms
+                TimeUnit.MILLISECONDS.sleep(20);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            deduct();
+        }
+    }
+}
+~~~
+
+3. 再次执行发现错误率依然高达99%，后台程序中一直在抛出**超时**异常。
+
+![image-20230103135358864](./assets/image-20230103135358864.png)
+
+![image-20230103135507156](./assets/image-20230103135507156.png)
+
+**这个主要是因为 @Transactional 注解导致的，加上事务注解就相当于开启了手动事务，整个方法的每一步都被加上了锁，一旦update执行失败，那么方法就会递归调用，导致其他的线程一直阻塞在这里，就出现了上述超时的异常，去掉事务注解后，MDL操作会自动加锁，其实MDL加锁过程是`系统自动控制，无法直接干预，也不需要直接干预，当我们对一个表做增删改查操作的时候，会自动加MDL读锁`，一旦update操作失败后，会立刻释放锁，下一个线程就可以继续执行。**
+
+![image-20230103142136591](./assets/image-20230103142136591.png)
+
+![image-20230103143356658](./assets/image-20230103143356658.png)
+
+>  乐观锁在并发量越大的情况下，性能越低（因为需要大量的重试）；并发量越小，性能越高。
+
+### MySQL 锁缺陷 
+
+在数据库集群情况下会导致数据库锁失效，并且很多数据库集群的中间件压根就不支持悲观锁。例如： mycat 在读写分离的场景下可能会导致乐观锁不可靠。 这把锁强依赖数据库的可用性，数据库是一个单点，一旦数据库挂掉，会导致业务系统不可用。
+
+## 总结
+
+性能：一个sql > 悲观锁 >  jvm锁 > 乐观锁。
+
+* 如果追求极致性能、业务场景简单并且不用数据前后变化状态的情况下，**优先选择一个SQL** 。
+* 如果写并发量较低（多读），争抢不是很严重的情况下**优先选择乐观锁**。
+* 如果写并发量较高，一般会经常冲突，此时选择乐观锁的话，会导致代码不断的重试。**优先选择悲观锁**。
+* 不推荐使用JVM本地锁。
 
