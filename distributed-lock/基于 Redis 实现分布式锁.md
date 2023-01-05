@@ -133,5 +133,265 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
 2. 获取成功，执行业务逻辑，执行完成释放锁（del）。
 3. 其他客户端等待重试。
 
+~~~java
+@Service
+@Slf4j
+public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements StockService {
+    @Autowired
+    private StockMapper stockMapper;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Override
+    public void deduct() {
+        // 加锁
+        Boolean lock = redisTemplate.opsForValue().setIfAbsent("deduct:lock", UUID.randomUUID().toString());
+        // 重试调用
+        if (Boolean.FALSE.equals(lock)) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            deduct();
+        } else {
+            try {
+                String stock = redisTemplate.opsForValue().get("stock").toString();
+                if (stock != null && !stock.equals("")) {
+                    int res = Integer.parseInt(stock);
+                    if (res > 0) {
+                        //扣减库存
+                        redisTemplate.opsForValue().set("stock", String.valueOf(--res));
+                    }
+                }
+            } finally {
+                //解锁
+                redisTemplate.delete("deduct:lock");
+            }
+        }
+    }
+}
+~~~
+
+~~~java
+@Service
+@Slf4j
+public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements StockService {
+    @Autowired
+    private StockMapper stockMapper;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Override
+    public void deduct() {
+        // 也可以替换成while循环
+        while (Boolean.FALSE.equals(redisTemplate.opsForValue().setIfAbsent("deduct:lock", UUID.randomUUID().toString()))) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        try {
+            String stock = Objects.requireNonNull(redisTemplate.opsForValue().get("stock"));
+            if (!stock.equals("")) {
+                int res = Integer.parseInt(stock);
+                if (res > 0) {
+                    //扣减库存
+                    redisTemplate.opsForValue().set("stock", String.valueOf(--res));
+                }
+            }
+        } finally {
+            //解锁
+            redisTemplate.delete("deduct:lock");
+        }
+    }
+}
+~~~
+
+![image-20230105100419482](./assets/image-20230105100419482.png)
+
+<font color="red">出现问题：会出现死锁。</font>
+
+### 防死锁
+
+**问题**：setnx刚刚获取到锁，当前服务器宕机，导致del释放锁无法执行，进而导致锁无法锁无法释放（死锁）。
+
+**解决**：给锁设置过期时间，自动释放锁。
+
+设置过期时间两种方式：
+
+* 通过expire设置过期时间（缺乏原子性：如果在setnx和expire之间出现异常，锁也无法释放）。
+* 使用set指令设置过期时间：`set key value ex 3 nx`（既达到setnx的效果，又设置了过期时间）。
+
+~~~java
+while (Boolean.FALSE.equals(redisTemplate.opsForValue().setIfAbsent("deduct:lock", UUID.randomUUID().toString(),5,TimeUnit.SECONDS)))
+~~~
+
+<font color="red">出现问题：会删除其他线程的锁。</font>
+
+### 防误删
+
+**问题**：可能会释放其他服务器的锁。
+
+**场景**：如果业务逻辑的执行时间是7s。执行流程如下
+
+1. index1业务逻辑没执行完，3秒后锁被自动释放。
+
+2. index2获取到锁，执行业务逻辑，3秒后锁被自动释放。
+
+3. index3获取到锁，执行业务逻辑。
+
+4. index1业务逻辑执行完成，开始调用del释放锁，这时释放的是index3的锁，导致index3的业务只执行1s就被别人释放。
+
+**解决**：setnx获取锁时，设置一个指定的唯一值（例如：uuid）；释放前获取这个值，判断是否自己的锁。
+
+![1606707959639](./assets/1606707959639.png)
+
+<font color="red">出现问题：删除缺乏原子性。</font>
+
+**场景**：
+
+1. index1执行删除时，查询到的lock值确实和uuid相等。
+2. index1执行删除前，lock刚好过期时间已到，被redis自动释放。
+3. index2获取了lock。
+4. index1执行删除，此时会把index2的lock删除。
+
+**解决方案**：没有一个命令可以同时做到判断 + 删除，所有只能通过其他方式实现（**LUA脚本**）。
+
+## Redis 中的 lua 脚本
+
+### 现实问题
+
+redis采用单线程架构，可以保证单个命令的原子性，但是无法保证一组命令在高并发场景下的原子性。例如：
+
+![1606711874388](./assets/1606711874388.png)
+
+在串行场景下：A和B的值肯定都是3。
+
+在并发场景下：A和B的值可能在0-6之间。
+
+**极限情况下1**：
+
+![1606712580214](./assets/1606712580214.png)
+
+则A的结果是0，B的结果是3。
+
+**极限情况下2**：
+
+![1606712697401](./assets/1606712697401.png)
+
+则A和B的结果都是6
 
 
+
+### Lua 介绍
+
+Lua 是一种轻量小巧的脚本语言，用标准C语言编写并以源代码形式开放， 其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。
+
+**设计目的**
+
+​	其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。
+
+**Lua 特性**
+
+- **轻量级**：它用标准C语言编写并以源代码形式开放，编译后仅仅一百余K，可以很方便的嵌入别的程序里。
+- **可扩展**：Lua提供了非常易于使用的扩展接口和机制：由宿主语言(通常是C或C++)提供这些功能，Lua可以使用它们，就像是本来就内置的功能一样。
+- 其它特性：
+  - 支持面向过程(procedure-oriented)编程和函数式编程(functional programming)；
+  - 自动内存管理；只提供了一种通用类型的表（table），用它可以实现数组，哈希表，集合，对象；
+  - 语言内置模式匹配；闭包(closure)；函数也可以看做一个值；提供多线程（协同进程，并非操作系统所支持的线程）支持；
+  - 通过闭包和table可以很方便地支持面向对象编程所需要的一些关键机制，比如数据抽象，虚函数，继承和重载等。
+
+### Lua 基本语法
+
+对lua脚本感兴趣的同学，请移步到官方教程或者《菜鸟教程》。这里仅以redis中可能会用到的部分语法作介绍。
+
+```lua
+a = 5               -- 全局变量
+local b = 5         -- 局部变量， redis只支持局部变量
+a, b = 10, 2*x      -- 等价于       a=10; b=2*x
+```
+
+流程控制：
+
+```lua
+if( 布尔表达式 1)
+then
+   --[ 在布尔表达式 1 为 true 时执行该语句块 --]
+elseif( 布尔表达式 2)
+then
+   --[ 在布尔表达式 2 为 true 时执行该语句块 --]
+else 
+   --[ 如果以上布尔表达式都不为 true 则执行该语句块 --]
+end
+```
+
+### Redis 执行 Lua 脚本
+
+在redis中需要通过eval命令执行lua脚本。
+
+格式：
+
+```lua
+EVAL script numkeys key [key ...] arg [arg ...]
+script：lua脚本字符串，这段Lua脚本不需要（也不应该）定义函数。
+numkeys：lua脚本中KEYS数组的大小
+key [key ...]：KEYS数组中的元素
+arg [arg ...]：ARGV数组中的元素
+```
+
+**案例1**：基本案例
+
+```shell
+EVAL "return 10" 0
+```
+
+输出：(integer) 10
+
+**案例2**：动态传参
+
+```shell
+EVAL "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}" 5 10 20 30 40 50 60 70 80 90
+# 输出：10 20 60 70
+# 5 值得是KEY的个数，那么10 20 30 40 50 都是 KEY ，而 60 70 80 90 为 ARG
+
+EVAL "if KEYS[1] > ARGV[1] then return 1 else return 0 end" 1 10 20
+# 输出：0
+
+EVAL "if KEYS[1] > ARGV[1] then return 1 else return 0 end" 1 20 10
+# 输出：1
+```
+
+~~传入了两个参数10和20，KEYS的长度是1，所以KEYS中有一个元素10，剩余的一个20就是ARGV数组的元素。
+
+**案例3**：执行redis类库方法
+
+redis.call()中的redis是redis中提供的lua脚本类库，仅在redis环境中可以使用该类库。
+
+```shell
+set aaa 10  -- 设置一个aaa值为10
+EVAL "return redis.call('get', 'aaa')" 0
+# 通过return把call方法返回给redis客户端，打印："10"
+```
+
+注意：**脚本里使用的所有键都应该由 KEYS 数组来传递。**但并不是强制性的，代价是这样写出的脚本不能被 Redis 集群所兼容。
+
+**案例4**：给redis类库方法动态传参
+
+```shell
+EVAL "return redis.call('set', KEYS[1], ARGV[1])" 1 bbb 20
+```
+
+![1600610957600](./assets/1600610957600.png)
+
+**案例5**：pcall函数的使用
+
+~~~shell
+-- 当call() 在执行命令的过程中发生错误时，脚本会停止执行，并返回一个脚本错误，输出错误信息
+EVAL "return redis.call('sets', KEYS[1], ARGV[1]), redis.call('set', KEYS[2], ARGV[2])" 2 bbb ccc 20 30
+-- pcall函数不影响后续指令的执行
+EVAL "return redis.pcall('sets', KEYS[1], ARGV[1]), redis.pcall('set', KEYS[2], ARGV[2])" 2 bbb ccc 20 30
+~~~
+
+![image-20230105173707009](./assets/image-20230105173707009.png)

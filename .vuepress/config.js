@@ -1423,9 +1423,10 @@ function distributedLock(){
     {
       title: "传统锁",
       collapsable: false,
-      sidebarDepth: 6,
+      sidebarDepth: 5,
       children: [
         "",
+        "基于 Redis 实现分布式锁",
       ]
     }
   ] 
