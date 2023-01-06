@@ -248,6 +248,36 @@ while (Boolean.FALSE.equals(redisTemplate.opsForValue().setIfAbsent("deduct:lock
 
 ![1606707959639](./assets/1606707959639.png)
 
+~~~java
+@Override
+public void deduct() {
+    String uuid = UUID.randomUUID().toString();
+    // 也可以替换成while循环
+    while (Boolean.FALSE.equals(redisTemplate.opsForValue().setIfAbsent("deduct:lock", uuid, 5, TimeUnit.SECONDS))) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(50);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    try {
+        String stock = Objects.requireNonNull(redisTemplate.opsForValue().get("stock"));
+        if (!stock.equals("")) {
+            int res = Integer.parseInt(stock);
+            if (res > 0) {
+                //扣减库存
+                redisTemplate.opsForValue().set("stock", String.valueOf(--res));
+            }
+        }
+    } finally {
+        //先判断是否是自己的锁
+        if (Objects.equals(redisTemplate.opsForValue().get("deduct:lock"), uuid)) {
+            redisTemplate.delete("deduct:lock");
+        }
+    }
+}
+~~~
+
 <font color="red">出现问题：删除缺乏原子性。</font>
 
 **场景**：
@@ -395,3 +425,61 @@ EVAL "return redis.pcall('sets', KEYS[1], ARGV[1]), redis.pcall('set', KEYS[2], 
 ~~~
 
 ![image-20230105173707009](./assets/image-20230105173707009.png)
+
+### 使用 Lua 保证删除原子性
+
+删除脚本：
+
+~~~lua
+if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end
+~~~
+
+代码实现：
+
+~~~java
+@Override
+public void deduct() {
+    String uuid = UUID.randomUUID().toString();
+    // 也可以替换成while循环
+    while (Boolean.FALSE.equals(redisTemplate.opsForValue().setIfAbsent("deduct:lock", uuid, 5, TimeUnit.SECONDS))) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(50);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    try {
+        String stock = Objects.requireNonNull(redisTemplate.opsForValue().get("stock"));
+        if (!stock.equals("")) {
+            int res = Integer.parseInt(stock);
+            if (res > 0) {
+                //扣减库存
+                redisTemplate.opsForValue().set("stock", String.valueOf(--res));
+            }
+        }
+    } finally {
+        //先判断是否是自己的锁
+        String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+        redisTemplate.execute(new DefaultRedisScript<>(script, Integer.class), Collections.singletonList("deduct:lock"), uuid);
+    }
+}
+~~~
+
+## 可重入锁
+
+由于上述加锁命令使用了 SETNX ，一旦键存在就无法再设置成功，这就导致后续同一线程内继续加锁，将会加锁失败。当一个线程执行一段代码成功获取锁之后，继续执行时，又遇到加锁的子任务代码，可重入性就保证线程能继续执行，而不可重入就是需要等待锁释放之后，再次获取锁成功，才能继续往下执行。
+
+用一段 Java 代码解释可重入：
+
+~~~java
+public synchronized void a() {
+    b();
+}
+
+public synchronized void b() {
+    // pass
+}
+~~~
+
+假设线程 X 在 a 方法获取锁之后，调用 b 方法，如果此时不可重入，线程就必须等待释放，再次争抢锁。但锁明明是被 X 线程拥有，却还需要等待自己释放锁，然后再去抢锁，这看起来就很奇怪，我释放我自己~
+
