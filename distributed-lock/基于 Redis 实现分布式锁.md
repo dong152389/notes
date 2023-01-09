@@ -481,5 +481,122 @@ public synchronized void b() {
 }
 ~~~
 
-假设线程 X 在 a 方法获取锁之后，调用 b 方法，如果此时不可重入，线程就必须等待释放，再次争抢锁。但锁明明是被 X 线程拥有，却还需要等待自己释放锁，然后再去抢锁，这看起来就很奇怪，我释放我自己~
+假设线程 X 在 a 方法获取锁之后，调用 b 方法，如果此时不可重入，线程就必须等待释放，再次争抢锁。但锁明明是被 X 线程拥有，却还需要等待自己释放锁，然后再去抢锁，这看起来就很奇怪，我释放我自己。
 
+可重入性就可以解决这个尴尬的问题，当线程拥有锁之后，往后再遇到加锁方法，直接将加锁次数加 1，然后再执行方法逻辑。退出加锁方法之后，加锁次数再减 1，当加锁次数为 0 时，锁才被真正的释放。
+
+可以看到可重入锁最大特性就是计数，计算加锁的次数。所以当可重入锁需要在分布式环境实现时，我们也就需要统计加锁次数。
+
+### 举个例子 ReentrantLock
+
+ReentrantLock 底层主要利用CAS+AQS队列来实现。它支持公平锁和非公平锁，两者的实现类似。
+
+#### CAS 理解
+
+```text
+cas，比较并交换。cas算法的过程是这样的，cas包括有三个值：
+ v表示要更新的变量
+ e表示预期值，就是旧的值
+ n表示新值
+更新时，判断只有e的值等于v变量的当前旧值时，才会将n新值赋给v，更新为新值。
+否则，则认为已经有其他线程更新过了，则当前线程什么都不操作，最后cas放回当前v变量的真实值。
+Java 中调用的是 Unsafe.class 中的 compareAndSwap 方法来实现的，这个是一个底层类，直接调用的硬件。看不到源码。
+```
+
+CAS是一种**乐观锁**，它抱着乐观的态度认为自己一定可以成果。当多个线程同时使用CAS操作一个变量时，<font color="red">只有一个会胜出</font>，并成功更新，其余均会失败。失败的线程不会被挂起，仅是被告知失败，并且允许再次尝试，当然也允许失败的线程放弃操作。基于这样的原理， CAS操作即使没有锁，也可以发现其他线程对当前线程的干扰，并进行恰当的处理。
+
+CAS会导致“**ABA问题**”。CAS算法实现一个重要前提需要取出内存中某时刻的数据，而在下时 刻比较并替换，那么在这个时间差类会导致数据的变化。
+
+比如：
+
+> 一个线程one从内存位置V中取出A，这时候另一个线程two也从内存中取出 A，并且 two 进行了一些操作变成了 B,然后 two 又将 V 位置的数据变成 A，这时候线程one进行CAS操 作发现内存中仍然是A，然后one操作成功。
+
+尽管线程one的CAS操作成功，但是不代表这个过程就是没有问题的。
+
+部分乐观锁的实现是通过版本号（version）的方式来解决ABA问题，乐观锁每次在执行数据的修改操作时，都会带上一个版本号，一旦版本号和数据的版本号一致就可以执行修改操作并对版本号执行 +1 操作，否则就执行失败。因为每次操作的版本号都会随之增加，所以不会出现ABA问题，因为版本号只会增加不会减少。
+
+#### AQS 理解
+
+AQS，即 AbstractQueuedSynchronizer, 队列同步器，它是 Java 并发用来构建锁和其他同步组件的基础框架。
+
+AQS 是一个抽象类，主是是以继承的方式使用。AQS 本身是没有实现任何同步接口的，它仅仅只是定义了同步状态的获取和释放的方法来供自定义的同步组件的使用。一般是同步组件的静态内部类，即通过组合的方式使用。
+
+AQS定义了一套多线程访问共享资源的同步器框架，许多同步类实现都依赖于它，如常用ReentrantLock/Semaphore/CountDownLatch它维护了一个volatile int state（代表共享资源）和一个**FIFO**（先进先出）线程等待队列（多线程争用资源被阻塞时会进入此队列）。
+
+#### 源码
+
+**加锁**
+
+通过 lock 获取锁，由于构造方法中创建的是非公平锁的实例。其实调用的是 NonfairSync 中的 lock 方法。
+
+![image-20230109102126890](./assets/image-20230109102126890.png)
+
+![image-20230109102333784](./assets/image-20230109102333784.png)
+
+可以看到 NonfairSync 继承了 Sync 而 Sync 继承的就是 **AQS 同步器**类。
+
+![](./assets/image-20230109102657660.png)
+
+![image-20230109102612223](./assets/image-20230109102612223.png)
+
+~~~java
+// 获得锁
+final void lock() {
+    /**
+      * 若通过CAS设置变量State（同步状态）成功，也就是获取锁成功，则将当前线程设置为独占线程。
+      * 若通过CAS设置变量State（同步状态）失败，也就是获取锁失败，则进入Acquire方法进行后续处理。
+      */
+    if (compareAndSetState(0, 1)) // 比较并设置状态成功，状态0表示锁没有被占用
+        // 把当前线程设置独占了锁
+        setExclusiveOwnerThread(Thread.currentThread());
+    else // 锁已经被占用，或者set失败
+        // 以独占模式获取对象，忽略中断
+        acquire(1); //Acquire方法是FairSync和UnfairSync的父类AQS中的核心方法。
+}
+~~~
+
+在 acquire 中会首先要获取锁，**如果获取锁失败了，就将当前线程添加到等待队列。** tryAcquire 的实现是在 NonfairSync 中实现的，如果没有获取到锁且没有添加到队列则直接中断线程。
+
+![image-20230109105242215](./assets/image-20230109105242215.png)
+
+![image-20230109144542035](./assets/image-20230109144542035.png)
+
+~~~java
+// 非公平方式获取
+final boolean nonfairTryAcquire(int acquires) {
+    // 当前线程
+    final Thread current = Thread.currentThread();
+    // 获取状态
+    int c = getState();
+    if (c == 0) { // 表示没有线程正在竞争该锁
+        if (compareAndSetState(0, acquires)) { // 比较并设置状态成功，状态0表示锁没有被占用
+            // 设置当前线程独占
+            setExclusiveOwnerThread(current); 
+            return true; // 成功
+        }
+    }
+    else if (current == getExclusiveOwnerThread()) { // 当前线程拥有该锁
+        int nextc = c + acquires; // 增加重入次数
+        if (nextc < 0) // overflow
+            throw new Error("Maximum lock count exceeded");
+        // 设置状态
+        setState(nextc); 
+        // 成功
+        return true; 
+    }
+    // 失败
+    return false;
+}
+~~~
+
+>  <font color="red">tryAcquire 中如果获取到了锁则返回 True，而 acquire 方法中取的是“非”，就意味着如果获取到了锁就直接结束 if 判断。否则才要进入等待队列。</font>
+
+![image-20230109160843331](./assets/image-20230109160843331.png)
+
+![image-20230109161214766](./assets/image-20230109161214766.png)
+
+**解锁**
+
+![image-20230109164422097](./assets/image-20230109164422097.png)
+
+![image-20230109164615706](./assets/image-20230109164615706.png)
