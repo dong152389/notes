@@ -600,3 +600,5 @@ final boolean nonfairTryAcquire(int acquires) {
 ![image-20230109164422097](./assets/image-20230109164422097.png)
 
 ![image-20230109164615706](./assets/image-20230109164615706.png)
+
+![1670224436833](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\1670224436833.png)
