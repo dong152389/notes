@@ -601,4 +601,318 @@ final boolean nonfairTryAcquire(int acquires) {
 
 ![image-20230109164615706](./assets/image-20230109164615706.png)
 
-![1670224436833](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\1670224436833.png)
+### Redis 可重入锁
+
+解决方案：Lua + Hash。
+
+#### 加锁
+
+Redis 提供了 Hash （哈希表）这种可以存储键值对数据结构。所以我们可以使用 Redis Hash 存储的锁的重入次数，然后利用 lua 脚本判断逻辑。
+
+1. 判断锁是否存在（exists），则直接获取锁 `hset key field value`。
+2. 如果锁存在则判断是否自己的锁（hexists），如果是自己的锁则重入：`hincrby key field increment`
+3. 否则重试：递归 循环
+
+~~~lua
+if (redis.call('exists', KEYS[1]) == 0 or redis.call('hexists', KEYS[1], ARGV[1]) == 1)
+then
+    redis.call('hincrby', KEYS[1], ARGV[1], 1);
+    redis.call('expire', KEYS[1], ARGV[2]);
+    return 1;
+else
+	return 0;
+end
+~~~
+
+假设值为：KEYS:[**lock**]， ARGV[**uuid**, **expire**]
+
+#### 解锁
+
+1. 判断自己的锁是否存在（hexists），不存在则返回 nil。
+2. 如果自己的锁存在，则减1（hincrby -1），判断减 1 后的值是否为 0，为 0 则释放锁（del）并返回 1。
+3. 不为 0，返回 0。
+
+~~~lua
+if redis.call('hexists', KEYS[1], ARGV[1]) == 0
+then
+    return nil
+elseif redis.call('hincrby', KEYS[1], ARGV[1], -1) == 0
+then 
+    return redis.call('del', KEYS[1])
+else 
+    return 0
+end
+~~~
+
+### 代码改造
+
+由于加解锁代码量相对较多，这里可以封装成一个工具类：
+
+![image-20230111105458781](./assets/image-20230111105458781.png)
+
+~~~java
+/**
+ * 工厂类，方便拓展各种锁的实现
+ */
+@Component
+public class DistributedLockFactory {
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    public DistributedRedisLock getRedisLock(String key, long expire) {
+        return new DistributedRedisLock(redisTemplate, key, expire);
+    }
+}
+~~~
+
+锁的实现可以参照 JUC 包中 Lock 接口的实现。
+
+~~~java
+/**
+ * 基于 Redis 的分布式锁的实现
+ */
+public class DistributedRedisLock implements Lock {
+    private StringRedisTemplate redisTemplate;
+    private String key;
+    private String field;
+    private long expire;
+    private TimeUnit tu = TimeUnit.SECONDS;
+
+    //需要一个构造方法将key、field、expire传递过来还有RedisTemplate
+    public DistributedRedisLock(StringRedisTemplate redisTemplate, String key, long expire) {
+        this.redisTemplate = redisTemplate;
+        this.key = key;
+        this.field = UUID.randomUUID().toString();
+        this.expire = expire;
+    }
+
+    @Override
+    public void lock() {
+        try {
+            if (expire > 0L) {
+                tryLock(expire, tu);
+            } else {
+                tryLock();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void lockInterruptibly() throws InterruptedException {
+
+    }
+
+    /**
+     * 加锁 无时效
+     * @return
+     */
+    @Override
+    public boolean tryLock() {
+        try {
+            //如果不传时间就是永久
+            return tryLock(-1L, tu);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 加锁 有时效
+     * if redis.call('exists', KEYS[1]) == 0 or redis.call('hexists', KEYS[1], ARGV[1]) == 1
+     * 		then
+     * 			redis.call('hincrby', KEYS[1], ARGV[1], 1)
+     * 			redis.call('expire', KEYS[1], ARGV[2])
+     * 			return 1
+     * 		else
+     * 			return 0
+     * 		end
+     * @param time 时间
+     * @param unit 单位
+     * @return
+     * @throws InterruptedException
+     */
+    @Override
+    public boolean tryLock(long time, @NotNull TimeUnit unit) throws InterruptedException {
+        long l = unit.toSeconds(time);
+        //返回值0和返回值1是Java中额Boolean类型
+        String script = "if redis.call('exists', KEYS[1]) == 0 or redis.call('hexists', KEYS[1], ARGV[1]) == 1 then redis.call('hincrby', KEYS[1], ARGV[1], 1) redis.call('expire', KEYS[1], ARGV[2]) return 1 else return 0 end";
+        while (Boolean.FALSE.equals(redisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList(key), field, String.valueOf(l)))) {
+            TimeUnit.MILLISECONDS.sleep(20);
+        }
+        return true;
+    }
+
+    @Override
+    public void unlock() {
+        //会返回三个值 null 0 1，所以选择 Long 类型更好
+        String script = "if redis.call('hexists', KEYS[1], ARGV[1]) == 0 then return nil elseif redis.call('hincrby', KEYS[1], ARGV[1], -1) == 0 then return redis.call('del', KEYS[1]) else return 0 end";
+        Long res = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(key), field);
+        if (res == null) {
+            //说明释放的不是自己的锁
+            throw new IllegalMonitorStateException();
+        }
+    }
+
+    @NotNull
+    @Override
+    public Condition newCondition() {
+        return null;
+    }
+}
+~~~
+
+~~~java
+@Autowired
+private DistributedLockFactory distributedLockFactory;
+
+@Override
+public void deduct() {
+    DistributedRedisLock lock = distributedLockFactory.getRedisLock("mylock", 30);
+    lock.lock();
+    try {
+        String stock = Objects.requireNonNull(redisTemplate.opsForValue().get("stock"));
+        if (!stock.equals("")) {
+            int res = Integer.parseInt(stock);
+            if (res > 0) {
+                //扣减库存
+                redisTemplate.opsForValue().set("stock", String.valueOf(--res));
+            }
+        }
+    } finally {
+        lock.unlock();
+    }
+}
+~~~
+
+#### 使用测试
+
+![image-20230111110814335](./assets/image-20230111110814335.png)
+
+#### 出现问题
+
+测试可重入性的时候发现在执行到 test  的时候会出现阻塞现象，必须等到锁释放的才能继续，这个原因是在调用getRedisLock每次都会生成一个DistributedRedisLock实例，所以导致每次UUID都不一致。
+
+~~~java
+@Override
+public void deduct() {
+    DistributedRedisLock lock = distributedLockFactory.getRedisLock("mylock", 30);
+    lock.lock();
+    try {
+        String stock = Objects.requireNonNull(redisTemplate.opsForValue().get("stock"));
+        if (!stock.equals("")) {
+            int res = Integer.parseInt(stock);
+            if (res > 0) {
+                //扣减库存
+                redisTemplate.opsForValue().set("stock", String.valueOf(--res));
+            }
+        }
+        test();
+    } finally {
+        lock.unlock();
+    }
+}
+/**
+ * 测试 
+ */
+public void test() {
+    DistributedRedisLock lock = distributedLockFactory.getRedisLock("mylock", 30);
+    lock.lock();
+    log.info("test的业务开始执行");
+    lock.unlock();
+}
+~~~
+
+#### 解决方案
+
+在初始化的时候将UUID传递过去，如果只用线程名称作为Field的话，可能会造成多部署的时候，线程名称重复导致出问题。
+
+~~~java
+/**
+ * 工厂类，方便拓展各种锁的实现
+ */
+@Component
+public class DistributedLockFactory {
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    private String uuid;
+
+    //在初始化的时候就将UUID生成
+    public DistributedLockFactory() {
+        uuid = UUID.randomUUID().toString();
+    }
+
+    public DistributedRedisLock getRedisLock(String key, long expire) {
+        return new DistributedRedisLock(redisTemplate, key, expire,uuid);
+    }
+}
+~~~
+
+~~~java
+/**
+ * 基于 Redis 的分布式锁的实现
+ */
+public class DistributedRedisLock implements Lock {
+    private final StringRedisTemplate redisTemplate;
+    private final String key;
+    private final String field;
+    private final long expire;
+    private final TimeUnit tu = TimeUnit.SECONDS;
+
+    //需要一个构造方法将key、field、expire传递过来还有RedisTemplate
+    public DistributedRedisLock(StringRedisTemplate redisTemplate, String key, long expire, String uuid) {
+        this.redisTemplate = redisTemplate;
+        this.key = key;
+        this.field = uuid;
+        this.expire = expire;
+    }
+	................
+
+    /**
+     * 加锁 有时效
+     * if redis.call('exists', KEYS[1]) == 0 or redis.call('hexists', KEYS[1], ARGV[1]) == 1
+     * 		then
+     * 			redis.call('hincrby', KEYS[1], ARGV[1], 1)
+     * 			redis.call('expire', KEYS[1], ARGV[2])
+     * 			return 1
+     * 		else
+     * 			return 0
+     * 		end
+     * @param time 时间
+     * @param unit 单位
+     * @return
+     * @throws InterruptedException
+     */
+    @Override
+    public boolean tryLock(long time, @NotNull TimeUnit unit) throws InterruptedException {
+        long l = unit.toSeconds(time);
+        //返回值0和返回值1是Java中额Boolean类型
+        String script = "if redis.call('exists', KEYS[1]) == 0 or redis.call('hexists', KEYS[1], ARGV[1]) == 1 then redis.call('hincrby', KEYS[1], ARGV[1], 1) redis.call('expire', KEYS[1], ARGV[2]) return 1 else return 0 end";
+        while (Boolean.FALSE.equals(redisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList(key), getId(), String.valueOf(l)))) {
+            TimeUnit.MILLISECONDS.sleep(20);
+        }
+        return true;
+    }
+
+    @Override
+    public void unlock() {
+        //会返回三个值 null 0 1，所以选择 Long 类型更好
+        String script = "if redis.call('hexists', KEYS[1], ARGV[1]) == 0 then return nil elseif redis.call('hincrby', KEYS[1], ARGV[1], -1) == 0 then return redis.call('del', KEYS[1]) else return 0 end";
+        Long res = redisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(key), getId());
+        if (res == null) {
+            //说明释放的不是自己的锁
+            throw new IllegalMonitorStateException();
+        }
+    }
+
+	//将线程名称拼上UUID防止冲突
+    private String getId() {
+        return Thread.currentThread().getName() + field;
+    }
+}
+
+~~~
+
