@@ -913,6 +913,105 @@ public class DistributedRedisLock implements Lock {
         return Thread.currentThread().getName() + field;
     }
 }
+~~~
 
+### 自动续期
+
+如果业务没有执行完毕，但是锁自动释放，导致其他线程获取锁造成一系列的问题。所以要使得锁和业务同步存在。
+
+~~~lua
+if redis.call('hexists', KEYS[1], ARGV[1]) == 1
+then
+    return redis.call('expire', KEYS[1], ARGV[2])
+else 
+    return 0
+end
+~~~
+
+~~~java
+package com.lock.demo.component;
+
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+
+import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+
+/**
+ * 基于 Redis 的分布式锁的实现
+ */
+@Slf4j
+public class DistributedRedisLock implements Lock {
+    private final StringRedisTemplate redisTemplate;
+    private final String key;
+    private final String field;
+    private final long expire;
+    private final TimeUnit tu = TimeUnit.SECONDS;
+
+    //需要一个构造方法将key、field、expire传递过来还有RedisTemplate
+    public DistributedRedisLock(StringRedisTemplate redisTemplate, String key, long expire, String uuid) {
+        this.redisTemplate = redisTemplate;
+        this.key = key;
+        this.field = uuid + ":" + Thread.currentThread().getId();
+        this.expire = expire;
+    }
+	....................................
+
+    /**
+     * 加锁 有时效
+     * if redis.call('exists', KEYS[1]) == 0 or redis.call('hexists', KEYS[1], ARGV[1]) == 1
+     * 		then
+     * 			redis.call('hincrby', KEYS[1], ARGV[1], 1)
+     * 			redis.call('expire', KEYS[1], ARGV[2])
+     * 			return 1
+     * 		else
+     * 			return 0
+     * 		end
+     * @param time 时间
+     * @param unit 单位
+     * @return
+     * @throws InterruptedException
+     */
+    @Override
+    public boolean tryLock(long time, @NotNull TimeUnit unit) throws InterruptedException {
+        long l = unit.toSeconds(time);
+        //返回值0和返回值1是Java中额Boolean类型
+        String script = "if redis.call('exists', KEYS[1]) == 0 or redis.call('hexists', KEYS[1], ARGV[1]) == 1 then redis.call('hincrby', KEYS[1], ARGV[1], 1) redis.call('expire', KEYS[1], ARGV[2]) return 1 else return 0 end";
+        while (Boolean.FALSE.equals(redisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList(key), field, String.valueOf(l)))) {
+            TimeUnit.MILLISECONDS.sleep(20);
+        }
+        //新增自动续期
+        autoRenewal();
+        return true;
+    }
+    
+    /**
+     * 自动续期
+     */
+    private void autoRenewal() {
+        String script = "if redis.call('hexists', KEYS[1], ARGV[1]) == 1 then return redis.call('expire', KEYS[1], ARGV[2]) else return 0 end";
+        /*
+            task – 要安排的任务。
+            delay – 在执行任务之前延迟（以毫秒为单位）。
+            period – 连续任务执行之间的时间（以毫秒为单位）。
+         */
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (Boolean.TRUE.equals(redisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList(key), field, String.valueOf(expire)))) {
+                    //如果成功继续重置
+                    autoRenewal();
+                    log.info("续期了！");
+                }
+            }
+        }, expire * 1000 / 3, expire * 1000 / 3);
+    }
+}
 ~~~
 
