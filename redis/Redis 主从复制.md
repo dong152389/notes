@@ -89,40 +89,38 @@ redis-server ~/myredis/redis6381.conf
 
 目录结构如下
 
-├── redis
-│   ├── docker-compose.yml
-│   ├── master
-│   │   ├── conf
-│   │   │   └── redis.conf
-│   │   └── data
-│   │       ├── appendonlydir
-│   │       │   ├── appendonly.aof.1.base.rdb
-│   │       │   ├── appendonly.aof.1.incr.aof
-│   │       │   └── appendonly.aof.manifest
-│   │       └── dump.rdb
-│   ├── slave1
-│   │   ├── conf
-│   │   │   └── redis.conf
-│   │   └── data
-│   │       ├── appendonlydir
-│   │       │   ├── appendonly.aof.15.base.rdb
-│   │       │   ├── appendonly.aof.15.incr.aof
-│   │       │   └── appendonly.aof.manifest
-│   │       └── dump.rdb
-│   └── slave2
-│       ├── conf
-│       │   └── redis.conf
-│       └── data
-│           ├── appendonlydir
-│           │   ├── appendonly.aof.15.base.rdb
-│           │   ├── appendonly.aof.15.incr.aof
-│           │   └── appendonly.aof.manifest
-│           └── dump.rdb
-└── sentinel
-    ├── docker-compose.yml
-    ├── sentinel1.conf
-    ├── sentinel2.conf
-    └── sentinel3.conf
+~~~
+.
+├── docker-compose.yml
+├── master
+│   ├── conf
+│   │   └── redis.conf
+│   ├── data
+│   └── logs
+├── sentinel
+│   ├── sentinel-1
+│   │   ├── conf
+│   │   │   └── sentinel.conf
+│   │   └── data
+│   ├── sentinel-2
+│   │   ├── conf
+│   │   │   └── sentinel.conf
+│   │   └── data
+│   └── sentinel-3
+│       ├── conf
+│       │   └── sentinel.conf
+│       └── data
+├── slave1
+│   ├── conf
+│   │   └── redis.conf
+│   ├── data
+│   └── logs
+└── slave2
+    ├── conf
+    │   └── redis.conf
+    ├── data
+    └── logs
+~~~
 
 ~~~yml
 version: "3.8"
@@ -135,10 +133,12 @@ services:
     restart: always
     volumes:
       - ./master/data:/data
+      - ./master/conf/redis.conf:/etc/redis/redis.conf
+      - ./master/logs:/logs
     ports:
       - 6379:6379
-    ### 这里的slave-announce-ip、slave-announce-port是宿主机IP与端口，不设置的话哨兵模式下访问的是容器内IP端口，不能为外部应用提供服务，原因是由于端口或IP映射导致的无法连接的问题。例如 docker 这种容器，当你使用了端口映射后，运行在 docker 中的 redis 是不知道正真的端口或 IP 的，所以在哨兵模式下，哨兵就无法连接到 master 和 replica。当遇到这种情况后，其实还有另一种解决方式，就是直接使用 docker 的主机网络（启动时加上 --net=host）。
-    command: ["redis-server","--requirepass 111111","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6379"]
+### 这里的slave-announce-ip、slave-announce-port是宿主机IP与端口，不设置的话哨兵模式下访问的是容器内IP端口，不能为外部应用提供服务，原因是由于端口或IP映射导致的无法连接的问题。例如 docker 这种容器，当你使用了端口映射后，运行在 docker 中的 redis 是不知道正真的端口或 IP 的，所以在哨兵模式下，哨兵就无法连接到 master 和 replica。当遇到这种情况后，其实还有另一种解决方式，就是直接使用 docker 的主机网络（启动时加上 --net=host）。
+    command: ["redis-server","/etc/redis/redis.conf","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6379"]
 
   slave1:
     image: redis:7.0.5
@@ -147,9 +147,13 @@ services:
     restart: always
     volumes:
       - ./slave1/data:/data
+      - ./slave1/conf/redis.conf:/etc/redis/redis.conf
+      - ./slave1/logs:/logs      
     ports:
-      - 6380:6379
-    command: ["redis-server","--requirepass 111111","--slaveof redis-master 6379","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6380"]
+      - 6380:6380
+    command: ["redis-server","/etc/redis/redis.conf","--slaveof 192.168.25.10 6379","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6380"]
+    depends_on:
+      - master
 
   slave2:
     image: redis:7.0.5
@@ -158,59 +162,172 @@ services:
     restart: always
     volumes:
       - ./slave2/data:/data
+      - ./slave2/conf/redis.conf:/etc/redis/redis.conf
+      - ./slave2/logs:/logs          
     ports:
-      - 6381:6379
-    command: ["redis-server","--requirepass 111111","--slaveof redis-master 6379","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6381"]
-~~~
+      - 6381:6381
+    command: ["redis-server","/etc/redis/redis.conf","--slaveof 192.168.25.10 6379","--masterauth 111111","--slave-announce-ip 192.168.25.10","--slave-announce-port 6381"]
+    depends_on:
+      - master
 
-~~~yaml
-version: "3.8"
-
-services:
-  sentinel1:
+  redis-sentinel-1:
     image: redis:7.0.5
-    restart: always
     container_name: redis-sentinel-1
+    restart: always
     ports:
       - 26379:26379
-    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
     volumes:
-      - ./sentinel1.conf:/usr/local/etc/redis/sentinel.conf
-
-  sentinel2:
+      # - ./sentinel-1/data:/data
+      - ./sentinel/sentinel-1/conf/sentinel.conf:/usr/local/etc/redis/sentinel.conf
+    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
+    depends_on:
+      - master
+      - slave1
+      - slave2
+  redis-sentinel-2:
     image: redis:7.0.5
-    restart: always
     container_name: redis-sentinel-2
-    ports:
-      - 26380:26379
-    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
-    volumes:
-      - ./sentinel2.conf:/usr/local/etc/redis/sentinel.conf
-
-  sentinel3:
-    image: redis:7.0.5
     restart: always
-    container_name: redis-sentinel-3
     ports:
-      - 26381:26379
-    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
+      - 26380:26380
     volumes:
-      - ./sentinel3.conf:/usr/local/etc/redis/sentinel.conf
+      # - ./sentinel-2/data:/data
+      - ./sentinel/sentinel-2/conf/sentinel.conf:/usr/local/etc/redis/sentinel.conf
+    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
+    depends_on:
+      - master
+      - slave1
+      - slave2
 
-networks:
-  default:
-    external:
-	  # 次名称是redis目录启动后自动创建的网络名称，如果没看到，可以使用down命令将其删除，就可以看到这个名称了
-      name: redis_default
+  redis-sentinel-3:
+    image: redis:7.0.5
+    container_name: redis-sentinel-3
+    restart: always
+    ports:
+      - 26381:26381
+    volumes:
+      # - ./sentinel-3/data:/data
+      - ./sentinel/sentinel-3/conf/sentinel.conf:/usr/local/etc/redis/sentinel.conf
+    command: ["redis-sentinel","/usr/local/etc/redis/sentinel.conf"]
+    depends_on:
+      - master
+      - slave1
+      - slave2
 ~~~
 
 ~~~properties
-# 将此文件复制3份 分别叫做sentinel1.conf、sentinel2.conf、sentinel3.conf
+#redis.conf
+###看清配置项母，牵扯到端口或者IP的请自行修改
+#允许外部访问
+bind 0.0.0.0
+protected-mode yes
+#端口
+port 6380
+tcp-backlog 511
+timeout 0
+tcp-keepalive 300
+daemonize no
+pidfile /var/run/redis_6380.pid
+loglevel notice
+logfile ""
+databases 16
+always-show-logo no
+set-proc-title yes
+proc-title-template "{title} {listen-addr} {server-mode}"
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
+dbfilename dump.rdb
+rdb-del-sync-files no
+dir ./
+replica-serve-stale-data yes
+replica-read-only yes
+repl-diskless-sync yes
+repl-diskless-sync-delay 5
+repl-diskless-sync-max-replicas 0
+repl-diskless-load disabled
+repl-disable-tcp-nodelay no
+replica-priority 100
+#指定宿主机的IP和端口
+replica-announce-ip 192.168.25.10
+replica-announce-port 6380
+acllog-max-len 128
+#密码
+requirepass 111111
+lazyfree-lazy-eviction no
+lazyfree-lazy-expire no
+lazyfree-lazy-server-del no
+replica-lazy-flush no
+lazyfree-lazy-user-del no
+lazyfree-lazy-user-flush no
+oom-score-adj no
+oom-score-adj-values 0 200 800
+disable-thp yes
+#RDB持久化
+#只在Slave上持久化RDB文件，而且只要15分钟备份一次就够了
+save 900 1
+#AOF持久化
+appendonly yes
+appendfilename "appendonly.aof"
+appenddirname "appendonlydir"
+
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+aof-use-rdb-preamble yes
+aof-timestamp-enabled no
+slowlog-log-slower-than 10000
+slowlog-max-len 128
+latency-monitor-threshold 0
+notify-keyspace-events ""
+hash-max-listpack-entries 512
+hash-max-listpack-value 64
+list-max-listpack-size -2
+list-compress-depth 0
+set-max-intset-entries 512
+zset-max-listpack-entries 128
+zset-max-listpack-value 64
+hll-sparse-max-bytes 3000
+stream-node-max-bytes 4096
+stream-node-max-entries 100
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit replica 256mb 64mb 60
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+dynamic-hz yes
+aof-rewrite-incremental-fsync yes
+rdb-save-incremental-fsync yes
+jemalloc-bg-thread yes
+~~~
+
+~~~properties
+# sentinel.conf
+####  根据Docker配置修改端口号或者IP####
+#哨兵的端口
 port 26379
-dir "/tmp"
+#工作路径
+dir "/data"
+
+protected-mode no
+ 
+# 指明日志文件名，一旦开启需要修改Docker配置中的映射地址，开启后docker中无日志，日在data文件夹中
+# logfile "/data/sentinel.log"
+ 
+# master表示 哨兵监控master服务的别名
+# 192.168.25.10 表示 master地址
+#2 表示只需要2个sentinel投票即可故障转移
 sentinel monitor mymaster 192.168.25.10 6379 2
+ 
+#这两项配置非常重要，不同哨兵的节点通信的地址
+sentinel announce-ip 192.168.25.10
+sentinel announce-port 26379
+ 
 # 用于验证主节点和副本的密码
 sentinel auth-pass mymaster 111111
+
 sentinel down-after-milliseconds mymaster 30000
 sentinel parallel-syncs mymaster 1
 sentinel failover-timeout mymaster 180000

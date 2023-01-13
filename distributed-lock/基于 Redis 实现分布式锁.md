@@ -929,20 +929,6 @@ end
 ~~~
 
 ~~~java
-package com.lock.demo.component;
-
-import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
-
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-
 /**
  * 基于 Redis 的分布式锁的实现
  */
@@ -1014,4 +1000,23 @@ public class DistributedRedisLock implements Lock {
     }
 }
 ~~~
+
+## 红锁算法
+
+redis集群状态下的问题：
+
+1. 客户端 A 从 master 获取到锁。
+2. 在 master 将锁同步到 slave 之前，master 宕掉了。
+3. slave 节点被晋级为 master 节点。
+4. 客户端B取得了同一个资源被客户端A已经获取到的另外一个锁。
+
+**安全失效**！
+
+解决集群下锁失效，参照redis官方网站针对redlock文档：https://redis.io/topics/distlock
+
+![image-20230113165909659](./assets/image-20230113165909659.png)
+
+## Redisson 中的分布式锁
+
+![image-20220501155501783](./assets/image-20220501155501783.png)
 
