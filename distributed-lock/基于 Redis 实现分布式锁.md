@@ -1024,7 +1024,7 @@ redis集群状态下的问题：
 
 Redisson是一个在Redis的基础上实现的Java驻内存数据网格（In-Memory Data Grid）。它不仅提供了一系列的分布式的Java常用对象，还提供了许多分布式服务。其中包括(BitSet, Set, Multimap, SortedSet, Map, List, Queue, BlockingQueue, Deque, BlockingDeque, Semaphore, Lock, AtomicLong, CountDownLatch, Publish / Subscribe, Bloom filter, Remote service, Spring cache, Executor service, Live Object service, Scheduler service) Redisson提供了使用Redis的最简单和最便捷的方法。Redisson的宗旨是促进使用者对Redis的关注分离（Separation of Concern），从而让使用者能够将精力更集中地放在处理业务逻辑上。
 
-![1568176834908](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\1568176834908.png)
+![1568176834908](./assets/1568176834908.png)
 
 
 
@@ -1118,6 +1118,22 @@ Redisson是一个在Redis的基础上实现的Java驻内存数据网格（In-Mem
    }
    ~~~
 
+#### Redisson可重入锁的底层代码
+
+![image-20230307095210402](./assets/image-20230307095210402.png)
+
+> 此处的tryAcquire方法不是AQS中的方法
+
+![image-20230307100630318](./assets/image-20230307100630318.png)
+
+![image-20230307100745054](./assets/image-20230307100745054.png)
+
+![image-20230307101351953](./assets/image-20230307101351953.png)
+
+![image-20230307102020112](./assets/image-20230307102020112.png)
+
+> 详细可看：[8. 分布式锁和同步器 · redisson/redisson Wiki (github.com)](https://github.com/redisson/redisson/wiki/8.-分布式锁和同步器)
+
 ### 公平锁（Fair Lock）
 
 基于 Redis 的 Redisson 分布式可重入公平锁也是实现了`java.util.concurrent.locks.Lock`接口的一种`RLock`对象。同时还提供了[异步（Async）](http://static.javadoc.io/org.redisson/redisson/3.18.1/org/redisson/api/RLockAsync.html)、[反射式（Reactive）](http://static.javadoc.io/org.redisson/redisson/3.18.1/org/redisson/api/RLockReactive.html)和[RxJava2标准](http://static.javadoc.io/org.redisson/redisson/3.18.1/org/redisson/api/RLockRx.html)的接口。它保证了当多个 Redisson 客户端线程同时请求加锁时，优先分配给先发出请求的线程。所有请求线程会在一个队列中排队，当某个线程出现宕机时，Redisson 会等待5秒后继续下一个线程，也就是说如果前面有5个线程都处于等待状态，那么后面的线程会等待至少25秒。
@@ -1179,7 +1195,7 @@ RLock lock3 = redissonInstance3.getLock("lock3");
 
 RedissonRedLock lock = new RedissonRedLock(lock1, lock2, lock3);
 // 同时加锁：lock1 lock2 lock3
-// 红锁在大部分节点上加锁成功就算成功。
+// 红锁在大部分节点上加锁成功就算成功。半数以上
 lock.lock();
 ...
 lock.unlock();
@@ -1238,3 +1254,60 @@ lock.unlock();
 
 基于Redis的Redisson的分布式信号量（[Semaphore](http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RSemaphore.html)）Java对象`RSemaphore`采用了与`java.util.concurrent.Semaphore`相似的接口和用法。同时还提供了[异步（Async）](http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RSemaphoreAsync.html)、[反射式（Reactive）](http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RSemaphoreReactive.html)和[RxJava2标准](http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RSemaphoreRx.html)的接口。
 
+~~~java
+@Override
+public void testSemaphore() {
+    RSemaphore semaphore = redissonClient.getSemaphore("semaphore");
+    semaphore.trySetPermits(3); // 设置信号量
+    try {
+        semaphore.acquire();
+        System.out.println(Thread.currentThread().getId() + "开始执行了");
+        TimeUnit.SECONDS.sleep(10+new Random().nextInt(10));
+        System.out.println(Thread.currentThread().getId() + "执行完成了");
+        semaphore.release();
+    } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+    }
+}
+~~~
+
+多次请求发现只有三个请求被放行，其他的请求被排队，直到前面执行完毕后。
+
+> 但是重新设置trySetPermits()，发现并未被更改，应该是Redis的BUG。
+
+### 闭锁（CountDownLatch）
+
+基于Redisson的Redisson分布式闭锁（[CountDownLatch](http://static.javadoc.io/org.redisson/redisson/3.10.0/org/redisson/api/RCountDownLatch.html)）Java对象`RCountDownLatch`采用了与`java.util.concurrent.CountDownLatch`相似的接口和用法。
+
+~~~java
+@GetMapping("latch")
+public String testLatch(){
+    testService.testLatch();
+    return "班长锁门了";
+}
+
+@GetMapping("countDown")
+public String testCountDown(){
+    testService.testCountDown();
+    return "有一个学生出门了";
+}
+
+@Override
+public void testLatch() {
+    RCountDownLatch latch = redissonClient.getCountDownLatch("latch");
+    latch.trySetCount(6);
+    try {
+        latch.await();
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+
+@Override
+public void testCountDown() {
+    RCountDownLatch latch = redissonClient.getCountDownLatch("latch");
+    latch.countDown();
+}
+~~~
+
+latch方法会一直等待countDown方法全部释放完后才会响应，过程中一直阻塞。

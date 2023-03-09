@@ -1426,7 +1426,22 @@ function distributedLock(){
       sidebarDepth: 5,
       children: [
         "",
-        "基于 Redis 实现分布式锁",
+      ]
+    },
+    {
+      title: "Redis 锁",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "基于 Redis 实现分布式锁"
+      ]
+    },
+    {
+      title: "Zookeeper 锁",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "基于 Zookeeper 实现分布式锁"
       ]
     }
   ] 
