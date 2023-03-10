@@ -381,5 +381,149 @@ public class ZkTest {
 
 ### 代码实现
 
+~~~java
+/**
+     * Zookeeper 分布式锁
+     * @param key       锁名称
+     * @param expire    过期时间
+     * @param unit      时间单位
+     * @return
+     */
+public DistributedZookeeperLock getZookeeperLock(String key, long expire, TimeUnit unit) {
+    return new DistributedZookeeperLock(ZkClientConfig.zooKeeper, key, expire, unit);
+}
+
+/**
+     * Zookeeper 分布式锁
+     * @param key       锁名称
+     * @return
+     */
+public DistributedZookeeperLock getZookeeperLock(String key) {
+    return new DistributedZookeeperLock(ZkClientConfig.zooKeeper, key);
+}
+~~~
+
+~~~java
+/**
+ * 基于 Zookeeper 的分布式锁的实现
+ */
+@Slf4j
+public class DistributedZookeeperLock implements Lock {
+    private final ZooKeeper zooKeeper;
+    private final String lockName;
+    private final long expire;
+    private final TimeUnit unit;
+    private static final String ROOT_PATH = "/locks";
+
+
+    public DistributedZookeeperLock(ZooKeeper zooKeeper, String lockName, long expire, TimeUnit unit) {
+        this.zooKeeper = zooKeeper;
+        this.lockName = lockName;
+        this.expire = expire;
+        this.unit = unit;
+        try {
+            if (zooKeeper.exists(ROOT_PATH, false) == null) {
+                zooKeeper.create(ROOT_PATH, null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DistributedZookeeperLock(ZooKeeper zooKeeper, String lockName) {
+        this.zooKeeper = zooKeeper;
+        this.lockName = lockName;
+        this.expire = -1L;
+        // 不能为NULL 否则程序报错,随意给个值
+        this.unit = TimeUnit.SECONDS;
+        try {
+            if (zooKeeper.exists(ROOT_PATH, false) == null) {
+                zooKeeper.create(ROOT_PATH, null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void lock() {
+        try {
+            this.tryLock(expire, unit);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void lockInterruptibly() throws InterruptedException {
+
+    }
+
+    @Override
+    public boolean tryLock() {
+        try {
+            tryLock(-1L, TimeUnit.MILLISECONDS);
+            return true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+   
+    @Override
+    public boolean tryLock(long time, @NotNull TimeUnit unit) throws InterruptedException {
+        // 创建ZNode节点的过程
+        try {
+            if (-1L == time || 0L == time) {
+                // 防止客户端程序获取到锁后，服务器端宕机，导致的死锁问题，需要创建一个临时的节点。
+                zooKeeper.create(ROOT_PATH + "/" + lockName, null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+            } else if (time < -1L) {
+                throw new RuntimeException("时间不能够小于-1！");
+            } else {
+                //时间转换
+                long ttl = timeFormat(time, unit);
+                zooKeeper.create(ROOT_PATH + "/" + lockName, null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_WITH_TTL, null, ttl);
+            }
+            return true;
+        } catch (KeeperException e) {
+//            e.printStackTrace();
+            TimeUnit.SECONDS.sleep(1);
+            tryLock(time, unit);
+        }
+        return false;
+    }
+
+    /**
+     * 时间转换
+     * @param time  时间
+     * @param unit  转换的单位
+     * @return
+     */
+    private long timeFormat(long time, TimeUnit unit) {
+        long ms = TimeUnit.MILLISECONDS.convert(time, unit);
+        return ms;
+    }
+
+    @Override
+    public void unlock() {
+        // 删除ZNode节点的过程
+        try {
+            Stat stat = zooKeeper.exists(ROOT_PATH + "/" + lockName, false);
+            zooKeeper.delete(ROOT_PATH + "/" + lockName, stat.getVersion());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @NotNull
+    @Override
+    public Condition newCondition() {
+        return null;
+    }
+}
+
+~~~
+
 
 
