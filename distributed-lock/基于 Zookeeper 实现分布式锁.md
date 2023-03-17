@@ -525,5 +525,25 @@ public class DistributedZookeeperLock implements Lock {
 
 ~~~
 
+Jmeter压力测试：
 
+![1607046072239](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\1607046072239.png)
 
+性能非常一般，mysql数据库的库存余量为0（注意：所有测试之前都要先修改库存量为5000）
+
+**存在问题：**
+
+1. 性能一般（比mysql分布式锁略好）
+2. 不可重入
+
+## 优化
+
+因为无限自旋，必定会非常影响性能。所以需要让所有的请求都能够创建锁。够避免争抢必然可以提高性能。
+
+**思路：**
+
+利用zk的序列化节点可以避免争抢锁的问题。
+
+### 阻塞锁
+
+### 可重入锁
