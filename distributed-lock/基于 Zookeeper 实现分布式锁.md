@@ -547,3 +547,188 @@ Jmeter压力测试：
 ### 阻塞锁
 
 ### 可重入锁
+
+~~~java
+/**
+ * 基于 Zookeeper 的分布式锁的实现
+ */
+@Slf4j
+public class DistributedZookeeperLock implements Lock {
+    private final ZooKeeper zooKeeper;
+    private final String lockName;
+    private final long expire;
+    private final TimeUnit unit;
+    private static final String ROOT_PATH = "/locks";
+    //提取的创建路径，方便删除
+    private String currentNodePath;
+    // 使用ThreadLocal来完成重入锁
+    private static final ThreadLocal<Integer> threadLocal = new ThreadLocal<>();
+
+
+    public DistributedZookeeperLock(ZooKeeper zooKeeper, String lockName, long expire, TimeUnit unit) {
+        this.zooKeeper = zooKeeper;
+        this.lockName = lockName;
+        this.expire = expire;
+        this.unit = unit;
+        try {
+            if (zooKeeper.exists(ROOT_PATH, false) == null) {
+                zooKeeper.create(ROOT_PATH, null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DistributedZookeeperLock(ZooKeeper zooKeeper, String lockName) {
+        this.zooKeeper = zooKeeper;
+        this.lockName = lockName;
+        this.expire = -1L;
+        // 不能为NULL 否则程序报错,随意给个值
+        this.unit = TimeUnit.SECONDS;
+        try {
+            if (zooKeeper.exists(ROOT_PATH, false) == null) {
+                zooKeeper.create(ROOT_PATH, null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void lock() {
+        try {
+            this.tryLock(expire, unit);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void lockInterruptibly() throws InterruptedException {
+
+    }
+
+    @Override
+    public boolean tryLock() {
+        try {
+            tryLock(-1L, TimeUnit.MILLISECONDS);
+            return true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean tryLock(long time, @NotNull TimeUnit unit) throws InterruptedException {
+        Integer flag = threadLocal.get();
+        if (flag != null && flag > 0) {
+            threadLocal.set(flag + 1);
+            return true;
+        }
+        // 创建ZNode节点的过程
+        try {
+            if (-1L == time || 0L == time) {
+                // 防止客户端程序获取到锁后，服务器端宕机，导致的死锁问题，需要创建一个临时的节点。
+                currentNodePath = zooKeeper.create(ROOT_PATH + "/" + lockName + "-", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+            } else if (time < -1L) {
+                throw new RuntimeException("时间不能够小于-1！");
+            } else {
+                //时间转换
+                long ttl = timeFormat(time, unit);
+                currentNodePath = zooKeeper.create(ROOT_PATH + "/" + lockName + "-", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL_WITH_TTL, null, ttl);
+            }
+            // 获取当前节点的上一个节点
+            String preNode = getPreNode();
+
+            if (StrUtil.isNotBlank(preNode)) {
+                // 原子性，查看上个节点是否存在
+                CountDownLatch countDownLatch = new CountDownLatch(1);
+                if (null == zooKeeper.exists(ROOT_PATH + "/" + preNode, event -> {
+                    // 如果存在就阻塞
+                    countDownLatch.countDown();
+                })) {
+                    // 上一个节点已经不存在了，当前节点就是最小的节点
+                    threadLocal.set(1);
+                    return true;
+                }
+                // 阻塞。。。。
+                countDownLatch.await();
+            }
+            threadLocal.set(1);
+            return true;
+        } catch (KeeperException e) {
+            e.printStackTrace();
+            TimeUnit.SECONDS.sleep(1);
+            tryLock(time, unit);
+        }
+        return false;
+    }
+
+    private String getPreNode() {
+        List<String> children = null;
+        try {
+            // 获取根节点下的所有节点
+            children = zooKeeper.getChildren(ROOT_PATH, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (CollUtil.isEmpty(children)) {
+            throw new IllegalMonitorStateException("非法操作！");
+        }
+//        List<String> nodes = children.stream().filter(node -> StrUtil.startWith(node, lockName + "-")).sorted().collect(Collectors.toList());
+        List<String> nodes = children.stream().filter(node -> StrUtil.startWith(node, lockName + "-")).sorted().collect(Collectors.toList());
+
+        // 获取当前节点的下标
+        int index = CollUtil.indexOf(nodes, s -> {
+            String sub = StrUtil.sub(s, StrUtil.lastIndexOf(s, "/", s.length(), true) + 1, s.length());
+            return sub.equals(StrUtil.sub(currentNodePath, StrUtil.lastIndexOf(currentNodePath, "/", currentNodePath.length(), true) + 1, currentNodePath.length()));
+        });
+        if (index < 0) {
+            throw new IllegalMonitorStateException("非法操作！");
+        } else if (index > 0) {
+            return nodes.get(index - 1);
+        }
+
+        // 如果index == 0 说明就是最小的节点，返回null
+        return null;
+    }
+
+    /**
+     * 时间转换
+     * @param time  时间
+     * @param unit  转换的单位
+     * @return
+     */
+    private long timeFormat(long time, TimeUnit unit) {
+        long ms = TimeUnit.MILLISECONDS.convert(time, unit);
+        return ms;
+    }
+
+    @Override
+    public void unlock() {
+        // 删除ZNode节点的过程
+        try {
+            threadLocal.set(threadLocal.get() - 1);
+            if (threadLocal.get() == 0) {
+                Stat stat = zooKeeper.exists(currentNodePath, false);
+                zooKeeper.delete(currentNodePath, stat.getVersion());
+                threadLocal.remove();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (KeeperException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @NotNull
+    @Override
+    public Condition newCondition() {
+        return null;
+    }
+
+}
+~~~
+
