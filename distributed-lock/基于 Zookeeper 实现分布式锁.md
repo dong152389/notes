@@ -527,7 +527,7 @@ public class DistributedZookeeperLock implements Lock {
 
 Jmeter压力测试：
 
-![1607046072239](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\1607046072239.png)
+![1607046072239](./assets/1607046072239.png)
 
 性能非常一般，mysql数据库的库存余量为0（注意：所有测试之前都要先修改库存量为5000）
 
@@ -732,3 +732,196 @@ public class DistributedZookeeperLock implements Lock {
 }
 ~~~
 
+在网页中访问，经测试，重入锁也正常。
+
+## Curator 中的分布式锁
+
+Curator是netflix公司开源的一套zookeeper客户端，目前是Apache的顶级项目。与Zookeeper提供的原生客户端相比，Curator的抽象层次更高，简化了Zookeeper客户端的开发量。Curator解决了很多zookeeper客户端非常底层的细节开发工作，包括连接重连、反复注册wathcer和NodeExistsException 异常等。
+
+通过查看官方文档，可以发现Curator主要解决了三类问题：
+
+- 封装ZooKeeper client与ZooKeeper server之间的连接处理
+- 提供了一套Fluent风格的操作API
+- 提供ZooKeeper各种应用场景(recipe， 比如：分布式锁服务、集群领导选举、共享计数器、缓存机制、分布式队列等)的抽象封装，这些实现都遵循了zk的最佳实践，并考虑了各种极端情况
+
+Curator由一系列的模块构成，对于一般开发者而言，常用的是curator-framework和curator-recipes：
+
+- curator-framework：提供了常见的zk相关的底层操作
+- curator-recipes：提供了一些zk的典型使用场景的参考。本节重点关注的分布式锁就是该包提供的
+
+### 引入依赖
+
+~~~xml
+<!--zookeeper 官方客户端-->
+<dependency>
+    <groupId>org.apache.zookeeper</groupId>
+    <artifactId>zookeeper</artifactId>
+    <version>3.8.1</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+
+<!-- Curator 客户端 -->
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-recipes</artifactId>
+    <version>5.4.0</version>
+    <exclusions>
+        <exclusion>
+            <artifactId>zookeeper</artifactId>
+            <groupId>org.apache.zookeeper</groupId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.apache.curator</groupId>
+    <artifactId>curator-framework</artifactId>
+    <version>5.4.0</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+~~~
+
+### 配置类
+
+~~~java
+/**
+ * Zookeeper Curator配置类
+ */
+@Configuration
+public class CuratorConfig {
+
+    @Bean
+    public CuratorFramework curatorFramework() {
+        // 重试策略，这里使用的是指数补偿重试策略，重试3次，初始重试间隔1000ms，每次重试之后重试间隔递增。
+        RetryPolicy retry = new ExponentialBackoffRetry(1000, 3);
+        // 初始化Curator客户端：指定链接信息 及 重试策略
+        CuratorFramework client = CuratorFrameworkFactory.newClient("192.168.25.10:2181,192.168.25.10:2182,192.168.25.10:2183", retry);
+        client.start(); // 开始链接，如果不调用该方法，很多方法无法工作
+        return client;
+    }
+}
+~~~
+
+### 可重入锁 InterProcessMutex
+
+Reentrant 和 JDK的 ReentrantLock 类似， 意味着同一个客户端在拥有锁的同时，可以多次获取，不会被阻塞。它是由类**InterProcessMutex**来实现。
+
+~~~java
+@Autowired
+private CuratorFramework curatorFramework;
+
+@Override
+public void deduct() {
+
+    // curator锁
+    InterProcessMutex processMutex = new InterProcessMutex(curatorFramework, "/curator/lock");
+    try {
+        processMutex.acquire();
+        // 先查询库存是否充足
+        String stock = Objects.requireNonNull(redisTemplate.opsForValue().get("stock"));
+        if (!stock.equals("")) {
+            int res = Integer.parseInt(stock);
+            if (res > 0) {
+                //扣减库存
+                redisTemplate.opsForValue().set("stock", String.valueOf(--res));
+            } else {
+                System.err.println("库存为空！");
+            }
+        }
+        // 重入
+        curatorReentrant(processMutex);
+        // 释放锁
+        processMutex.release();
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+
+private void curatorReentrant(InterProcessMutex processMutex) {
+    try {
+        processMutex.acquire();
+        log.info("测试可重入锁");
+        processMutex.release();
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+~~~
+
+![image-20230329145352380](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329145352380.png)
+
+但是经过 Jmeter 压测后发现，吞吐量并不高，甚至比手写的还要低。
+
+#### 底层原理
+
+* 初始化
+
+
+
+![image-20230329151839027](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329151839027.png)
+
+![image-20230329152426854](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329152426854.png)
+
+![image-20230329152712243](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329152548765.png)
+
+* 加锁
+
+![image-20230329154616327](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329154616327.png)
+
+![image-20230329153543285](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329153543285.png)
+
+* 解锁
+
+![image-20230329155535112](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329155535112.png)
+
+### 不可重入锁 InterProcessSemaphoreMutex
+
+~~~java
+@Autowired
+private CuratorFramework curatorFramework;
+
+@Override
+public void deduct() {
+    try {
+        InterProcessSemaphoreMutex mutex = new InterProcessSemaphoreMutex(curatorFramework, "/curator/locks");
+        mutex.acquire();
+        String stock = Objects.requireNonNull(redisTemplate.opsForValue().get("stock"));
+        if (!stock.equals("")) {
+            int res = Integer.parseInt(stock);
+            if (res > 0) {
+                //扣减库存
+                redisTemplate.opsForValue().set("stock", String.valueOf(--res));
+            } else {
+                System.err.println("库存为空！");
+            }
+        }
+        curatorReentrant(mutex);
+        // 释放锁
+        mutex.release();
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+
+}
+
+private void curatorReentrant(InterProcessSemaphoreMutex mutex) {
+    try {
+        mutex.acquire();
+        log.info("测试可重入锁");
+        mutex.release();
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+~~~
+
+测试发现会一直阻塞在那里。
