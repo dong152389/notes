@@ -857,7 +857,7 @@ private void curatorReentrant(InterProcessMutex processMutex) {
 }
 ~~~
 
-![image-20230329145352380](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329145352380.png)
+![image-20230329145352380](./assets/image-20230329145352380.png)
 
 但是经过 Jmeter 压测后发现，吞吐量并不高，甚至比手写的还要低。
 
@@ -867,21 +867,21 @@ private void curatorReentrant(InterProcessMutex processMutex) {
 
 
 
-![image-20230329151839027](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329151839027.png)
+![image-20230329151839027](./assets/image-20230329151839027.png)
 
-![image-20230329152426854](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329152426854.png)
+![image-20230329152426854](./assets/image-20230329152426854.png)
 
-![image-20230329152712243](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329152548765.png)
+![image-20230329152712243](./assets/image-20230329152548765.png)
 
 * 加锁
 
-![image-20230329154616327](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329154616327.png)
+![image-20230329154616327](./assets/image-20230329154616327.png)
 
-![image-20230329153543285](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329153543285.png)
+![image-20230329153543285](./assets/image-20230329153543285.png)
 
 * 解锁
 
-![image-20230329155535112](C:\Users\Fengdong.Duan\Desktop\my-notes\distributed-lock\assets\image-20230329155535112.png)
+![image-20230329155535112](./assets/image-20230329155535112.png)
 
 ### 不可重入锁 InterProcessSemaphoreMutex
 
@@ -925,3 +925,300 @@ private void curatorReentrant(InterProcessSemaphoreMutex mutex) {
 ~~~
 
 测试发现会一直阻塞在那里。
+
+### 可重入读写锁 InterProcessReadWriteLock
+
+类似 JDK 的 ReentrantReadWriteLock。一个拥有写锁的线程可重入读锁，但是读锁却不能进入写锁。这也意味着写锁可以降级成读锁。从读锁升级成写锁是不成的。主要实现类 InterProcessReadWriteLock：
+
+~~~java
+@GetMapping("zk/read")
+public String testZkRead() {
+    String msg = testService.testZkRead();
+    return "测试读";
+}
+
+@GetMapping("zk/write")
+public String testZkWrite() {
+    String msg = testService.testZkWrite();
+    return "测试写";
+}
+~~~
+
+~~~java
+@Override
+public String testZkRead() {
+    // curator锁
+    try {
+        InterProcessReadWriteLock rwLock = new InterProcessReadWriteLock(curatorFramework, "/curator/rwlock");
+        rwLock.readLock().acquire(10, TimeUnit.SECONDS);
+        // TODO：一顿读的操作。。。。
+        //rwlock.readLock().unlock();
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+    return null;
+}
+
+@Override
+public String testZkWrite() {
+    // curator锁
+    try {
+        InterProcessReadWriteLock rwLock = new InterProcessReadWriteLock(curatorFramework, "/curator/rwlock");
+        rwLock.writeLock().acquire(10, TimeUnit.SECONDS);
+        // TODO：一顿写的操作。。。。
+        //rwlock.writeLock().unlock();
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+    return null;
+}
+~~~
+
+### 联锁 InterProcessMultiLock
+
+Multi Shared Lock是一个锁的容器。当调用 acquire， 所有的锁都会被 acquire，如果请求失败，所有的锁都会被 release。同样调用release 时所有的锁都被 release (失败被忽略)。基本上，它就是组锁的代表，在它上面的请求释放操作都会传递给它包含的所有的锁。实现类 InterProcessMultiLock：
+
+~~~java
+// 构造函数需要包含的锁的集合，或者一组ZooKeeper的path
+public InterProcessMultiLock(List<InterProcessLock> locks);
+public InterProcessMultiLock(CuratorFramework client, List<String> paths);
+
+// 获取锁
+public void acquire();
+public boolean acquire(long time, TimeUnit unit);
+
+// 释放锁
+public synchronized void release();
+~~~
+
+### 信号量 InterProcessSemaphoreV2
+
+一个计数的信号量类似 JDK 的 Semaphore。JDK 中 Semaphore 维护的一组许可(permits)，而 Cubator 中称之为租约(Lease)。注意，所有的实例必须使用相同的 numberOfLeases 值。调用 acquire 会返回一个租约对象。客户端必须在 finally 中 close 这些租约对象，否则这些租约会丢失掉。但是，如果客户端 session 由于某种原因比如 crash 丢掉， 那么这些客户端持有的租约会自动 close， 这样其它客户端可以继续使用这些租约。主要实现类 InterProcessSemaphoreV2：
+
+~~~java
+// 构造方法
+public InterProcessSemaphoreV2(CuratorFramework client, String path, int maxLeases);
+
+// 注意一次你可以请求多个租约，如果Semaphore当前的租约不够，则请求线程会被阻塞。
+// 同时还提供了超时的重载方法
+public Lease acquire();
+public Collection<Lease> acquire(int qty);
+public Lease acquire(long time, TimeUnit unit);
+public Collection<Lease> acquire(int qty, long time, TimeUnit unit)
+
+// 租约还可以通过下面的方式返还
+public void returnAll(Collection<Lease> leases);
+public void returnLease(Lease lease);
+~~~
+
+~~~java
+public void testInterProcessSemaphoreV2() {
+    // 一次只能有5个请求打入
+    InterProcessSemaphoreV2 semaphoreV2 = new InterProcessSemaphoreV2(curatorFramework, "/curator/semaphore", 5);
+    try {
+        Lease acquire = semaphoreV2.acquire();// 获取资源，获取资源成功的线程可以继续处理业务操作。否则会被阻塞住
+        this.redisTemplate.opsForList().rightPush("log", port + "获取了资源，开始处理业务逻辑。" + Thread.currentThread().getName());
+        TimeUnit.SECONDS.sleep(10 + new Random().nextInt(10));
+        this.redisTemplate.opsForList().rightPush("log", port + "处理完业务逻辑，释放资源" + Thread.currentThread().getName());
+        // 手动释放资源，后续请求线程就可以获取该资源
+        semaphoreV2.returnLease(acquire);
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+~~~
+
+### 栅栏 Barrier
+
+**定义：**curator 针对分布式场景实现了分布式屏障：barrier。我们在分布式系统中可以使用 barrier 去阻塞进程，知道某个条件被触发。其实跟 Java 多线程的 barrier 是一样的。
+
+**例如：**当两个进程在执行任务的时候，A调用了B，A需要等待B完成以后的通知.
+
+Barrier是这样一个类： 它会阻塞所有节点上的等待进程，知道某一个被满足， 然后所有的节点继续进行。比如赛马比赛中， 等赛马陆续来到起跑线前。 一声令下，所有的赛马都飞奔而出。
+
+~~~java
+setBarrier() - 设置栅栏
+waitOnBarrier() - 等待栅栏移除
+removeBarrier() - 移除栅栏
+~~~
+
+~~~java
+static DistributedBarrier barrier = null;
+
+@Override
+public void testDistributedBarrier() {
+    try {
+        for (int i = 0; i < 5; i++) {
+            new Thread(() -> {
+                try {
+                    barrier = new DistributedBarrier(curatorFramework, "/super");
+                    System.out.println(Thread.currentThread().getName() + "设置barrier!");
+                    barrier.setBarrier();    //设置
+                    barrier.waitOnBarrier();    //等待
+                    System.out.println("---------开始执行程序----------");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, "t" + i).start();
+        }
+
+        Thread.sleep(5000);
+        barrier.removeBarrier();    //释放
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+
+//t4设置barrier!
+//t3设置barrier!
+//t2设置barrier!
+//t1设置barrier!
+//t0设置barrier!
+//---------开始执行程序----------
+//---------开始执行程序----------
+//---------开始执行程序----------
+//---------开始执行程序----------
+//---------开始执行程序----------
+~~~
+
+### 双栅栏 Double Barrier
+
+双栅栏，允许客户端在计算的开始和结束时同步。当足够的进程加入到双栅栏时，进程开始计算，当计算完成时，离开栅栏。DistributedDoubleBarrier实现了双栅栏的功能
+
+~~~java
+public DistributedDoubleBarrier(CuratorFramework client, String barrierPath, int memberQty)
+enter()、enter(long maxWait, TimeUnit unit) - 等待同时进入栅栏
+leave()、leave(long maxWait, TimeUnit unit) - 等待同时离开栅栏
+~~~
+
+memberQty 是成员数量，当 enter 方法被调用时，成员被阻塞，直到所有的成员都调用了 enter。当 leave 方法被调用时，它也阻塞调用线程，直到所有的成员都调用了 leave。
+
+注意：参数 memberQty 的值只是一个阈值，而不是一个限制值。当等待栅栏的数量大于或等于这个值栅栏就会打开！
+
+与栅栏(DistributedBarrier)一样,双栅栏的barrierPath参数也是用来确定是否是同一个栅栏的，双栅栏的使用情况如下：
+
+1. 从多个客户端在同一个路径上创建双栅栏(DistributedDoubleBarrier),然后调用enter()方法，等待栅栏数量达到memberQty时就可以进入栅栏。
+2. 栅栏数量达到memberQty，多个客户端同时停止阻塞继续运行，直到执行leave()方法，等待memberQty个数量的栅栏同时阻塞到leave()方法中。
+3. memberQty个数量的栅栏同时阻塞到leave()方法中，多个客户端的leave()方法停止阻塞，继续运行。
+
+~~~java
+@Override
+public void distributedDoubleBarrier() {
+    for (int i = 0; i < 5; i++) {
+        new Thread(() -> {
+            try {
+                DistributedDoubleBarrier barrier = new DistributedDoubleBarrier(curatorFramework, "/super", 5);
+                Thread.sleep(1000 * (new Random()).nextInt(3));
+                System.out.println(Thread.currentThread().getName() + "已经准备");
+                barrier.enter();
+                System.out.println("同时开始运行...");
+                Thread.sleep(1000 * (new Random()).nextInt(3));
+                System.out.println(Thread.currentThread().getName() + "运行完毕");
+                barrier.leave();
+                System.out.println("同时退出运行...");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, "t" + i).start();
+    }
+}
+~~~
+
+###  共享计数器
+
+利用ZooKeeper可以实现一个集群共享的计数器。只要使用相同的path就可以得到最新的计数器值， 这是由ZooKeeper的一致性保证的。Curator有两个计数器， 一个是用int来计数，一个用long来计数。
+
+#### SharedCount
+
+~~~java
+// 构造方法
+public SharedCount(CuratorFramework client, String path, int seedValue);
+// 获取共享计数的值
+public int getCount();
+// 设置共享计数的值
+public void setCount(int newCount) throws Exception;
+// 当版本号没有变化时，才会更新共享变量的值
+public boolean  trySetCount(VersionedValue<Integer> previous, int newCount);
+// 通过监听器监听共享计数的变化
+public void addListener(SharedCountListener listener);
+public void addListener(final SharedCountListener listener, Executor executor);
+// 共享计数在使用之前必须开启
+public void start() throws Exception;
+// 关闭共享计数
+public void close() throws IOException;
+~~~
+
+~~~java
+@Override
+public void testZkShareCount() {
+    try {
+        // 第三个参数是共享计数的初始值
+        SharedCount sharedCount = new SharedCount(curatorFramework, "/curator/count", 0);
+        // 启动共享计数器
+        sharedCount.start();
+        // 获取共享计数的值
+        int count = sharedCount.getCount();
+        // 修改共享计数的值
+        int random = new Random().nextInt(1000);
+        sharedCount.setCount(random);
+        System.out.println("我获取了共享计数的初始值：" + count + "，并把计数器的值改为：" + random);
+        sharedCount.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+~~~
+
+#### DistributedAtomicNumber
+
+DistributedAtomicNumber接口是分布式原子数值类型的抽象，定义了分布式原子数值类型需要提供的方法。
+
+DistributedAtomicNumber接口有两个实现：`DistributedAtomicLong` 和 `DistributedAtomicInteger`
+
+![image-20220711225708066](./assets/image-20220711225708066.png)
+
+这两个实现将各种原子操作的执行委托给了`DistributedAtomicValue`，所以这两种实现是类似的，只不过表示的数值类型不同而已。这里以`DistributedAtomicLong` 为例进行演示
+
+DistributedAtomicLong除了计数的范围比SharedCount大了之外，比SharedCount更简单易用。它首先尝试使用乐观锁的方式设置计数器， 如果不成功(比如期间计数器已经被其它client更新了)， 它使用InterProcessMutex方式来更新计数值。此计数器有一系列的操作：
+
+- get(): 获取当前值
+- increment()：加一
+- decrement(): 减一
+- add()：增加特定的值
+- subtract(): 减去特定的值
+- trySet(): 尝试设置计数值
+- forceSet(): 强制设置计数值
+
+你必须检查返回结果的succeeded()， 它代表此操作是否成功。如果操作成功， preValue()代表操作前的值， postValue()代表操作后的值。
+
+~~~java
+@Override
+public void distributedAtomicNumber() {
+    DistributedAtomicLong aLong =
+        /**
+                 * 参数1 重试次数; 参数2 每次重试间隔的时间
+                 */
+        new DistributedAtomicLong(curatorFramework, "/curator/atomic", new RetryNTimes(3, 5000));
+    try {
+        // 初始化
+        boolean initialize = aLong.initialize(100L);
+        if (initialize) {
+            System.out.println(Thread.currentThread().getName() + "初始化 atomicLong 成功");
+        } else {
+            System.out.println(Thread.currentThread().getName() + "初始化 atomicLong 失败");
+        }
+
+        // 比较再设置，当Zookeeper中的值与期望值相等时才能设置新值
+        AtomicValue<Long> longAtomicValue = aLong.compareAndSet(100L, 150L);
+        if (longAtomicValue.succeeded()) {
+            System.out.println(Thread.currentThread().getName() + " compareAndSet 成功" + "当前的值为" + aLong.get().postValue());
+        } else {
+            System.out.println(Thread.currentThread().getName() + " compareAndSet 失败");
+        }
+
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+}
+~~~
+
