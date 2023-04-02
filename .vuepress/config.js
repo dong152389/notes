@@ -1418,7 +1418,7 @@ function shiro() {
     }
   ]
 }
-function distributedLock(){
+function distributedLock() {
   return [
     {
       title: "传统锁",
@@ -1443,6 +1443,22 @@ function distributedLock(){
       children: [
         "基于 Zookeeper 实现分布式锁"
       ]
+    },
+    {
+      title: "MySQL 锁",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "基于 MySQL 实现分布式锁"
+      ]
+    },
+    {
+      title: "总结",
+      collapsable: false,
+      sidebarDepth: 5,
+      children: [
+        "总结"
+      ]
     }
-  ] 
+  ]
 }
