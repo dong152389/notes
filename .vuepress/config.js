@@ -1,5 +1,5 @@
 module.exports = {
-  dest: "notebook",
+  dest: "build",
   base: "/notebook/",
   markdown: {
     externalLinks: {
