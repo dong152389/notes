@@ -29,4 +29,4 @@ jobs:
         with:
           branch: gh-pages
           folder: build
-          token: ${{ secrets.NOTE_BOOK }}
+          token: ${{ secrets.ACCESS_TOKEN }}
