@@ -194,7 +194,7 @@ public class AdminController {
 
 浏览器交替显示：
 
-```text
+```
 Hi，your message is :"HelloFeign" i am from port：8762
 Hi，your message is :"HelloFeign" i am from port：8763
 ```

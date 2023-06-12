@@ -12,19 +12,19 @@ https://tomcat.apache.org/
 
 ### 解压缩
 
-```text
+```
 tar -zxvf apache-tomcat-8.5.23.tar.gz
 ```
 
 ### 变更目录名
 
-```text
+```
 mv apache-tomcat-8.5.23 tomcat
 ```
 
 ### 移动目录
 
-```text
+```
 mv tomcat/ /usr/local/
 ```
 
@@ -32,18 +32,18 @@ mv tomcat/ /usr/local/
 
 ### 启动
 
-```text
+```
 /usr/local/tomcat/bin/startup.sh
 ```
 
 ### 停止
 
-```text
+```
 /usr/local/tomcat/bin/shutdown.sh
 ```
 
 ### 目录内执行脚本
 
-```text
+```
 ./startup.sh
 ```

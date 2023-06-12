@@ -57,7 +57,7 @@
 
 ### 复制配置到容器并重启
 
-```text
+```
 # 复制到容器
 docker cp managed-schema solr:/opt/solr/server/solr/ik_core/conf
 
@@ -99,7 +99,7 @@ docker-compose restart
 
 ### 根据 ID 删除
 
-```text
+```
 <delete>
     <id>536563</id>
 </delete>
@@ -108,7 +108,7 @@ docker-compose restart
 
 ### 根据查询删除
 
-```text
+```
 <delete>
     <query>*:*</query>
 </delete>

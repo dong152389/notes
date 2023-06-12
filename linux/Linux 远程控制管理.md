@@ -15,19 +15,19 @@ OpenSSH 由客户端和服务端组成。
 
 ### 检查软件是否安装
 
-```text
+```
 apt-cache policy openssh-client openssh-server
 ```
 
 ### 安装服务端
 
-```text
+```
 apt-get install openssh-server
 ```
 
 ### 安装客户端
 
-```text
+```
 apt-get install openssh-client
 ```
 

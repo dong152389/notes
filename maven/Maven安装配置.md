@@ -40,7 +40,7 @@
 
 输出：
 
-```text
+```
 C:\Users\Lusifer>mvn -version
 Apache Maven 3.5.2 (138edd61fd100ec658bfa2d307c43b76940a5d7d; 2017-10-18T15:58:13+08:00)
 Maven home: D:\apache-maven-3.5.2\bin\..

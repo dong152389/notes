@@ -4,13 +4,13 @@
 
 ### 更新数据源
 
-```text
+```
 apt-get update
 ```
 
 ### 安装 MySQL
 
-```text
+```
 apt-get install mysql-server
 ```
 
@@ -22,7 +22,7 @@ apt-get install mysql-server
 
 运行安全脚本：
 
-```text
+```
 mysql_secure_installation
 ```
 
@@ -32,7 +32,7 @@ mysql_secure_installation
 
 按上边方式安装完成后，MySQL 应该已经开始自动运行了。要测试它，请检查其状态。
 
-```text
+```
 lusifer@ubuntu:~$ systemctl status mysql.service
 ● mysql.service - MySQL Community Server
    Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled)
@@ -47,7 +47,7 @@ Nov 21 13:04:34 ubuntu systemd[1]: Started MySQL Community Server.
 
 查看 MySQL 版本：
 
-```text
+```
 mysqladmin -p -u root version
 ```
 
@@ -55,31 +55,31 @@ mysqladmin -p -u root version
 
 - 修改配置文件
 
-```text
+```
 nano /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
 - 注释掉(语句前面加上 # 即可)：
 
-```text
+```
 bind-address = 127.0.0.1
 ```
 
 - 重启 MySQL
 
-```text
+```
 service mysql restart
 ```
 
 - 登录 MySQL
 
-```text
+```
 mysql -u root -p
 ```
 
 - 授权 root 用户允许所有人连接
 
-```text
+```
 grant all privileges on *.* to 'root'@'%' identified by '你的 mysql root 账户密码';
 ```
 
@@ -87,21 +87,21 @@ grant all privileges on *.* to 'root'@'%' identified by '你的 mysql root 账�
 
 - 查看和设置密码安全级别
 
-```text
+```
 select @@validate_password_policy;
 ```
 
-```text
+```
 set global validate_password_policy=0;
 ```
 
 - 查看和设置密码长度限制
 
-```text
+```
 select @@validate_password_length;
 ```
 
-```text
+```
 set global validate_password_length=1;
 ```
 
@@ -109,19 +109,19 @@ set global validate_password_length=1;
 
 ### 启动
 
-```text
+```
 service mysql start
 ```
 
 ### 停止
 
-```text
+```
 service mysql stop
 ```
 
 ### 重启
 
-```text
+```
 service mysql restart
 ```
 
@@ -129,7 +129,7 @@ service mysql restart
 
 修改配置 `mysqld.cnf` 配置文件
 
-```text
+```
 vi /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
@@ -137,14 +137,14 @@ vi /etc/mysql/mysql.conf.d/mysqld.cnf
 
 在 `[mysqld]` 节点上增加如下配置
 
-```text
+```
 [client]
 default-character-set=utf8
 ```
 
 在 `[mysqld]` 节点底部增加如下配置
 
-```text
+```
 default-storage-engine=INNODB
 character-set-server=utf8
 collation-server=utf8_general_ci
@@ -154,6 +154,6 @@ collation-server=utf8_general_ci
 
 在 `[mysqld]` 节点底部增加如下配置
 
-```text
+```
 lower-case-table-names = 1
 ```

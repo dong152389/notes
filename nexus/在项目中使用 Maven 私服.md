@@ -25,7 +25,7 @@
 
 Release 版本与 Snapshot 定义如下：
 
-```text
+```
 Release: 1.0.0/1.0.0-RELEASE
 Snapshot: 1.0.0-SNAPSHOT
 ```
@@ -59,7 +59,7 @@ Snapshot: 1.0.0-SNAPSHOT
 
 ## 部署到仓库
 
-```text
+```
 mvn deploy
 ```
 
@@ -67,7 +67,7 @@ mvn deploy
 
 Nexus 3.0 不支持页面上传，可使用 maven 命令：
 
-```text
+```
 # 如第三方JAR包：aliyun-sdk-oss-2.2.3.jar
 mvn deploy:deploy-file 
   -DgroupId=com.aliyun.oss 

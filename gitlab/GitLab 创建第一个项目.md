@@ -28,13 +28,13 @@
 
 输入命令：
 
-```text
+```
 ssh-keygen -t rsa -C "your_email@example.com"
 ```
 
 执行成功后的效果：
 
-```text
+```
 Microsoft Windows [版本 10.0.14393]
 (c) 2016 Microsoft Corporation。保留所有权利。
 
@@ -103,7 +103,7 @@ C:\Program Files\Git\usr\bin>
 - 我们以创建 `.gitignore` 过滤配置文件为例，该文件的主要作用为过滤不需要上传的文件，比如：IDE 生成的工程文件、编译后的 class 文件等
 - 在工程目录下，新建 `.gitignore` 文件，并填入如下配置：
 
-```text
+```
 .gradle
 *.sw?
 .#*

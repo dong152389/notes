@@ -137,7 +137,7 @@ AspectJ 主要是使用 XML 配置顾问方式自动为每个符合切入点表�
 
 ### TbContentCategory
 
-```text
+```
 package com.hello.spring.transaction.aspectsj.aop.domain;
 
 import lombok.Data;
@@ -501,7 +501,7 @@ public class TbContentServiceImpl implements TbContentService {
 
 ### `TbContentMapper.xml`
 
-```text
+```
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hello.spring.transaction.aspectsj.aop.dao.TbContentDao">
@@ -539,7 +539,7 @@ public class TbContentServiceImpl implements TbContentService {
 
 ### `log4j.properties`
 
-```text
+```
 log4j.rootLogger=INFO, console, file
 
 log4j.appender.console=org.apache.log4j.ConsoleAppender
@@ -556,7 +556,7 @@ log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
 
 ### `jdbc.properties`
 
-```text
+```
 #============================#
 #==== Database settings ====#
 #============================#
@@ -579,7 +579,7 @@ jdbc.testSql=SELECT 'x' FROM DUAL
 
 ## 创建测试类
 
-```text
+```
 package com.hello.spring.transaction.aspectsj.aop.service.test;
 
 import com.hello.spring.transaction.aspectsj.aop.domain.TbContent;

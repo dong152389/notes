@@ -249,7 +249,7 @@ public class BeanValidator {
 
 修改实体类，增加验证注解，以后我们只需要在实体类的属性上使用 JSR-303 注解即可完成相关数据的验证工作，关键代码如下：
 
-```text
+```
 @Length(min = 6, max = 20, message = "用户名长度必须介于 6 和 20 之间")
 private String username;
 @Length(min = 6, max = 20, message = "密码长度必须介于 6 和 20 之间")
@@ -264,7 +264,7 @@ private String email;
 
 修改 `spring-context.xml` 文件，注入 `Validator` 工具类，配置如下：
 
-```text
+```
 <!-- 配置 Bean Validator 定义 -->
 <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 <bean id="beanValidator" class="com.dfd.my.shop.commons.validator.BeanValidator">

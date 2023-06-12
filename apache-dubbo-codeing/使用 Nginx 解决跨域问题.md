@@ -43,7 +43,7 @@ JSONP 只支持 GET 请求，CORS 支持所有类型的 HTTP 请求。JSONP 的�
 
 以下为文件上传的跨域配置方案：
 
-```text
+```
 user  nginx;
 worker_processes  1;
 

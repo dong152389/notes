@@ -4,7 +4,7 @@
 
 在使用 SpringMVC 的时候我们可以使用 Spring 封装的一系列表单标签，这些标签都可以访问到 `ModelMap` 中的内容。我们需要先在 JSP 中声明使用的标签，具体做法是在 JSP 文件的顶部加入以下指令：
 
-```jsp
+```html
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 ```
 
@@ -14,7 +14,7 @@
 
 使用 Spring MVC 的 `form` 标签主要有两个作用，第一是它会自动的绑定来自 Model 中的一个属性值到当前 `form` 对应的实体对象，默认是 `command` 属性，这样我们就可以在 `form` 表单体里面方便的使用该对象的属性了。第二是它支持我们在提交表单的时候使用除 GET 和 POST 之外的其他方法进行提交，包括 DELETE 和 PUT 等。
 
-```jsp
+```html
 <form:form action="formTag/form.do" method="post">  
     <table>  
         <tr>  
@@ -36,7 +36,7 @@
 
 使用 `<form:input path="name" />` 标签来渲染一个 HTML 文本框，等同于：
 
-```jsp
+```html
 <input id="name" name="name" type="text" value=""/>
 ```
 
@@ -46,7 +46,7 @@
 
 使用 `<form:password path="password" />` 标签来渲染一个 HTML 密码框，等同于：
 
-```jsp
+```html
 <input id="password" name="password" type="password" value=""/>
 ```
 
@@ -56,7 +56,7 @@
 
 使用 `<form:textarea path="address" rows="5" cols="30" />` 标签来渲染一个 HTML 文本域，等同于：
 
-```jsp
+```html
 <textarea id="address" name="address" rows="5" cols="30">
 ```
 
@@ -66,7 +66,7 @@
 
 使用 `<form:checkbox path="receivePaper" />` 标签来渲染一个 HTML 复选框，等同于：
 
-```jsp
+```html
 <input id="receivePaper1" name="receivePaper" type="checkbox" value="true"/>
 <input type="hidden" name="_receivePaper" value="on"/>
 ```
@@ -77,7 +77,7 @@
 
 使用 `<form:checkboxes items="${webFrameworkList}" path="favoriteFrameworks" />` 标签来渲染一个 HTML 多选复选框，等同于：
 
-```jsp
+```html
 <span>
     <input id="favoriteFrameworks1" name="favoriteFrameworks" type="checkbox" value="Spring MVC" checked="checked"/>
     <label for="favoriteFrameworks1">Spring MVC</label>
@@ -103,12 +103,12 @@
 
 使用 `<form:radiobutton />` 标签来渲染一个 HTML 单选按钮，等同于：
 
-```jsp
+```html
 <form:radiobutton path="gender" value="M" label="男" />
 <form:radiobutton path="gender" value="F" label="女" />
 ```
 
-```jsp
+```html
 <input id="gender1" name="gender" type="radio" value="M" checked="checked"/><label for="gender1">男</label>
 <input id="gender2" name="gender" type="radio" value="F"/><label for="gender2">女</label>
 ```
@@ -119,7 +119,7 @@
 
 使用 `<form:radiobuttons path="favoriteNumber" items="${numbersList}" />` 标签来渲染一个 HTML 多项单选按钮，等同于：
 
-```jsp
+```html
 <span>
     <input id="favoriteNumber1" name="favoriteNumber" type="radio" value="1"/>
     <label for="favoriteNumber1">1</label>
@@ -142,7 +142,7 @@
 
 使用 `<form:select />`, `<form:option />`，`<form:options />` 标签来渲染一个 HTML 下拉列表，等同于：
 
-```jsp
+```html
 <form:select path="country">
    <form:option value="NONE" label="Select"/>
    <form:options items="${countryList}" />
@@ -163,11 +163,11 @@
 
 使用 `<form:select />` 标签及其属性 `multiple=true` 来渲染一个 HTML 多选下拉列表，等同于：
 
-```jsp
+```html
 <form:select path="skills" items="${skillsList}" multiple="true" />
 ```
 
-```jsp
+```html
 <select id="skills" name="skills" multiple="multiple">
    <option value="Struts">Struts</option>
    <option value="Hibernate">Hibernate</option>
@@ -183,6 +183,6 @@
 
 使用 `<form:hidden path="id" value="1000"/>` 标签来渲染一个 HTML 隐藏字段域，等同于：
 
-```jsp
+```html
 <input id="id" name="id" type="hidden" value="1000"/>
 ```

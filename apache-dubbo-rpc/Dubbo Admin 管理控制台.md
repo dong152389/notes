@@ -8,7 +8,7 @@ GitHub：https://github.com/apache/incubator-dubbo-ops
 
 ![img](./img/Lusifer_20181019141753.png)
 
-```text
+```
 # 打包
 mvn clean package
 

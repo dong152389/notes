@@ -48,7 +48,7 @@ HttpClient 相比传统 JDK 自带的 `URLConnection`，增加了易用性和灵
 
 `pom.xml` 配置如下：
 
-```text
+```
 <!-- Apache Http Begin -->
 <dependency>
     <groupId>org.apache.httpcomponents</groupId>

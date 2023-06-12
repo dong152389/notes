@@ -156,7 +156,7 @@ JSON API 数据格式已经被 IANA 机构接受了注册，因此必须使用 `
 
 如果客户端发起一个 POST 请求，在 RESTful 部分我们提到，POST 为创建资源，如果服务器处理成功应该返回一个创建成功的标志，在 HTTP 协议中，201 为新建成功的状态。文档规定，服务器必须在 data 中返回 id 和 type。
 
-```text
+```
 HTTP/1.1 201 Created
 Location: http://example.com/photos/550e8400-e29b-41d4-a716-446655440000
 Content-Type: application/vnd.api+json

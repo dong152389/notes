@@ -26,7 +26,7 @@
 
 Java Web 的 Maven 基本结构如下：
 
-```text
+```
 ├─src
 │  ├─main
 │  │  ├─java
@@ -119,7 +119,7 @@ public class HelloServlet extends HttpServlet {
 
 创建一个 `JSP` 页面，用于测试请求
 
-```jsp
+```html
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -176,6 +176,6 @@ log4j.appender.file.layout.ConversionPattern=%d %p [%c] - %m%n
 
 按照之前章节 `第一个 IDEA 应用程序` 配置完 `Tomcat` 后直接运行，打开浏览器访问 http://localhost:8080 显示如下：
 
-```text
+```
 Hello Maven
 ```

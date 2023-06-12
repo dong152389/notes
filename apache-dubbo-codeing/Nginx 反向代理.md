@@ -69,7 +69,7 @@ services:
 
 修改 `/usr/local/docker/nginx/conf` 目录下的 nginx.conf 配置文件：
 
-```text
+```
 user  nginx;
 worker_processes  1;
 

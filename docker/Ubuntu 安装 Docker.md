@@ -46,26 +46,26 @@ Ubuntu 16.04 + 上的 Docker CE 默认使用 `overlay2` 存储层驱动,无需�
 
 ### 安装必要的一些系统工具
 
-```text
+```
 sudo apt-get update
 sudo apt-get -y install apt-transport-https ca-certificates curl software-properties-common
 ```
 
 ### 安装 GPG 证书
 
-```text
+```
 curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
 ```
 
 ### 写入软件源信息
 
-```text
+```
 sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
 ```
 
 ### 更新并安装 Docker CE
 
-```text
+```
 sudo apt-get -y update
 sudo apt-get -y install docker-ce
 ```

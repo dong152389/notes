@@ -19,7 +19,7 @@ Bootstrap 捆绑了 200 多种字体格式的字形，在 fonts 文件夹内可�
 
 如需使用图标，只需要简单地使用下面的代码即可：
 
-```text
+```
 <span class="glyphicon glyphicon-search"></span>
 ```
 

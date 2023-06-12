@@ -103,7 +103,7 @@ vim keepalived.conf
 
 ![](./assets/135655.png)
 
-~~~conf
+~~~properties
 #keepalived.conf
 global_defs {
   notification_email {

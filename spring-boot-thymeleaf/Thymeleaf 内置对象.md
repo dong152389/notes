@@ -2,7 +2,7 @@
 
 ## `#dates`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Dates
@@ -68,7 +68,7 @@ ${#dates.createToday()}
 
 ## `#Calendars`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Calendars
@@ -134,7 +134,7 @@ ${#calendars.createToday()}
 
 ## `#numbers`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Numbers
@@ -207,7 +207,7 @@ ${#numbers.sequence(from,to,step)}
 
 ## `#strings`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Strings
@@ -326,7 +326,7 @@ ${#strings.randomAlphanumeric(count)}
 
 ## `#objects`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Objects
@@ -344,7 +344,7 @@ ${#objects.setNullSafe(objSet,default)}
 
 ## `#bools`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Bools
@@ -385,7 +385,7 @@ ${#bools.setOr(condSet)}
 
 ## `#arrays`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Arrays
@@ -424,7 +424,7 @@ ${#arrays.containsAll(array, elements)}
 
 ## `#lists`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Lists
@@ -457,7 +457,7 @@ ${#lists.sort(list, comparator)}
 
 ## `#sets`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Sets
@@ -484,7 +484,7 @@ ${#sets.containsAll(set, elements)}
 
 ## `#maps`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Maps
@@ -509,7 +509,7 @@ ${#maps.containsAllValues(map, value)}
 
 ## `#aggregates`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Aggregates
@@ -529,7 +529,7 @@ ${#aggregates.avg(collection)}
 
 ## `#messages`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Messages
@@ -565,7 +565,7 @@ ${#messages.setMsgOrNull(messageKeySet)}
 
 ## `#ids`
 
-```text
+```
 /*
 * ======================================================================
 * See javadoc API for class org.thymeleaf.expression.Ids

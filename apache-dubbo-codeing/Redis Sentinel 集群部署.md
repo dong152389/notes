@@ -10,7 +10,7 @@ Redis Sentinel 是官方推荐的高可用性解决方案。它是 Redis 集群�
 
 ## Redis Sentinel 核心配置
 
-```text
+```
 # Example sentinel.conf
 
 # *** IMPORTANT ***
@@ -284,7 +284,7 @@ services:
 
 需要三份 sentinel.conf 配置文件，分别为 `sentinel1.conf`，`sentinel2.conf`，`sentinel3.conf`，配置文件内容相同
 
-```text
+```
 port 26379
 dir /tmp
 # 自定义集群名，其中 127.0.0.1 为 redis-master 的 ip，6379 为 redis-master 的端口，2 为最小投票数（因为有 3 台 Sentinel 所以可以设置成 2）

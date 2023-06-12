@@ -4,7 +4,7 @@
 
 通过 `@Transactional` 注解方式，也可将事务织入到相应方法中。而使用注解方式，只需在配置文件中加入一个 `tx` 标签，以告诉 Spring 使用注解来完成事务的织入。该标签只需指定一个属性，事务管理器。
 
-```text
+```
 <!-- 开启事务注解驱动 -->
 <tx:annotation-driven transaction-manager="transactionManager" />
 ```

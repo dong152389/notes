@@ -17,7 +17,7 @@
 
 修改 `/usr/local/docker/nginx/conf` 目录下的 nginx.conf 配置文件：
 
-```text
+```
 user  nginx;
 worker_processes  1;
 
@@ -51,7 +51,7 @@ http {
 
 ### 相关配置说明
 
-```text
+```
 # 定义负载均衡设备的 Ip及设备状态 
 upstream myServer {
     server 127.0.0.1:9090 down;
@@ -63,7 +63,7 @@ upstream myServer {
 
 在需要使用负载的 Server 节点下添加
 
-```text
+```
 proxy_pass http://myServer;
 ```
 
