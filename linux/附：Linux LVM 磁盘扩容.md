@@ -44,7 +44,7 @@
 
 ### 查看 fdisk
 
-```text
+```
 fdisk -l
 ```
 
@@ -58,7 +58,7 @@ fdisk -l
 
 ### 查看所有连接到电脑上的储存设备
 
-```text
+```
 fdisk -l |grep '/dev'
 ```
 
@@ -72,7 +72,7 @@ fdisk -l |grep '/dev'
 
 ### 创建 `sdb` 分区
 
-```text
+```
 fdisk /dev/sdb
 n	# 新建分区
 l	# 选择逻辑分区，如果没有，则首先创建扩展分区（p），然后再添加逻辑分区（硬盘：最多四个分区 P-P-P-P 或 P-P-P-E）
@@ -80,7 +80,7 @@ l	# 选择逻辑分区，如果没有，则首先创建扩展分区（p），然
 
 ![img](./assets/Lusifer_201810310008.png)
 
-```text
+```
 回车
 回车
 回车
@@ -91,7 +91,7 @@ w	# 写入磁盘分区
 
 ![img](./assets/Lusifer_201810310009.png)
 
-```text
+```
 mkfs -t ext4 /dev/sdb1
 ```
 
@@ -99,13 +99,13 @@ mkfs -t ext4 /dev/sdb1
 
 ### 创建 PV
 
-```text
+```
 pvcreate /dev/sdb1
 ```
 
 ### 查看卷组
 
-```text
+```
 pvscan
 ```
 
@@ -113,13 +113,13 @@ pvscan
 
 ### 扩容 VG
 
-```text
+```
 vgdisplay
 ```
 
 ![img](./assets/Lusifer_201810310012.png)
 
-```text
+```
 vgextend ubuntu-vg /dev/sdb1
 ```
 
@@ -129,7 +129,7 @@ vgextend ubuntu-vg /dev/sdb1
 
 ![img](./assets/Lusifer_201810310014.png)
 
-```text
+```
 # 增加指定大小
 lvextend -L +30G /dev/ubuntu-vg/root
 # 按百分比扩容
@@ -138,13 +138,13 @@ lvextend -l +100%FREE /dev/ubuntu-vg/root
 
 ### 刷新分区
 
-```text
+```
 resize2fs /dev/ubuntu-vg/root
 ```
 
 ### 删除 unknown device
 
-```text
+```
 pvscan
 vgreduce --removemissing ubuntu-vg
 ```

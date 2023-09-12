@@ -376,7 +376,7 @@ PS：别忘记在 `my-shop` 工程的 `pom.xml` 中增加 `<module>my-shop-web-a
 
 我们可以在 Root 工程中使用 Maven 提供的 `mvn clean` 命令测试一下效果，控制台输出如下：
 
-```log
+```sh
 [INFO] Scanning for projects...
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Build Order:

@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 
 此时我们再次请求服务提供者，浏览器会报 500 异常
 
-```text
+```
 Exception to show hystrix enabled.
 ```
 
@@ -150,7 +150,7 @@ public class UserController {
 
 此时我们再次请求服务提供者，浏览器会显示：
 
-```text
+```
 Hystrix fallback
 ```
 

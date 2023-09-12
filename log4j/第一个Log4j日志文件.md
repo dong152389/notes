@@ -98,7 +98,7 @@ public class MyTest {
 
 此时控制台显示为：
 
-```text
+```
 2018-06-07 05:15:42,914 INFO [com.dfd.hello.spring.MyTest] - slf4j for info
 2018-06-07 05:15:42,915 ERROR [com.dfd.hello.spring.MyTest] - slf4j for error
 2018-06-07 05:15:42,915 WARN [com.dfd.hello.spring.MyTest] - slf4j for warn

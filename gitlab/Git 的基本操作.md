@@ -6,7 +6,7 @@
 
 用 git init 在目录中创建新的 Git 仓库。 你可以在任何时候、任何目录中这么做，完全是本地化的。
 
-```text
+```
 git init
 ```
 
@@ -14,7 +14,7 @@ git init
 
 使用 git clone 拷贝一个 Git 仓库到本地，让自己能够查看该项目，或者进行修改。
 
-```text
+```
 git clone [url]
 ```
 
@@ -24,7 +24,7 @@ git clone [url]
 
 git add 命令可将该文件添加到缓存
 
-```text
+```
 git add <filename>
 ```
 
@@ -32,7 +32,7 @@ git add <filename>
 
 git status 以查看在你上次提交之后是否有修改。
 
-```text
+```
 git status
 git status -s
 ```
@@ -54,14 +54,14 @@ git diff 命令显示已写入缓存与已修改但尚未写入缓存的改动�
 
 Git 为你的每一个提交都记录你的名字与电子邮箱地址，所以第一步需要配置用户名和邮箱地址。
 
-```text
+```
 git config --global user.name 'yourname'
 git config --global user.email youremail
 ```
 
 将文件写入缓存区并提供提交注释
 
-```text
+```
 git commit -m 'update message'
 ```
 
@@ -69,7 +69,7 @@ git commit -m 'update message'
 
 git reset HEAD 命令用于取消已缓存的内容。
 
-```text
+```
 git reset HEAD -- <filename>
 ```
 
@@ -79,7 +79,7 @@ git reset HEAD -- <filename>
 
 git pull命令用于从另一个存储库或本地分支获取并集成(整合)。git pull命令的作用是：取回远程主机某个分支的更新，再与本地的指定分支合并，它的完整格式稍稍有点复杂。
 
-```text
+```
 git pull <远程主机名> <远程分支名>:<本地分支名>
 ```
 
@@ -89,7 +89,7 @@ git pull <远程主机名> <远程分支名>:<本地分支名>
 
 `git push`命令用于将本地分支的更新，推送到远程主机。它的格式与`git pull`命令相似。
 
-```text
+```
 git push <远程主机名> <本地分支名>:<远程分支名>
 ```
 
@@ -103,12 +103,12 @@ git push <远程主机名> <本地分支名>:<远程分支名>
 
 `-a` 选项意为"创建一个带注解的标签"。 不用 -a 选项也可以执行的，但它不会记录这标签是啥时候打的，谁打的，也不会让你添加个标签的注解。 我推荐一直创建带注解的标签。
 
-```text
+```
 git tag -a v1.0.0
 ```
 
 如果我们要查看所有标签可以使用以下命令：
 
-```text
+```
 git tag
 ```

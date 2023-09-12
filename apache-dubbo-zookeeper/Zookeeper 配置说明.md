@@ -89,7 +89,7 @@ server.3=192.168.0.3:2888:3888
 
 - 客户端连接服务器并进入 Bash 模式
 
-```text
+```
 ./zkCli.sh -server <ip>:<port>
 
 # 命令参数
@@ -119,13 +119,13 @@ ZooKeeper -server host:port cmd args
 
 - 创建节点（Bash 模式）
 
-```text
+```
 create /test "hello zookeeper"
 ```
 
 - 查询节点（Bash 模式）
 
-```text
+```
 get /test
 
 # 输出如下
@@ -145,6 +145,6 @@ numChildren = 0
 
 - 删除节点（Bash 模式）
 
-```text
+```
 delete /test
 ```

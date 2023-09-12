@@ -94,7 +94,7 @@ chmod [who] [+ | - | =] [mode] 文件名
 
 #### 示例
 
-```text
+```
 lusifer@UbuntuBase:~$ ls -al test.txt 
 -rw-rw-r-- 1 lusifer lusifer 6 Nov  2 21:47 test.txt
 lusifer@UbuntuBase:~$ chmod u=rwx,g+r,o+r test.txt 
@@ -125,7 +125,7 @@ lusifer@UbuntuBase:~$
 
 若要 r-x 属性则 4+1=5
 
-```text
+```
 lusifer@UbuntuBase:~$ chmod 777 test.txt 
 lusifer@UbuntuBase:~$ ls -al test.txt 
 -rwxrwxrwx 1 lusifer lusifer 6 Nov  2 21:47 test.txt

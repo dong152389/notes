@@ -34,7 +34,7 @@ Redis 集群通过分区（partition）来提供一定程度的可用性（avail
     #cluster-node-timeout 15000   设定节点失联时间，超过该时间（毫秒），集群自动进行主从切换。
     ~~~
 
-  * ~~~conf
+  * ~~~properties
     include /root/myredis/redis.conf
     port 6379
     pidfile "/var/run/redis_6379.pid"

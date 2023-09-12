@@ -103,13 +103,13 @@ jdbc.password=123456
 
 ## 插件自动生成命令
 
-```text
+```
 mvn mybatis-generator:generate
 ```
 
 成功生成控制台打印的消息，如：
 
-```text
+```
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------------------------------------------------------------

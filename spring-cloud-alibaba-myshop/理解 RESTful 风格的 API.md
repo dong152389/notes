@@ -20,7 +20,7 @@ REST 是一种很笼统的概念，它代表一种架构风格。
 
 为了解决这个版本不兼容问题，在设计 RESTful API 的一种实用的做法是使用版本号。一般情况下，我们会在 url 中保留版本号，并同时兼容多个版本。
 
-```text
+```
 【GET】  /v1/users/{user_id}  // 版本 v1 的查询用户列表的 API 接口
 【GET】  /v2/users/{user_id}  // 版本 v2 的查询用户列表的 API 接口
 ```
@@ -33,31 +33,31 @@ REST 是一种很笼统的概念，它代表一种架构风格。
 
 RESTful API 的设计以资源为核心，每一个 URI 代表一种资源。因此，URI 不能包含动词，只能是名词。注意的是，形容词也是可以使用的，但是尽量少用。一般来说，不论资源是单个还是多个，API 的名词要以复数进行命名。此外，命名名词的时候，要使用小写、数字及下划线来区分多个单词。这样的设计是为了与 json 对象及属性的命名方案保持一致。例如，一个查询系统标签的接口可以进行如下设计。
 
-```text
+```
 【GET】  /v1/tags/{tag_id} 
 ```
 
 同时，资源的路径应该从根到子依次如下
 
-```text
+```
 /{resources}/{resource_id}/{sub_resources}/{sub_resource_id}/{sub_resource_property}
 ```
 
 我们来看一个“添加用户的角色”的设计，其中“用户”是主资源，“角色”是子资源。
 
-```text
+```
 【POST】  /v1/users/{user_id}/roles/{role_id} // 添加用户的角色
 ```
 
 有的时候，当一个资源变化难以使用标准的 RESTful API 来命名，可以考虑使用一些特殊的 actions 命名。
 
-```text
+```
 /{resources}/{resource_id}/actions/{action}
 ```
 
 举个例子，“密码修改”这个接口的命名很难完全使用名词来构建路径，此时可以引入 action 命名。
 
-```text
+```
 【PUT】  /v1/users/{user_id}/password/actions/modify // 密码修改
 ```
 
@@ -73,7 +73,7 @@ RESTful API 的设计以资源为核心，每一个 URI 代表一种资源。因
 
 这里，使用“用户”的案例进行回顾通过 GET、 POST、 PUT、 PATCH、 DELETE 等方式对服务端的资源进行操作。
 
-```text
+```
 【GET】          /users                # 查询用户信息列表
 【GET】          /users/1001           # 查看某个用户信息
 【POST】         /users                # 新建用户信息
@@ -86,25 +86,25 @@ RESTful API 的设计以资源为核心，每一个 URI 代表一种资源。因
 
 RESTful API 接口应该提供参数，过滤返回结果。其中，offset 指定返回记录的开始位置。一般情况下，它会结合 limit 来做分页的查询，这里 limit 指定返回记录的数量。
 
-```text
+```
 【GET】  /{version}/{resources}/{resource_id}?offset=0&limit=20
 ```
 
 同时，orderby 可以用来排序，但仅支持单个字符的排序，如果存在多个字段排序，需要业务中扩展其他参数进行支持。
 
-```text
+```
 【GET】  /{version}/{resources}/{resource_id}?orderby={field} [asc|desc]
 ```
 
 为了更好地选择是否支持查询总数，我们可以使用 count 字段，count 表示返回数据是否包含总条数，它的默认值为 false。
 
-```text
+```
 【GET】  /{version}/{resources}/{resource_id}?count=[true|false]
 ```
 
 上面介绍的 offset、 limit、 orderby 是一些公共参数。此外，业务场景中还存在许多个性化的参数。我们来看一个例子。
 
-```text
+```
 【GET】  /v1/categorys/{category_id}/apps/{app_id}?enable=[1|0]&os_type={field}&device_ids={field,field,…}
 ```
 
@@ -129,7 +129,7 @@ RESTful API 接口应该提供参数，过滤返回结果。其中，offset 指�
 
 当 RESTful API 接口出现非 2xx 的 HTTP 错误码响应时，采用全局的异常结构响应信息。
 
-```text
+```
 HTTP/1.1 400 Bad Request
 Content-Type: application/json
 {
@@ -146,7 +146,7 @@ Content-Type: application/json
 
 在设计服务端的 RESTful API 的时候，我们还需要对请求参数进行限制说明。例如一个支持批量查询的接口，我们要考虑最大支持查询的数量。
 
-```text
+```
 【GET】     /v1/users/batch?user_ids=1001,1002      // 批量查询用户信息
 参数说明
 - user_ids: 用户ID串，最多允许 20 个。
@@ -154,7 +154,7 @@ Content-Type: application/json
 
 此外，在设计新增或修改接口时，我们还需要在文档中明确告诉调用者哪些参数是必填项，哪些是选填项，以及它们的边界值的限制。
 
-```text
+```
 【POST】     /v1/users                             // 创建用户信息
 请求内容
 {
@@ -171,7 +171,7 @@ Content-Type: application/json
 
 针对不同操作，服务端向用户返回的结果应该符合以下规范。
 
-```text
+```
 【GET】     /{version}/{resources}/{resource_id}      // 返回单个资源对象
 【GET】     /{version}/{resources}                    // 返回资源对象的列表
 【POST】    /{version}/{resources}                    // 返回新生成的资源对象
@@ -183,7 +183,7 @@ Content-Type: application/json
 
 如果是单条数据，则返回一个对象的 JSON 字符串。
 
-```text
+```
 HTTP/1.1 200 OK
 {
     "id" : "01234567-89ab-cdef-0123-456789abcdef",
@@ -196,7 +196,7 @@ HTTP/1.1 200 OK
 
 如果是列表数据，则返回一个封装的结构体。
 
-```text
+```
 HTTP/1.1 200 OK
 {
     "count":100,
@@ -217,7 +217,7 @@ HTTP/1.1 200 OK
 
 最后，我们使用一个完整的案例将前面介绍的知识整合起来。这里，使用“获取用户列表”的案例。
 
-```text
+```
 【GET】     /v1/users?[&keyword=xxx][&enable=1][&offset=0][&limit=20] 获取用户列表
 功能说明：获取用户列表
 请求方式：GET
@@ -260,7 +260,7 @@ Content-Type: application/json
 
 HTTP 幂等方法，是指无论调用多少次都不会有不同结果的 HTTP 方法。不管你调用一次，还是调用一百次，一千次，结果都是相同的。
 
-```text
+```
 GET     /tickets       # 获取ticket列表
 GET     /tickets/12    # 查看某个具体的ticket
 POST    /tickets       # 新建一个ticket
@@ -273,7 +273,7 @@ DELETE  /tickets/12    # 删除ticekt 12
 
 HTTP GET 方法，用于获取资源，不管调用多少次接口，结果都不会改变，所以是幂等的。
 
-```text
+```
 GET     /tickets       # 获取ticket列表
 GET     /tickets/12    # 查看某个具体的ticket
 ```
@@ -284,7 +284,7 @@ GET     /tickets/12    # 查看某个具体的ticket
 
 可能你会问有这种情况么？当然有咯。例如，我们有一个接口获取当前时间，我们就应该设计成
 
-```text
+```
 GET     /service_time # 获取服务器当前时间
 ```
 
@@ -294,7 +294,7 @@ GET     /service_time # 获取服务器当前时间
 
 HTTP POST 方法是一个非幂等方法，因为调用多次，都将产生新的资源。
 
-```text
+```
 POST    /tickets       # 新建一个ticket
 ```
 
@@ -304,7 +304,7 @@ POST    /tickets       # 新建一个ticket
 
 HTTP PUT 方法是不是幂等的呢？我们来看下
 
-```text
+```
 PUT     /tickets/12    # 更新ticket 12
 ```
 
@@ -318,7 +318,7 @@ HTTP PATCH 方法是非幂等的。HTTP POST 方法和 HTTP PUT 方法可能比�
 
 可能你还不能理解这点。我们举个例子
 
-```text
+```
 PATCH   /tickets/12    # 更新ticket 12
 ```
 
@@ -328,7 +328,7 @@ PATCH   /tickets/12    # 更新ticket 12
 
 HTTP DELETE 方法用于删除资源，会将资源删除。
 
-```text
+```
 DELETE  /tickets/12    # 删除ticekt 12
 ```
 

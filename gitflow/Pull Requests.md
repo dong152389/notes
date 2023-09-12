@@ -88,7 +88,7 @@ Pull Request 也可以用于正式项目之外的其它开发者之间的协作�
 
 下一步，小红克隆自己刚才 fork 出来的 Bitbucket 仓库，以在本机上准备出工作拷贝。命令如下：
 
-```text
+```
 git clone https://user@bitbucket.org/user/repo.git
 ```
 
@@ -98,13 +98,13 @@ git clone https://user@bitbucket.org/user/repo.git
 
 在开始改代码前，小红要为新功能先新建一个新分支。她会用这个分支作为 Pull Request 的源分支。
 
-```text
+```
 git checkout -b some-feature
 ```
 
 ## 编辑代码
 
-```text
+```
 git commit -a -m "Add first draft of some feature"
 ```
 
@@ -116,7 +116,7 @@ git commit -a -m "Add first draft of some feature"
 
 小红完成了功能后，push 功能到她自己的 Bitbucket 仓库中（不是正式仓库），用下面简单的命令：
 
-```text
+```
 git push origin some-branch
 ```
 

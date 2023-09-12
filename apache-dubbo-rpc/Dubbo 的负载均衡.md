@@ -87,7 +87,7 @@ dubbo:
 
 浏览器会交替显示：
 
-```text
+```
 Hello Dubbo , i am from port:12345
 Hello Dubbo , i am from port:12346
 ```

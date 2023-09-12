@@ -52,7 +52,7 @@ services:
 
 搜索所有 `apollo-quick-start` 开头的日志，看到以下日志说明启动成功：
 
-```text
+```
 apollo-quick-start    | ==== starting service ====
 apollo-quick-start    | Service logging file is ./service/apollo-service.log
 apollo-quick-start    | Started [45]

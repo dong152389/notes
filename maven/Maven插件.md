@@ -9,13 +9,13 @@ Maven 是一个执行插件的框架，每一个任务实际上是由插件完�
 - 创建项目文档
 - 创建项目报告 一个插件通常提供了一组目标，可使用以下语法来执行：
 
-```text
+```
 mvn [plugin-name]:[goal-name]
 ```
 
 例如，一个 Java 项目可以使用 Maven 编译器插件来编译目标，通过运行以下命令编译
 
-```text
+```
 mvn compiler:compile
 ```
 

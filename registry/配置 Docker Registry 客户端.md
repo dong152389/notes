@@ -4,7 +4,7 @@
 
 我们的教学案例使用的是 Ubuntu Server 16.04 LTS 版本，属于 `systemd` 系统，需要在 `/etc/docker/daemon.json` 中增加如下内容（如果文件不存在请新建该文件）
 
-```text
+```
 {
   "registry-mirrors": [
     "https://registry.docker-cn.com"
@@ -19,7 +19,7 @@
 
 之后重新启动服务。
 
-```text
+```
 $ sudo systemctl daemon-reload
 $ sudo systemctl restart docker
 ```
@@ -28,7 +28,7 @@ $ sudo systemctl restart docker
 
 使用 `docker info` 命令手动检查，如果从配置中看到如下内容，说明配置成功（192.168.75.133 为教学案例 IP）
 
-```text
+```
 Insecure Registries:
  192.168.75.133:5000
  127.0.0.0/8
@@ -38,7 +38,7 @@ Insecure Registries:
 
 我们以 Nginx 为例测试镜像上传功能
 
-```text
+```
 ## 拉取一个镜像
 docker pull nginx
 
@@ -54,7 +54,7 @@ docker push 192.168.75.133:5000/nginx
 
 ## 查看全部镜像
 
-```text
+```
 curl -XGET http://192.168.75.133:5000/v2/_catalog
 ```
 
@@ -62,7 +62,7 @@ curl -XGET http://192.168.75.133:5000/v2/_catalog
 
 以 Nginx 为例，查看已提交的列表
 
-```text
+```
 curl -XGET http://192.168.75.133:5000/v2/nginx/tags/list
 ```
 
@@ -70,13 +70,13 @@ curl -XGET http://192.168.75.133:5000/v2/nginx/tags/list
 
 - 先删除镜像
 
-```text
+```
 docker rmi nginx
 docker rmi 192.168.75.133:5000/nginx
 ```
 
 - 再拉取镜像
 
-```text
+```
 docker pull 192.168.75.133:5000/nginx
 ```

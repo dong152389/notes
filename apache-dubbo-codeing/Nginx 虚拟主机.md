@@ -30,7 +30,7 @@ services:
 
 ## Nginx 配置文件的结构
 
-```text
+```
 # ...
 events {
 	# ...
@@ -67,7 +67,7 @@ http {
 
 修改 `/usr/local/docker/nginx/conf` 目录下的 nginx.conf 配置文件：
 
-```text
+```
 # 启动进程,通常设置成和 CPU 的数量相等
 worker_processes  1;
 
@@ -143,7 +143,7 @@ http {
 
 ### 配置虚拟主机
 
-```text
+```
 user  nginx;
 worker_processes  1;
 
