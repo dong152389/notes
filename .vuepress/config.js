@@ -1,6 +1,6 @@
 module.exports = {
   dest: "build",
-  base: "/notebook/",
+  base: "/my-notes/",
   markdown: {
     externalLinks: {
       target: "_blank",
