@@ -11,5 +11,4 @@ actionLink: /guide/
 #   - title: 丰富功能
 #     details: 代码生成、物理分页、性能分析等功能一应俱全。
 # footer: Apache License 2.0 | © 2016-2018 baomidou
-# github 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
 ---
